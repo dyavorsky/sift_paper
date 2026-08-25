@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="generator" content="quarto-1.11.1">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+    <title>litreview</title>
+    <style>
+      /* Default styles provided by pandoc.
+      ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+      */
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: 1.5em;}
+      div.column{flex: auto;}
+      @media screen {
+      div.columns{gap: min(4vw, 1.5em);}
+      div.column{overflow-x: auto;}
+      }
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      ul.task-list{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+        vertical-align: middle;
+      }
+    </style>
+
+    <style>
+      body.hypothesis-enabled #quarto-embed-header {
+        padding-right: 36px;
+      }
+
+      #quarto-embed-header {
+        height: 3em;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: solid 1px;
+      }
+
+      #quarto-embed-header h6 {
+        font-size: 1.1em;
+        padding-top: 0.6em;
+        margin-left: 1em;
+        margin-right: 1em;
+        font-weight: 400;
+      }
+
+      #quarto-embed-header a.quarto-back-link,
+      #quarto-embed-header a.quarto-download-embed {
+        font-size: 0.8em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-left: 1em;
+        margin-right: 1em;
+      }
+
+      .quarto-back-container {
+        padding-left: 0.5em;
+        display: flex;
+      }
+
+      .headroom {
+          will-change: transform;
+          transition: transform 200ms linear;
+      }
+
+      .headroom--pinned {
+          transform: translateY(0%);
+      }
+
+      .headroom--unpinned {
+          transform: translateY(-100%);
+      }      
+    </style>
+
+    <script>
+    window.document.addEventListener("DOMContentLoaded", function () {
+
+      var header = window.document.querySelector("#quarto-embed-header");
+      const titleBannerEl = window.document.querySelector("body > #title-block-header");
+      if (titleBannerEl) {
+        titleBannerEl.style.paddingTop = header.clientHeight + "px";
+      }
+      const contentEl = window.document.getElementById('quarto-content');
+      for (const child of contentEl.children) {
+        child.style.paddingTop = header.clientHeight + "px";
+        child.style.marginTop = "1em";
+      }
+
+      // Use the article root if the `back` call doesn't work. This isn't perfect
+      // but should typically work
+      window.quartoBackToArticle = () => {
+        var currentUrl = window.location.href;
+        window.history.back();
+        setTimeout(() => {
+            // if location was not changed in 100 ms, then there is no history back
+            if(currentUrl === window.location.href){              
+                // redirect to site root
+                window.location.href = "../index.html";
+            }
+        }, 100);
+      }
+
+      const headroom = new window.Headroom(header, {
+        tolerance: 5,
+        onPin: function () {
+        },
+        onUnpin: function () {
+        },
+      });
+      headroom.init();
+    });
+    </script>
+
+    
+<script src="../site_libs/manuscript-notebook/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d5b4e69c7e37b49c6591bcc5116dd748.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b89755862c00f08386c47aeabbd074f3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+      <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script> 
+      </head>
+
+  <body class="quarto-notebook quarto-light">
+    <div id="quarto-embed-header" class="headroom fixed-top bg-primary">
+      
+      <a onclick="window.quartoBackToArticle(); return false;" class="btn btn-primary quarto-back-link" href=""><i class="bi bi-caret-left"></i> Back to Article</a>
+      <h6><i class="bi bi-journal-code"></i> Related Literature</h6>
+
+            <a href="../sections/litreview.qmd" class="btn btn-primary quarto-download-embed" download="litreview.qmd">Download Source</a>
+          </div>
+
+     <div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-lit" id="toc-sec-lit" class="nav-link active" data-scroll-target="#sec-lit">Related Literature</a>
+  <ul class="collapse">
+  <li><a href="#sec-lit-theory" id="toc-sec-lit-theory" class="nav-link" data-scroll-target="#sec-lit-theory">Optimal Sequential Search</a></li>
+  <li><a href="#sec-lit-field" id="toc-sec-lit-field" class="nav-link" data-scroll-target="#sec-lit-field">Structural Search with Field and Clickstream Data</a></li>
+  <li><a href="#sec-lit-lab" id="toc-sec-lit-lab" class="nav-link" data-scroll-target="#sec-lit-lab">Lab and Experimental Evidence on Search</a></li>
+  <li><a href="#sec-lit-preference" id="toc-sec-lit-preference" class="nav-link" data-scroll-target="#sec-lit-preference">Information Search inside Preference Measurement</a></li>
+  <li><a href="#sec-lit-consideration" id="toc-sec-lit-consideration" class="nav-link" data-scroll-target="#sec-lit-consideration">Consideration Sets and Screening Rules in Conjoint</a></li>
+  <li><a href="#sec-lit-practice" id="toc-sec-lit-practice" class="nav-link" data-scroll-target="#sec-lit-practice">Conjoint Practice, Incentive Alignment, and Commercial Precedent</a></li>
+  <li><a href="#sec-lit-positioning" id="toc-sec-lit-positioning" class="nav-link" data-scroll-target="#sec-lit-positioning">Positioning</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">      <section id="sec-lit" class="level2">
+<h2 class="anchored" data-anchor-id="sec-lit">Related Literature</h2>
+<div class="callout callout-style-default callout-warning callout-titled" title="Citation verification status — remove before circulation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Citation verification status — remove before circulation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Every reference in this section was reconstructed from memory without database access and is <strong>unverified</strong>. Confidence flags follow each entry: <strong>[H]</strong> confident the paper exists and the details are roughly right; <strong>[M]</strong> confident the paper exists, unsure of journal, year, or coauthors; <strong>[L]</strong> believe something like this exists, may be conflating sources. Treat <strong>[L]</strong> items as search leads, not references. Nothing here should reach a referee, a proposal, or a client before it is checked against the record. The three entries marked <strong>novelty gate</strong> determine whether the paper’s central claim survives; read those first.</p>
+</div>
+</div>
+<!--
+Structure of this section: five literatures plus a positioning subsection.
+Currently bulleted notes, not prose. Convert to prose after the citation
+verification pass and after the novelty ruling on @sec-lit-preference.
+-->
+<section id="sec-lit-theory" class="level3">
+<h3 class="anchored" data-anchor-id="sec-lit-theory">Optimal Sequential Search</h3>
+<p>The theoretical backbone. The instrument’s data-generating process is the Weitzman protocol run inside a survey.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Weitzman_1979">@Weitzman_1979</span>, “Optimal Search for the Best Alternative,” <em>Econometrica</em>. [H]</strong> The Pandora’s box problem, and the model the instrument is built to estimate. Each box has a known prize distribution and a known opening cost. The optimal policy factors into three parts: a <em>reservation value</em> computed for each box independently of every other box; a <em>selection rule</em> (open boxes in descending reservation value); and a <em>stopping rule</em> (stop when the best realized prize exceeds the highest remaining reservation value). The independence of the reservation values is what makes the model estimable at survey scale.</li>
+<li><strong><span class="citation" data-cites="Stigler_1961">@Stigler_1961</span>, “The Economics of Information,” <em>Journal of Political Economy</em>. [H]</strong> The fixed-sample-size alternative: the consumer commits to <span class="math inline">\(n\)</span> searches up front rather than deciding adaptively. The competing protocol, and the one SIFT’s panel structure may be able to test against sequential search respondent by respondent.</li>
+<li><strong><span class="citation" data-cites="McCall_1970">@McCall_1970</span>, <em>Quarterly Journal of Economics</em>. [M]</strong> Reservation-wage formulation of sequential search with recall; the labor-search ancestor of the marketing applications below.</li>
+</ul>
+<p><em>Simultaneous versus sequential.</em> These are two competing protocols, not two descriptions of one thing. Sequential search fits click-through-and-inspect; fixed-sample search fits “get three quotes.” <span class="citation" data-cites="Honka_Chintagunta_2017">@Honka_Chintagunta_2017</span> is the reference on distinguishing them empirically, and is directly relevant here because SIFT’s within-respondent panel could run that test at the individual level rather than the population level.</p>
+</section>
+<section id="sec-lit-field" class="level3">
+<h3 class="anchored" data-anchor-id="sec-lit-field">Structural Search with Field and Clickstream Data</h3>
+<p>Context rather than precedent: all of this work is observational or platform data with no designed instrument. SIFT’s credibility with an economics audience depends on connecting to it cleanly.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Hong_Shum_2006">@Hong_Shum_2006</span>, <em>RAND Journal of Economics</em>. [H]</strong> Recovers search costs from price distributions alone, without search data. The extreme case of how little the field has typically had to work with.</li>
+<li><strong><span class="citation" data-cites="Hortacsu_Syverson_2004">@Hortacsu_Syverson_2004</span>, <em>Quarterly Journal of Economics</em>. [H]</strong> S&amp;P 500 index funds. Search frictions with differentiated products, in a setting where the products are nearly identical and the frictions are not.</li>
+<li><strong><span class="citation" data-cites="Kim_2010">@Kim_2010</span>, <em>Marketing Science</em>. [H]</strong> Amazon view-rank data for camcorders. One of the first structural search models fit to online browsing data in marketing.</li>
+<li><strong><span class="citation" data-cites="DeLosSantos_2012">@DeLosSantos_2012</span>, “Testing Models of Consumer Search Using Data on Web Browsing,” <em>American Economic Review</em>. [H]</strong> Comscore browsing data; tests sequential search against fixed-sample search and finds fixed-sample fits better in their setting. The empirical warning shot for assuming the Weitzman protocol rather than testing it.</li>
+<li><strong><span class="citation" data-cites="Koulayev_2014">@Koulayev_2014</span>, <em>RAND Journal of Economics</em>. [M]</strong> Hotel search with click data; identification and estimation for differentiated products.</li>
+<li><strong><span class="citation" data-cites="Honka_2014">@Honka_2014</span>, <em>RAND Journal of Economics</em>. [H]</strong> Auto insurance; separates search costs from switching costs. The template for arguing that an estimated friction is the friction you claim it is.</li>
+<li><strong><span class="citation" data-cites="Honka_Chintagunta_2017">@Honka_Chintagunta_2017</span>, <em>Marketing Science</em>. [M]</strong> Simultaneous or sequential; see above.</li>
+<li><strong><span class="citation" data-cites="Chen_Yao_2017">@Chen_Yao_2017</span>, <em>Management Science</em>. [M]</strong> Sequential search with refinement — filters and sorts modeled as search actions — on Expedia clickstream data. Closest existing work in spirit to a list-screen interface, and the natural precedent if the instrument later adds filtering.</li>
+<li><strong><span class="citation" data-cites="Ursu_2018">@Ursu_2018</span>, “The Power of Rankings,” <em>Marketing Science</em>. [H]</strong> Expedia’s randomized-position experiment. The cleanest source of exogenous variation in the field literature, obtained once, as a rare gift from a platform. The contrast with SIFT is direct: here the same variation is free, designed in, and present in every task.</li>
+<li><strong><span class="citation" data-cites="Ursu_2020">@Ursu_2020</span>, <em>Marketing Science</em>. [M]</strong> Search duration and time spent, rather than search incidence alone.</li>
+<li><strong><span class="citation" data-cites="Yavorsky_2021">@Yavorsky_2021</span>, <em>Quantitative Marketing and Economics</em>. [H]</strong> Dealership visits in the U.S. auto market; identification of search costs from observed search sets. (Author’s own; the estimation code is an implementation asset, see <span class="citation" data-cites="sec-estimation">@sec-estimation</span>.)</li>
+<li><strong><span class="citation" data-cites="Bronnenberg_2016">@Bronnenberg_2016</span>, “Zooming In on Choice,” <em>Journal of Marketing Research</em>. [M]</strong> Descriptive clickstream evidence on how consumers actually move through product pages. Face-validity evidence for the interface design in
+<ol class="example" type="1">
+<li></li>
+</ol></li>
+<li><strong><span class="citation" data-cites="Ursu_Seiler_Honka_2024">@Ursu_Seiler_Honka_2024</span>, <em>Quantitative Marketing and Economics</em>. [M] — novelty gate</strong> Framework and consolidation review of the sequential search model. Best single entry point to the current state of model specification, identification, and estimation practice; read first to establish what is already settled.</li>
+<li><strong><span class="citation" data-cites="Greminger_2022">@Greminger_2022</span>, <em>Management Science</em>. [M]</strong> Search with discovery of alternatives — the consumer does not know the full choice set at the outset. Relevant to how much of the list-screen the instrument reveals up front.</li>
+</ul>
+</section>
+<section id="sec-lit-lab" class="level3">
+<h3 class="anchored" data-anchor-id="sec-lit-lab">Lab and Experimental Evidence on Search</h3>
+<p>Two experimental literatures that have barely spoken to each other, and the direct methodological precedent for running search as a designed task.</p>
+<section id="does-anyone-follow-the-optimal-rule" class="level4">
+<h4 class="anchored" data-anchor-id="does-anyone-follow-the-optimal-rule">Does anyone follow the optimal rule?</h4>
+<ul>
+<li><strong><span class="citation" data-cites="Schotter_Braunstein_1981">@Schotter_Braunstein_1981</span>, <em>Economic Inquiry</em>. [M]</strong> Early sequential-search experiments with real incentives.</li>
+<li><strong><span class="citation" data-cites="Hey_1987">@Hey_1987</span>, “Still Searching,” <em>Journal of Economic Behavior and Organization</em>. [M]</strong> Subjects use rules of thumb rather than optimal reservation strategies.</li>
+<li><strong><span class="citation" data-cites="Cox_Oaxaca_1989">@Cox_Oaxaca_1989</span>. [M]</strong> Finite-horizon search; broadly supportive of reservation-rule behavior with noise. The more favorable read.</li>
+<li><strong><span class="citation" data-cites="Sonnemans_1998">@Sonnemans_1998</span>. [M]</strong> Verbal-protocol evidence and classification of search strategies.</li>
+<li><strong><span class="citation" data-cites="Brown_2011">@Brown_2011</span>. [L]</strong> Real-time search in the laboratory and in the market.</li>
+</ul>
+<p><em>Net read.</em> Mixed, and this is the single largest scientific risk to the project. Behavior is directionally consistent with reservation-value logic, but the deviations are systematic rather than random: too little search relative to the optimum, order effects, and sensitivity to sunk costs. The paper should state this openly and early rather than let a referee find it.</p>
+</section>
+<section id="information-acquisition-mouselab-and-eye-tracking" class="level4">
+<h4 class="anchored" data-anchor-id="information-acquisition-mouselab-and-eye-tracking">Information acquisition: Mouselab and eye-tracking</h4>
+<p>Mechanically, the SIFT task is a Mouselab information board wearing a commercial skin.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Payne_1988">@Payne_1988</span>; <span class="citation" data-cites="Payne_1993">@Payne_1993</span>, <em>The Adaptive Decision Maker</em>. [H]</strong> The Mouselab paradigm: information boards in which subjects click cells to reveal attribute values, with the acquisition sequence recorded. Descriptive and process-focused rather than structural.</li>
+<li><strong><span class="citation" data-cites="Gabaix_2006">@Gabaix_2006</span>, “Costly Information Acquisition,” <em>American Economic Review</em>. [H] — novelty gate</strong> A Mouselab-style experiment paired with a <em>structural</em> boundedly-rational model (directed cognition) estimated on the acquisition data. The closest existing template for the core maneuver — run an information-acquisition experiment, fit a structural search-type model to the acquisition record. Not Weitzman, but the same move.</li>
+<li><strong><span class="citation" data-cites="Caplin_2011">@Caplin_2011</span>, “Search and Satisficing,” <em>American Economic Review</em>. [H]</strong> Choice-process data showing that people stop before finding the best available option. The satisficing alternative against which model fit should be reported.</li>
+<li><strong><span class="citation" data-cites="Reutskaja_2011">@Reutskaja_2011</span>, <em>American Economic Review</em>. [H]</strong> Eye-tracking evidence on search under time pressure with supermarket-style displays.</li>
+</ul>
+<p><em>Net read.</em> The experimental apparatus is well validated and has been for decades. What has largely not been done is fitting a Weitzman model to acquisition data and reporting search costs in interpretable units.</p>
+</section>
+</section>
+<section id="sec-lit-preference" class="level3">
+<h3 class="anchored" data-anchor-id="sec-lit-preference">Information Search inside Preference Measurement</h3>
+<p>The closest existing work in marketing, and the location of the sharpest threat to novelty.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Yang_2015">@Yang_2015</span>, “A Bounded Rationality Model of Information Search and Choice in Preference Measurement,” <em>Journal of Marketing Research</em>. [M] — novelty gate</strong> Models within-task information search during a conjoint-style task using eye-tracking data, with an optimal-stopping flavor. If one paper threatens the contribution, it is this one. Read it first and read it carefully.</li>
+<li><strong><span class="citation" data-cites="Yang_2018">@Yang_2018</span>, <em>Marketing Science</em>. [M]</strong> Attention and information processing in incentive-aligned choice experiments.</li>
+<li><strong><span class="citation" data-cites="Meissner_2016">@Meissner_2016</span>, <em>Journal of Marketing Research</em>. [M]</strong> Eye-tracking in conjoint; processing becomes measurably more efficient with practice. Directly relevant because a multi-task panel will exhibit learning across tasks, which appears in the model as drift in the search-cost parameter (<span class="citation" data-cites="sec-lit-lab">@sec-lit-lab</span>, <span class="citation" data-cites="sec-discussion">@sec-discussion</span>).</li>
+</ul>
+<p><em>Distinction to preserve — and to verify before relying on it.</em> These papers study search <em>within</em> a task, over the attributes of profiles already displayed, mostly in service of better preference estimates. SIFT studies search <em>across alternatives</em>, in a two-stage list-then-detail architecture, where the search cost is itself a deliverable rather than a nuisance parameter. Related, but not the same object. Confirm this holds before building on it.</p>
+</section>
+<section id="sec-lit-consideration" class="level3">
+<h3 class="anchored" data-anchor-id="sec-lit-consideration">Consideration Sets and Screening Rules in Conjoint</h3>
+<p>The existing marketing answer to “people do not evaluate everything,” and the comparison a conjoint-literate reader will reach for first.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Gilbride_Allenby_2004">@Gilbride_Allenby_2004</span>, <em>Marketing Science</em>. [H]</strong> A choice model with conjunctive, disjunctive, and compensatory screening rules. The incumbent formulation.</li>
+<li><strong><span class="citation" data-cites="Hauser_2010">@Hauser_2010</span>, <em>Journal of Marketing Research</em>. [H]</strong> Disjunctions of conjunctions; cognitive simplicity in consideration rules.</li>
+<li><strong><span class="citation" data-cites="Yee_2007">@Yee_2007</span>, <em>Marketing Science</em>. [M]</strong> Greedoid-based noncompensatory inference.</li>
+<li><strong><span class="citation" data-cites="Dzyabura_2011">@Dzyabura_2011</span>, <em>Marketing Science</em>. [M]</strong> Active machine learning for consideration heuristics.</li>
+<li><strong><span class="citation" data-cites="Hauser_2014">@Hauser_2014</span>, <em>Journal of Business Research</em>. [M]</strong> Review of consideration-set heuristics.</li>
+</ul>
+<p><em>Sharpest one-line contrast.</em> This literature <em>infers</em> screening rules from choice outcomes, treating consideration as latent structure. SIFT <em>observes</em> the consideration process directly and prices it in units of search cost. Inference versus observation.</p>
+</section>
+<section id="sec-lit-practice" class="level3">
+<h3 class="anchored" data-anchor-id="sec-lit-practice">Conjoint Practice, Incentive Alignment, and Commercial Precedent</h3>
+<ul>
+<li><strong><span class="citation" data-cites="Allenby_2019">@Allenby_2019</span>, <em>Handbook of the Economics of Marketing</em>. [H]</strong> Economic foundations of conjoint analysis; the statement of the workhorse model that SIFT nests.</li>
+<li><strong><span class="citation" data-cites="Marshall_Bradlow_2002">@Marshall_Bradlow_2002</span>, <em>JASA</em>. [H]</strong> A unified approach to conjoint analysis models; precedent for treating distinct response formats as one likelihood family.</li>
+<li><strong><span class="citation" data-cites="Ding_2005">@Ding_2005</span>, <em>Journal of Marketing Research</em>; <span class="citation" data-cites="Ding_2007">@Ding_2007</span>, <em>Journal of Marketing Research</em>. [H]</strong> Incentive alignment in conjoint. If estimated search costs are to carry units that mean anything, the task needs real stakes; this is the precedent for how to supply them.</li>
+<li><strong>Sawtooth ACBC (adaptive choice-based conjoint).</strong> Not an academic reference, but the closest commercial product to a two-stage consideration instrument: a screening section (must-haves, unacceptables) followed by a choice tournament. Study as design precedent, and as the thing a client may already have bought. <!-- TODO: cite the Sawtooth technical paper --></li>
+<li><strong>Virtual-shelf and shopper-simulation vendors.</strong> Several field shelf-set exercises with click data, reported descriptively (time to first click, click share). No known case of backing a structural search model out of one. <strong>This is where prior art most likely hides; check directly.</strong> <!-- TODO: vendor scan, then decide whether this belongs in the paper at all --></li>
+</ul>
+</section>
+<section id="sec-lit-positioning" class="level3">
+<h3 class="anchored" data-anchor-id="sec-lit-positioning">Positioning</h3>
+<!--
+TODO: prose. The four claims to be stated here as hypotheses the paper
+tests, not as established gaps:
+
+  1. A fieldable, productized survey instrument that yields Weitzman
+     search-cost parameters the way conjoint yields part-worths. Lab
+     analogues exist (@Gabaix_2006); a survey method with design norms
+     and reporting conventions does not.
+  2. Individual-level search costs identified from within-subject panel
+     data rather than cross-sectional heterogeneity.
+  3. Designed exogenous variation in position and information architecture
+     in every task, rather than obtained once from a platform (@Ursu_2018).
+  4. Segmentation on search behavior — how people shop — rather than on
+     preference. No prior art known.
+
+Each of these is a claim to disprove during the verification pass, not a
+result. Do not write them as results.
+-->
+</section>
+</section>
+     </main>
+<!-- /main column -->  <script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>  </div> <!-- /content --> 
+  
+</body></html>

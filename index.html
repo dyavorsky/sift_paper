@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.1">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dan Yavorsky">
+<meta name="author" content="Eric T. Bradlow">
+<meta name="dcterms.date" content="2026-08-25">
+<meta name="keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
+
+<title>SIFT: Search Conjoint</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-d5b4e69c7e37b49c6591bcc5116dd748.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b89755862c00f08386c47aeabbd074f3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta name="citation_title" content="SIFT: Search Conjoint">
+<meta name="citation_abstract" content="Conjoint analysis measures what consumers prefer among alternatives they have been shown. It is silent on what they would have looked at, what looking costs them, and what they never see at all. We introduce SIFT, a survey instrument in which the respondent faces a list-screen of alternatives, clicks through to inspect individual listings at will, and then chooses — a task that reproduces the two-stage list-then-detail architecture of the environments in which many category purchases are actually made. Each respondent completes a sequence of such tasks, and position, list-screen content, and detail-page content are randomized by design in every one. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters, as conjoint does, and search costs, for which conjoint has no analogue. Two features distinguish the instrument from the structural search literature it borrows from. First, the within-respondent panel of search spells supports individual-level estimates of preferences and search costs jointly, where field applications typically observe a single spell per consumer and identify heterogeneity cross-sectionally. Second, the exogenous variation that field studies obtain only rarely — randomized position and information architecture — is designed in rather than found. The framework nests conjoint: as the search cost goes to zero every alternative is inspected, choice is made over fully realized utilities, and the model collapses to a standard choice-based conjoint model. Whether the search cost is distinguishable from zero is therefore a testable question rather than a maintained assumption, and the answer tells the analyst whether consideration or preference is the binding constraint in a category. We derive the likelihood, characterize what the designed variation buys for identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery at commercial task counts, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT&amp;amp;#039;s preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — a distinction conjoint cannot draw, and one that carries different managerial remedies.
+">
+<meta name="citation_keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
+<meta name="citation_author" content="Dan Yavorsky">
+<meta name="citation_author" content="Eric T. Bradlow">
+<meta name="citation_publication_date" content="2026-08-25">
+<meta name="citation_cover_date" content="2026-08-25">
+<meta name="citation_year" content="2026">
+<meta name="citation_online_date" content="2026-08-25">
+<meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=Optimal search for the best alternative;,citation_author=Martin L. Weitzman;,citation_publication_date=1979;,citation_cover_date=1979;,citation_year=1979;,citation_issue=3;,citation_volume=47;,citation_journal_title=Econometrica;">
+<meta name="citation_reference" content="citation_title=The economics of information;,citation_author=George J. Stigler;,citation_publication_date=1961;,citation_cover_date=1961;,citation_year=1961;,citation_journal_title=Journal of Political Economy;">
+<meta name="citation_reference" content="citation_title=Economics of information and job search;,citation_author=J. J. McCall;,citation_publication_date=1970;,citation_cover_date=1970;,citation_year=1970;,citation_journal_title=The Quarterly Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Using price distributions to estimate search costs;,citation_author=Han Hong;,citation_author=Matthew Shum;,citation_publication_date=2006;,citation_cover_date=2006;,citation_year=2006;,citation_journal_title=The RAND Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Product differentiation, search costs, and competition in the mutual fund industry: A case study of S&amp;amp;amp;P 500 index funds;,citation_author=Ali Hortaçsu;,citation_author=Chad Syverson;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_journal_title=The Quarterly Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Online demand under limited consumer search;,citation_author=Jun B. Kim;,citation_author=Paulo Albuquerque;,citation_author=Bart J. Bronnenberg;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Testing models of consumer search using data on web browsing;,citation_author=Babur De los Santos;,citation_author=Ali Hortaçsu;,citation_author=Matthijs R. Wildenbeest;,citation_publication_date=2012;,citation_cover_date=2012;,citation_year=2012;,citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=Search for differentiated products: Identification and estimation;,citation_author=Sergei Koulayev;,citation_publication_date=2014;,citation_cover_date=2014;,citation_year=2014;,citation_journal_title=The RAND Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Quantifying search and switching costs in the US auto insurance industry;,citation_author=Elisabeth Honka;,citation_publication_date=2014;,citation_cover_date=2014;,citation_year=2014;,citation_journal_title=The RAND Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Simultaneous or sequential? Search strategies in the US auto insurance industry;,citation_author=Elisabeth Honka;,citation_author=Pradeep Chintagunta;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Sequential search with refinement: Model and application with click-stream data;,citation_author=Yuxin Chen;,citation_author=Song Yao;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_journal_title=Management Science;">
+<meta name="citation_reference" content="citation_title=The power of rankings: Quantifying the effect of rankings on online consumer search and purchase decisions;,citation_author=Raluca M. Ursu;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_issue=4;,citation_doi=10.1287/mksc.2017.1072;,citation_volume=37;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Search duration;,citation_author=Raluca M. Ursu;,citation_author=Qianyun Wang;,citation_author=Pradeep K. Chintagunta;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Consumer search in the U.S. Auto industry: The role of dealership visits;,citation_author=Dan Yavorsky;,citation_author=Elisabeth Honka;,citation_author=Keith Chen;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_issue=1;,citation_doi=10.1007/s11129-020-09229-4;,citation_volume=19;,citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Zooming in on choice: How do consumers search for cameras online?;,citation_author=Bart J. Bronnenberg;,citation_author=Jun B. Kim;,citation_author=Carl F. Mela;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=The sequential search model: A framework for empirical research;,citation_author=Raluca Ursu;,citation_author=Stephan Seiler;,citation_author=Elisabeth Honka;,citation_publication_date=2024;,citation_cover_date=2024;,citation_year=2024;,citation_doi=10.1007/s11129-024-09291-2;,citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Estimation of preference heterogeneity in markets with costly search;,citation_author=Ilya Morozov;,citation_author=Stephan Seiler;,citation_author=Xiaojing Dong;,citation_author=Liwen Hou;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_issue=5;,citation_doi=10.1287/mksc.2021.1287;,citation_volume=40;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=The probit choice model under sequential search with an application to online retailing;,citation_author=Jun B. Kim;,citation_author=Paulo Albuquerque;,citation_author=Bart J. Bronnenberg;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_issue=11;,citation_volume=63;,citation_journal_title=Management Science;">
+<meta name="citation_reference" content="citation_title=Ordered consumer search;,citation_author=Mark Armstrong;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_issue=5;,citation_volume=15;,citation_journal_title=Journal of the European Economic Association;">
+<meta name="citation_reference" content="citation_title=Consumer search and price competition;,citation_author=Michael Choi;,citation_author=Anovia Yifan Dai;,citation_author=Kyungmin Kim;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_issue=4;,citation_volume=86;,citation_journal_title=Econometrica;">
+<meta name="citation_reference" content="citation_title=Simulated maximum likelihood estimation of the sequential search model;,citation_author=Jae Hyen Chung;,citation_author=Pradeep Chintagunta;,citation_author=Sanjog Misra;,citation_publication_date=2025;,citation_cover_date=2025;,citation_year=2025;,citation_doi=10.1007/s11129-024-09281-4;,citation_volume=23;,citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Consumer search and purchase: An empirical investigation of retargeting based on consumer online behaviors;,citation_author=Zhenling Jiang;,citation_author=Tat Chan;,citation_author=Hai Che;,citation_author=Youwei Wang;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_issue=2;,citation_volume=40;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Search gaps and consumer fatigue;,citation_author=Raluca Ursu;,citation_author=Qianyun Zhang;,citation_author=Elisabeth Honka;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_issue=1;,citation_volume=42;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Measuring benefits from new products in markets with information frictions;,citation_author=Ilya Morozov;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_volume=69;,citation_journal_title=Management Science;">
+<meta name="citation_reference" content="citation_title=A new use of importance sampling to reduce computational burden in simulation estimation;,citation_author=Daniel A. Ackerberg;,citation_publication_date=2009;,citation_cover_date=2009;,citation_year=2009;,citation_issue=4;,citation_volume=7;,citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Dynamic effects of price promotions: Field evidence, consumer search, and supply-side implications;,citation_author=Andr’es Elberg;,citation_author=Pedro M. Gardete;,citation_author=Rosario Macera;,citation_author=Carlos Noton;,citation_publication_date=2019;,citation_cover_date=2019;,citation_year=2019;,citation_issue=1;,citation_volume=17;,citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Optimal search and discovery;,citation_author=Rafael P. Greminger;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_journal_title=Management Science;">
+<meta name="citation_reference" content="citation_title=Economic search: An experimental study;,citation_author=Andrew Schotter;,citation_author=Yale M. Braunstein;,citation_publication_date=1981;,citation_cover_date=1981;,citation_year=1981;,citation_journal_title=Economic Inquiry;">
+<meta name="citation_reference" content="citation_title=Still searching;,citation_author=John D. Hey;,citation_publication_date=1987;,citation_cover_date=1987;,citation_year=1987;,citation_journal_title=Journal of Economic Behavior and Organization;">
+<meta name="citation_reference" content="citation_title=Laboratory experiments with a finite-horizon job-search model;,citation_author=James C. Cox;,citation_author=Ronald L. Oaxaca;,citation_publication_date=1989;,citation_cover_date=1989;,citation_year=1989;,citation_journal_title=Journal of Risk and Uncertainty;">
+<meta name="citation_reference" content="citation_title=Strategies of search;,citation_author=Joep Sonnemans;,citation_publication_date=1998;,citation_cover_date=1998;,citation_year=1998;,citation_journal_title=Journal of Economic Behavior and Organization;">
+<meta name="citation_reference" content="citation_title=Real-time search in the laboratory and the market;,citation_author=Meta Brown;,citation_author=Christopher J. Flinn;,citation_author=Andrew Schotter;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=Adaptive strategy selection in decision making;,citation_author=John W. Payne;,citation_author=James R. Bettman;,citation_author=Eric J. Johnson;,citation_publication_date=1988;,citation_cover_date=1988;,citation_year=1988;,citation_journal_title=Journal of Experimental Psychology: Learning, Memory, and Cognition;">
+<meta name="citation_reference" content="citation_title=The adaptive decision maker;,citation_author=John W. Payne;,citation_author=James R. Bettman;,citation_author=Eric J. Johnson;,citation_publication_date=1993;,citation_cover_date=1993;,citation_year=1993;">
+<meta name="citation_reference" content="citation_title=Costly information acquisition: Experimental analysis of a boundedly rational model;,citation_author=Xavier Gabaix;,citation_author=David Laibson;,citation_author=Guillermo Moloche;,citation_author=Stephen Weinberg;,citation_publication_date=2006;,citation_cover_date=2006;,citation_year=2006;,citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=Search and satisficing;,citation_author=Andrew Caplin;,citation_author=Mark Dean;,citation_author=Daniel Martin;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=Search dynamics in consumer choice under time pressure: An eye-tracking study;,citation_author=Elena Reutskaja;,citation_author=Rosemarie Nagel;,citation_author=Colin F. Camerer;,citation_author=Antonio Rangel;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=A bounded rationality model of information search and choice in preference measurement;,citation_author=Liu Yang;,citation_author=Olivier Toubia;,citation_author=Martijn G. Jong;,citation_publication_date=2015;,citation_cover_date=2015;,citation_year=2015;,citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=Attention, information processing, and choice in incentive-aligned choice experiments;,citation_author=Liu Yang;,citation_author=Olivier Toubia;,citation_author=Martijn G. Jong;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Eye tracking reveals processes that enable conjoint choices to become increasingly efficient with practice;,citation_author=Martin Meißner;,citation_author=Andrés Musalem;,citation_author=Joel Huber;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=A choice model with conjunctive, disjunctive, and compensatory screening rules;,citation_author=Timothy J. Gilbride;,citation_author=Greg M. Allenby;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Disjunctions of conjunctions, cognitive simplicity, and consideration sets;,citation_author=John R. Hauser;,citation_author=Olivier Toubia;,citation_author=Theodoros Evgeniou;,citation_author=Rene Befurt;,citation_author=Daria Dzyabura;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;,citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=Greedoid-based noncompensatory inference;,citation_author=Michael Yee;,citation_author=Ely Dahan;,citation_author=John R. Hauser;,citation_author=James Orlin;,citation_publication_date=2007;,citation_cover_date=2007;,citation_year=2007;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Active machine learning for consideration heuristics;,citation_author=Daria Dzyabura;,citation_author=John R. Hauser;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Consideration-set heuristics: Review and research agenda;,citation_author=John R. Hauser;,citation_publication_date=2014;,citation_cover_date=2014;,citation_year=2014;,citation_journal_title=Journal of Business Research;">
+<meta name="citation_reference" content="citation_title=Economic foundations of conjoint analysis;,citation_author=Greg M. Allenby;,citation_author=Nino Hardt;,citation_author=Peter E. Rossi;,citation_editor=Jean-Pierre Dubé;,citation_editor=Peter E. Rossi;,citation_publication_date=2019;,citation_cover_date=2019;,citation_year=2019;,citation_volume=1;,citation_inbook_title=Handbook of the economics of marketing;">
+<meta name="citation_reference" content="citation_title=Incentive-aligned conjoint analysis;,citation_author=Min Ding;,citation_author=Rajdeep Grewal;,citation_author=John Liechty;,citation_publication_date=2005;,citation_cover_date=2005;,citation_year=2005;,citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=An incentive-aligned mechanism for conjoint analysis;,citation_author=Min Ding;,citation_publication_date=2007;,citation_cover_date=2007;,citation_year=2007;,citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=A unified approach to conjoint analysis models;,citation_author=Pablo Marshall;,citation_author=Eric T. Bradlow;,citation_publication_date=2002;,citation_cover_date=2002;,citation_year=2002;,citation_journal_title=Journal of the American Statistical Association;">
+</head>
+
+<body class="quarto-light">
+
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">SIFT: Search Conjoint</h1>
+            <p class="subtitle lead">Measuring Preferences and Search Costs in a Single Survey Instrument</p>
+          </div>
+
+    
+    <div class="quarto-title-meta-container">
+      <div class="quarto-title-meta-column-start">
+            <div class="quarto-title-meta-author">
+          <div class="quarto-title-meta-heading">Authors</div>
+          <div class="quarto-title-meta-heading">Affiliations</div>
+          
+                <div class="quarto-title-meta-contents">
+            <p class="author">Dan Yavorsky <a href="mailto:dyavorsky@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0003-4095-6405" class="quarto-title-author-orcid" aria-label="ORCID profile for Dan Yavorsky"> <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+                <div class="quarto-title-meta-contents">
+                    <p class="affiliation">
+                        GBK Collective
+                      </p>
+                    <p class="affiliation">
+                        Rady School of Management, University of California San Diego
+                      </p>
+                  </div>
+                      <div class="quarto-title-meta-contents">
+            <p class="author">Eric T. Bradlow <a href="mailto:ebradlow@wharton.upenn.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+          </div>
+                <div class="quarto-title-meta-contents">
+                    <p class="affiliation">
+                        The Wharton School, University of Pennsylvania
+                      </p>
+                  </div>
+                    </div>
+        
+        <div class="quarto-title-meta">
+
+                      
+                <div>
+            <div class="quarto-title-meta-heading">Published</div>
+            <div class="quarto-title-meta-contents">
+              <p class="date">August 25, 2026</p>
+            </div>
+          </div>
+          
+                
+              </div>
+      </div>
+      <div class="quarto-title-meta-column-end quarto-other-formats-target">
+      <div class="quarto-alternate-formats"><div class="quarto-title-meta-heading">Other Formats</div><div class="quarto-title-meta-contents"><p><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></p></div></div></div>
+    </div>
+
+    <div>
+      <div class="abstract">
+        <div class="block-title">Abstract</div>
+        <p>Conjoint analysis measures what consumers prefer among alternatives they have been shown. It is silent on what they would have looked at, what looking costs them, and what they never see at all. We introduce SIFT, a survey instrument in which the respondent faces a list-screen of alternatives, clicks through to inspect individual listings at will, and then chooses — a task that reproduces the two-stage list-then-detail architecture of the environments in which many category purchases are actually made. Each respondent completes a sequence of such tasks, and position, list-screen content, and detail-page content are randomized by design in every one. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters, as conjoint does, and search costs, for which conjoint has no analogue. Two features distinguish the instrument from the structural search literature it borrows from. First, the within-respondent panel of search spells supports individual-level estimates of preferences and search costs jointly, where field applications typically observe a single spell per consumer and identify heterogeneity cross-sectionally. Second, the exogenous variation that field studies obtain only rarely — randomized position and information architecture — is designed in rather than found. The framework nests conjoint: as the search cost goes to zero every alternative is inspected, choice is made over fully realized utilities, and the model collapses to a standard choice-based conjoint model. Whether the search cost is distinguishable from zero is therefore a testable question rather than a maintained assumption, and the answer tells the analyst whether consideration or preference is the binding constraint in a category. We derive the likelihood, characterize what the designed variation buys for identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery at commercial task counts, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT’s preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — a distinction conjoint cannot draw, and one that carries different managerial remedies.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="keywords">
+        <div class="block-title">Keywords</div>
+        <p>consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation</p>
+      </div>
+    </div>
+
+    <div class="quarto-other-links-text-target">
+    </div>  </div>
+</header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-intro" id="toc-sec-intro" class="nav-link active" data-scroll-target="#sec-intro"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#sec-lit" id="toc-sec-lit" class="nav-link" data-scroll-target="#sec-lit"><span class="header-section-number">2</span> Related Literature</a>
+  <ul class="collapse">
+  <li><a href="#sec-lit-theory" id="toc-sec-lit-theory" class="nav-link" data-scroll-target="#sec-lit-theory"><span class="header-section-number">2.1</span> Optimal Sequential Search</a></li>
+  <li><a href="#sec-lit-field" id="toc-sec-lit-field" class="nav-link" data-scroll-target="#sec-lit-field"><span class="header-section-number">2.2</span> Structural Search with Field and Clickstream Data</a></li>
+  <li><a href="#sec-lit-lab" id="toc-sec-lit-lab" class="nav-link" data-scroll-target="#sec-lit-lab"><span class="header-section-number">2.3</span> Lab and Experimental Evidence on Search</a></li>
+  <li><a href="#sec-lit-preference" id="toc-sec-lit-preference" class="nav-link" data-scroll-target="#sec-lit-preference"><span class="header-section-number">2.4</span> Information Search inside Preference Measurement</a></li>
+  <li><a href="#sec-lit-consideration" id="toc-sec-lit-consideration" class="nav-link" data-scroll-target="#sec-lit-consideration"><span class="header-section-number">2.5</span> Consideration Sets and Screening Rules in Conjoint</a></li>
+  <li><a href="#sec-lit-practice" id="toc-sec-lit-practice" class="nav-link" data-scroll-target="#sec-lit-practice"><span class="header-section-number">2.6</span> Conjoint Practice, Incentive Alignment, and Commercial Precedent</a></li>
+  <li><a href="#sec-lit-positioning" id="toc-sec-lit-positioning" class="nav-link" data-scroll-target="#sec-lit-positioning"><span class="header-section-number">2.7</span> Positioning</a></li>
+  </ul></li>
+  <li><a href="#sec-instrument" id="toc-sec-instrument" class="nav-link" data-scroll-target="#sec-instrument"><span class="header-section-number">3</span> The SIFT Instrument</a>
+  <ul class="collapse">
+  <li><a href="#sec-instrument-architecture" id="toc-sec-instrument-architecture" class="nav-link" data-scroll-target="#sec-instrument-architecture"><span class="header-section-number">3.1</span> Task Architecture</a></li>
+  <li><a href="#sec-instrument-randomization" id="toc-sec-instrument-randomization" class="nav-link" data-scroll-target="#sec-instrument-randomization"><span class="header-section-number">3.2</span> Randomization and Experimental Design</a></li>
+  <li><a href="#sec-instrument-data" id="toc-sec-instrument-data" class="nav-link" data-scroll-target="#sec-instrument-data"><span class="header-section-number">3.3</span> Data Recorded</a></li>
+  </ul></li>
+  <li><a href="#sec-model" id="toc-sec-model" class="nav-link" data-scroll-target="#sec-model"><span class="header-section-number">4</span> Model</a>
+  <ul class="collapse">
+  <li><a href="#sec-model-setup" id="toc-sec-model-setup" class="nav-link" data-scroll-target="#sec-model-setup"><span class="header-section-number">4.1</span> Setup and Notation</a></li>
+  <li><a href="#sec-model-policy" id="toc-sec-model-policy" class="nav-link" data-scroll-target="#sec-model-policy"><span class="header-section-number">4.2</span> Optimal Search Policy</a></li>
+  <li><a href="#sec-model-likelihood" id="toc-sec-model-likelihood" class="nav-link" data-scroll-target="#sec-model-likelihood"><span class="header-section-number">4.3</span> Likelihood</a></li>
+  <li><a href="#sec-model-nesting" id="toc-sec-model-nesting" class="nav-link" data-scroll-target="#sec-model-nesting"><span class="header-section-number">4.4</span> Conjoint as the Zero-Search-Cost Special Case</a></li>
+  <li><a href="#sec-model-alternatives" id="toc-sec-model-alternatives" class="nav-link" data-scroll-target="#sec-model-alternatives"><span class="header-section-number">4.5</span> Alternative Search Protocols</a></li>
+  </ul></li>
+  <li><a href="#sec-estimation" id="toc-sec-estimation" class="nav-link" data-scroll-target="#sec-estimation"><span class="header-section-number">5</span> Identification and Estimation</a>
+  <ul class="collapse">
+  <li><a href="#sec-est-variation" id="toc-sec-est-variation" class="nav-link" data-scroll-target="#sec-est-variation"><span class="header-section-number">5.1</span> What the Designed Variation Buys</a></li>
+  <li><a href="#sec-est-normalization" id="toc-sec-est-normalization" class="nav-link" data-scroll-target="#sec-est-normalization"><span class="header-section-number">5.2</span> Normalization</a></li>
+  <li><a href="#sec-est-nesting" id="toc-sec-est-nesting" class="nav-link" data-scroll-target="#sec-est-nesting"><span class="header-section-number">5.3</span> Testing the Zero-Search-Cost Restriction</a></li>
+  <li><a href="#sec-est-panel" id="toc-sec-est-panel" class="nav-link" data-scroll-target="#sec-est-panel"><span class="header-section-number">5.4</span> Individual-Level Estimation from a Task Panel</a></li>
+  <li><a href="#sec-est-estimation" id="toc-sec-est-estimation" class="nav-link" data-scroll-target="#sec-est-estimation"><span class="header-section-number">5.5</span> Estimation</a></li>
+  <li><a href="#sec-est-software" id="toc-sec-est-software" class="nav-link" data-scroll-target="#sec-est-software"><span class="header-section-number">5.6</span> Software</a></li>
+  </ul></li>
+  <li><a href="#sec-simstudy" id="toc-sec-simstudy" class="nav-link" data-scroll-target="#sec-simstudy"><span class="header-section-number">6</span> Simulation Study</a>
+  <ul class="collapse">
+  <li><a href="#design" id="toc-design" class="nav-link" data-scroll-target="#design"><span class="header-section-number">6.1</span> Design</a></li>
+  <li><a href="#parameter-recovery" id="toc-parameter-recovery" class="nav-link" data-scroll-target="#parameter-recovery"><span class="header-section-number">6.2</span> Parameter Recovery</a></li>
+  <li><a href="#power-to-detect-a-nonzero-search-cost" id="toc-power-to-detect-a-nonzero-search-cost" class="nav-link" data-scroll-target="#power-to-detect-a-nonzero-search-cost"><span class="header-section-number">6.3</span> Power to Detect a Nonzero Search Cost</a></li>
+  <li><a href="#misspecification-and-behavioral-robustness" id="toc-misspecification-and-behavioral-robustness" class="nav-link" data-scroll-target="#misspecification-and-behavioral-robustness"><span class="header-section-number">6.4</span> Misspecification and Behavioral Robustness</a></li>
+  </ul></li>
+  <li><a href="#sec-analysis" id="toc-sec-analysis" class="nav-link" data-scroll-target="#sec-analysis"><span class="header-section-number">7</span> Empirical Application</a>
+  <ul class="collapse">
+  <li><a href="#data-and-design" id="toc-data-and-design" class="nav-link" data-scroll-target="#data-and-design"><span class="header-section-number">7.1</span> Data and Design</a></li>
+  <li><a href="#descriptive-evidence" id="toc-descriptive-evidence" class="nav-link" data-scroll-target="#descriptive-evidence"><span class="header-section-number">7.2</span> Descriptive Evidence</a></li>
+  <li><a href="#estimates" id="toc-estimates" class="nav-link" data-scroll-target="#estimates"><span class="header-section-number">7.3</span> Estimates</a></li>
+  <li><a href="#convergent-validity-against-conjoint" id="toc-convergent-validity-against-conjoint" class="nav-link" data-scroll-target="#convergent-validity-against-conjoint"><span class="header-section-number">7.4</span> Convergent Validity against Conjoint</a></li>
+  <li><a href="#holdout-prediction" id="toc-holdout-prediction" class="nav-link" data-scroll-target="#holdout-prediction"><span class="header-section-number">7.5</span> Holdout Prediction</a></li>
+  <li><a href="#task-order-effects" id="toc-task-order-effects" class="nav-link" data-scroll-target="#task-order-effects"><span class="header-section-number">7.6</span> Task-Order Effects</a></li>
+  </ul></li>
+  <li><a href="#sec-managerial" id="toc-sec-managerial" class="nav-link" data-scroll-target="#sec-managerial"><span class="header-section-number">8</span> What the Model Delivers</a>
+  <ul class="collapse">
+  <li><a href="#decomposing-non-purchase" id="toc-decomposing-non-purchase" class="nav-link" data-scroll-target="#decomposing-non-purchase"><span class="header-section-number">8.1</span> Decomposing Non-Purchase</a></li>
+  <li><a href="#position-and-merchandising-counterfactuals" id="toc-position-and-merchandising-counterfactuals" class="nav-link" data-scroll-target="#position-and-merchandising-counterfactuals"><span class="header-section-number">8.2</span> Position and Merchandising Counterfactuals</a></li>
+  <li><a href="#information-architecture" id="toc-information-architecture" class="nav-link" data-scroll-target="#information-architecture"><span class="header-section-number">8.3</span> Information Architecture</a></li>
+  <li><a href="#search-based-segmentation" id="toc-search-based-segmentation" class="nav-link" data-scroll-target="#search-based-segmentation"><span class="header-section-number">8.4</span> Search-Based Segmentation</a></li>
+  </ul></li>
+  <li><a href="#sec-discussion" id="toc-sec-discussion" class="nav-link" data-scroll-target="#sec-discussion"><span class="header-section-number">9</span> Discussion</a>
+  <ul class="collapse">
+  <li><a href="#what-the-nesting-result-changes" id="toc-what-the-nesting-result-changes" class="nav-link" data-scroll-target="#what-the-nesting-result-changes"><span class="header-section-number">9.1</span> What the Nesting Result Changes</a></li>
+  <li><a href="#implications-for-practice" id="toc-implications-for-practice" class="nav-link" data-scroll-target="#implications-for-practice"><span class="header-section-number">9.2</span> Implications for Practice</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">9.3</span> Limitations</a></li>
+  <li><a href="#where-conjoint-remains-the-right-tool" id="toc-where-conjoint-remains-the-right-tool" class="nav-link" data-scroll-target="#where-conjoint-remains-the-right-tool"><span class="header-section-number">9.4</span> Where Conjoint Remains the Right Tool</a></li>
+  </ul></li>
+  <li><a href="#sec-conclusion" id="toc-sec-conclusion" class="nav-link" data-scroll-target="#sec-conclusion"><span class="header-section-number">10</span> Conclusion</a></li>
+  
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="sections/appendix-preview.html"><i class="bi bi-journal-code"></i>Appendix</a></li><li><a href="sections/conclusion-preview.html"><i class="bi bi-journal-code"></i>Conclusion</a></li><li><a href="sections/discussion-preview.html"><i class="bi bi-journal-code"></i>Discussion</a></li><li><a href="sections/analysis-preview.html"><i class="bi bi-journal-code"></i>Empirical Application</a></li><li><a href="sections/identification-preview.html"><i class="bi bi-journal-code"></i>Identification and Estimation</a></li><li><a href="sections/intro-preview.html"><i class="bi bi-journal-code"></i>Introduction</a></li><li><a href="latex_commands-preview.html"><i class="bi bi-journal-code"></i>latex_commands.qmd</a></li><li><a href="sections/model-preview.html"><i class="bi bi-journal-code"></i>Model</a></li><li><a href="sections/litreview-preview.html"><i class="bi bi-journal-code"></i>Related Literature</a></li><li><a href="sections/simstudy-preview.html"><i class="bi bi-journal-code"></i>Simulation Study</a></li><li><a href="sections/instrument-preview.html"><i class="bi bi-journal-code"></i>The SIFT Instrument</a></li><li><a href="sections/managerial-preview.html"><i class="bi bi-journal-code"></i>What the Model Delivers</a></li></ul></div></nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+  
+
+
+<!-- Latex -->
+<p><span class="math display">\[
+  \newcommand{\iid}{\stackrel{iid}{\sim}}
+  \newcommand{\bfbeta}{\boldsymbol{\beta}}
+  \newcommand{\bfgamma}{\boldsymbol{\gamma}}
+  \newcommand{\bfkappa}{\boldsymbol{\kappa}}
+  \newcommand{\bftheta}{\boldsymbol{\theta}}
+  \newcommand{\bfOmega}{\boldsymbol{\Omega}}
+  \newcommand{\bfX}{\mathbf{X}}
+  \newcommand{\bfL}{\mathbf{L}}
+  \newcommand{\bfZ}{\mathbf{Z}}
+  \newcommand{\Jset}{\mathcal{J}}
+  \newcommand{\Sset}{\mathcal{S}}
+  \newcommand{\Sbar}{\bar{\mathcal{S}}}
+  \newcommand{\resv}{z}
+  \newcommand{\cost}{c}
+\]</span></p>
+<!-- Sections -->
+<section id="sec-intro" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="sec-intro"><span class="header-section-number">1</span> Introduction</h2>
+<!--
+TODO: draft. Left intentionally blank.
+
+Elements to hit when drafting (from the project brief, not yet prose):
+  - Conjoint measures preference among alternatives the respondent was shown;
+    it is silent on what she would have looked at and what looking costs.
+  - The two-stage list-then-detail architecture is how many categories are
+    actually shopped; the instrument reproduces it.
+  - The nesting claim is load-bearing: conjoint is the zero-search-cost
+    special case of SIFT. Non-adversarial, roughly true, and testable.
+  - Two technical claims: (i) within-respondent panel of search spells
+    supports individual-level preference AND search-cost estimates;
+    (ii) exogenous variation in position and information architecture is
+    designed in rather than found.
+  - One-line version: conjoint tells you what people prefer once they are
+    looking; SIFT tells you what they look at, what it costs them to look,
+    and what they never see at all.
+  - Contributions list, then roadmap paragraph pointing at each section.
+-->
+</section>
+<section id="sec-lit" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="sec-lit"><span class="header-section-number">2</span> Related Literature</h2>
+<div class="callout callout-style-default callout-warning callout-titled" title="Citation verification status — remove before circulation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Citation verification status — remove before circulation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Every reference in this section was reconstructed from memory without database access and is <strong>unverified</strong>. Confidence flags follow each entry: <strong>[H]</strong> confident the paper exists and the details are roughly right; <strong>[M]</strong> confident the paper exists, unsure of journal, year, or coauthors; <strong>[L]</strong> believe something like this exists, may be conflating sources. Treat <strong>[L]</strong> items as search leads, not references. Nothing here should reach a referee, a proposal, or a client before it is checked against the record. The three entries marked <strong>novelty gate</strong> determine whether the paper’s central claim survives; read those first.</p>
+</div>
+</div>
+<!--
+Structure of this section: five literatures plus a positioning subsection.
+Currently bulleted notes, not prose. Convert to prose after the citation
+verification pass and after the novelty ruling on @sec-lit-preference.
+-->
+<section id="sec-lit-theory" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="sec-lit-theory"><span class="header-section-number">2.1</span> Optimal Sequential Search</h3>
+<p>The theoretical backbone. The instrument’s data-generating process is the Weitzman protocol run inside a survey.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Weitzman_1979">Weitzman (<a href="#ref-Weitzman_1979" role="doc-biblioref">1979</a>)</span>, “Optimal Search for the Best Alternative,” <em>Econometrica</em>. [H]</strong> The Pandora’s box problem, and the model the instrument is built to estimate. Each box has a known prize distribution and a known opening cost. The optimal policy factors into three parts: a <em>reservation value</em> computed for each box independently of every other box; a <em>selection rule</em> (open boxes in descending reservation value); and a <em>stopping rule</em> (stop when the best realized prize exceeds the highest remaining reservation value). The independence of the reservation values is what makes the model estimable at survey scale.</li>
+<li><strong><span class="citation" data-cites="Stigler_1961">Stigler (<a href="#ref-Stigler_1961" role="doc-biblioref">1961</a>)</span>, “The Economics of Information,” <em>Journal of Political Economy</em>. [H]</strong> The fixed-sample-size alternative: the consumer commits to <span class="math inline">\(n\)</span> searches up front rather than deciding adaptively. The competing protocol, and the one SIFT’s panel structure may be able to test against sequential search respondent by respondent.</li>
+<li><strong><span class="citation" data-cites="McCall_1970">McCall (<a href="#ref-McCall_1970" role="doc-biblioref">1970</a>)</span>, <em>Quarterly Journal of Economics</em>. [M]</strong> Reservation-wage formulation of sequential search with recall; the labor-search ancestor of the marketing applications below.</li>
+</ul>
+<p><em>Simultaneous versus sequential.</em> These are two competing protocols, not two descriptions of one thing. Sequential search fits click-through-and-inspect; fixed-sample search fits “get three quotes.” <span class="citation" data-cites="Honka_Chintagunta_2017">Honka and Chintagunta (<a href="#ref-Honka_Chintagunta_2017" role="doc-biblioref">2017</a>)</span> is the reference on distinguishing them empirically, and is directly relevant here because SIFT’s within-respondent panel could run that test at the individual level rather than the population level.</p>
+</section>
+<section id="sec-lit-field" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="sec-lit-field"><span class="header-section-number">2.2</span> Structural Search with Field and Clickstream Data</h3>
+<p>Context rather than precedent: all of this work is observational or platform data with no designed instrument. SIFT’s credibility with an economics audience depends on connecting to it cleanly.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Hong_Shum_2006">Hong and Shum (<a href="#ref-Hong_Shum_2006" role="doc-biblioref">2006</a>)</span>, <em>RAND Journal of Economics</em>. [H]</strong> Recovers search costs from price distributions alone, without search data. The extreme case of how little the field has typically had to work with.</li>
+<li><strong><span class="citation" data-cites="Hortacsu_Syverson_2004">Hortaçsu and Syverson (<a href="#ref-Hortacsu_Syverson_2004" role="doc-biblioref">2004</a>)</span>, <em>Quarterly Journal of Economics</em>. [H]</strong> S&amp;P 500 index funds. Search frictions with differentiated products, in a setting where the products are nearly identical and the frictions are not.</li>
+<li><strong><span class="citation" data-cites="Kim_2010">Kim et al. (<a href="#ref-Kim_2010" role="doc-biblioref">2010</a>)</span>, <em>Marketing Science</em>. [H]</strong> Amazon view-rank data for camcorders. One of the first structural search models fit to online browsing data in marketing.</li>
+<li><strong><span class="citation" data-cites="DeLosSantos_2012">De los Santos et al. (<a href="#ref-DeLosSantos_2012" role="doc-biblioref">2012</a>)</span>, “Testing Models of Consumer Search Using Data on Web Browsing,” <em>American Economic Review</em>. [H]</strong> Comscore browsing data; tests sequential search against fixed-sample search and finds fixed-sample fits better in their setting. The empirical warning shot for assuming the Weitzman protocol rather than testing it.</li>
+<li><strong><span class="citation" data-cites="Koulayev_2014">Koulayev (<a href="#ref-Koulayev_2014" role="doc-biblioref">2014</a>)</span>, <em>RAND Journal of Economics</em>. [M]</strong> Hotel search with click data; identification and estimation for differentiated products.</li>
+<li><strong><span class="citation" data-cites="Honka_2014">Honka (<a href="#ref-Honka_2014" role="doc-biblioref">2014</a>)</span>, <em>RAND Journal of Economics</em>. [H]</strong> Auto insurance; separates search costs from switching costs. The template for arguing that an estimated friction is the friction you claim it is.</li>
+<li><strong><span class="citation" data-cites="Honka_Chintagunta_2017">Honka and Chintagunta (<a href="#ref-Honka_Chintagunta_2017" role="doc-biblioref">2017</a>)</span>, <em>Marketing Science</em>. [M]</strong> Simultaneous or sequential; see above.</li>
+<li><strong><span class="citation" data-cites="Chen_Yao_2017">Chen and Yao (<a href="#ref-Chen_Yao_2017" role="doc-biblioref">2017</a>)</span>, <em>Management Science</em>. [M]</strong> Sequential search with refinement — filters and sorts modeled as search actions — on Expedia clickstream data. Closest existing work in spirit to a list-screen interface, and the natural precedent if the instrument later adds filtering.</li>
+<li><strong><span class="citation" data-cites="Ursu_2018">Ursu (<a href="#ref-Ursu_2018" role="doc-biblioref">2018</a>)</span>, “The Power of Rankings,” <em>Marketing Science</em>. [H]</strong> Expedia’s randomized-position experiment. The cleanest source of exogenous variation in the field literature, obtained once, as a rare gift from a platform. The contrast with SIFT is direct: here the same variation is free, designed in, and present in every task.</li>
+<li><strong><span class="citation" data-cites="Ursu_2020">Ursu et al. (<a href="#ref-Ursu_2020" role="doc-biblioref">2020</a>)</span>, <em>Marketing Science</em>. [M]</strong> Search duration and time spent, rather than search incidence alone.</li>
+<li><strong><span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span>, <em>Quantitative Marketing and Economics</em>. [H]</strong> Dealership visits in the U.S. auto market; identification of search costs from observed search sets. (Author’s own; the estimation code is an implementation asset, see <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a>.)</li>
+<li><strong><span class="citation" data-cites="Bronnenberg_2016">Bronnenberg et al. (<a href="#ref-Bronnenberg_2016" role="doc-biblioref">2016</a>)</span>, “Zooming In on Choice,” <em>Journal of Marketing Research</em>. [M]</strong> Descriptive clickstream evidence on how consumers actually move through product pages. Face-validity evidence for the interface design in
+<ol class="example" type="1">
+<li></li>
+</ol></li>
+<li><strong>2, <em>Quantitative Marketing and Economics</em>. [M] — novelty gate</strong> Framework and consolidation review of the sequential search model. Best single entry point to the current state of model specification, identification, and estimation practice; read first to establish what is already settled.</li>
+<li><strong><span class="citation" data-cites="Greminger_2022">Greminger (<a href="#ref-Greminger_2022" role="doc-biblioref">2022</a>)</span>, <em>Management Science</em>. [M]</strong> Search with discovery of alternatives — the consumer does not know the full choice set at the outset. Relevant to how much of the list-screen the instrument reveals up front.</li>
+</ul>
+</section>
+<section id="sec-lit-lab" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="sec-lit-lab"><span class="header-section-number">2.3</span> Lab and Experimental Evidence on Search</h3>
+<p>Two experimental literatures that have barely spoken to each other, and the direct methodological precedent for running search as a designed task.</p>
+<section id="does-anyone-follow-the-optimal-rule" class="level4" data-number="2.3.1">
+<h4 data-number="2.3.1" class="anchored" data-anchor-id="does-anyone-follow-the-optimal-rule"><span class="header-section-number">2.3.1</span> Does anyone follow the optimal rule?</h4>
+<ul>
+<li><strong><span class="citation" data-cites="Schotter_Braunstein_1981">Schotter and Braunstein (<a href="#ref-Schotter_Braunstein_1981" role="doc-biblioref">1981</a>)</span>, <em>Economic Inquiry</em>. [M]</strong> Early sequential-search experiments with real incentives.</li>
+<li><strong><span class="citation" data-cites="Hey_1987">Hey (<a href="#ref-Hey_1987" role="doc-biblioref">1987</a>)</span>, “Still Searching,” <em>Journal of Economic Behavior and Organization</em>. [M]</strong> Subjects use rules of thumb rather than optimal reservation strategies.</li>
+<li><strong><span class="citation" data-cites="Cox_Oaxaca_1989">Cox and Oaxaca (<a href="#ref-Cox_Oaxaca_1989" role="doc-biblioref">1989</a>)</span>. [M]</strong> Finite-horizon search; broadly supportive of reservation-rule behavior with noise. The more favorable read.</li>
+<li><strong><span class="citation" data-cites="Sonnemans_1998">Sonnemans (<a href="#ref-Sonnemans_1998" role="doc-biblioref">1998</a>)</span>. [M]</strong> Verbal-protocol evidence and classification of search strategies.</li>
+<li><strong><span class="citation" data-cites="Brown_2011">Brown et al. (<a href="#ref-Brown_2011" role="doc-biblioref">2011</a>)</span>. [L]</strong> Real-time search in the laboratory and in the market.</li>
+</ul>
+<p><em>Net read.</em> Mixed, and this is the single largest scientific risk to the project. Behavior is directionally consistent with reservation-value logic, but the deviations are systematic rather than random: too little search relative to the optimum, order effects, and sensitivity to sunk costs. The paper should state this openly and early rather than let a referee find it.</p>
+</section>
+<section id="information-acquisition-mouselab-and-eye-tracking" class="level4" data-number="2.3.2">
+<h4 data-number="2.3.2" class="anchored" data-anchor-id="information-acquisition-mouselab-and-eye-tracking"><span class="header-section-number">2.3.2</span> Information acquisition: Mouselab and eye-tracking</h4>
+<p>Mechanically, the SIFT task is a Mouselab information board wearing a commercial skin.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Payne_1988">Payne et al. (<a href="#ref-Payne_1988" role="doc-biblioref">1988</a>)</span>; <span class="citation" data-cites="Payne_1993">Payne et al. (<a href="#ref-Payne_1993" role="doc-biblioref">1993</a>)</span>, <em>The Adaptive Decision Maker</em>. [H]</strong> The Mouselab paradigm: information boards in which subjects click cells to reveal attribute values, with the acquisition sequence recorded. Descriptive and process-focused rather than structural.</li>
+<li><strong><span class="citation" data-cites="Gabaix_2006">Gabaix et al. (<a href="#ref-Gabaix_2006" role="doc-biblioref">2006</a>)</span>, “Costly Information Acquisition,” <em>American Economic Review</em>. [H] — novelty gate</strong> A Mouselab-style experiment paired with a <em>structural</em> boundedly-rational model (directed cognition) estimated on the acquisition data. The closest existing template for the core maneuver — run an information-acquisition experiment, fit a structural search-type model to the acquisition record. Not Weitzman, but the same move.</li>
+<li><strong><span class="citation" data-cites="Caplin_2011">Caplin et al. (<a href="#ref-Caplin_2011" role="doc-biblioref">2011</a>)</span>, “Search and Satisficing,” <em>American Economic Review</em>. [H]</strong> Choice-process data showing that people stop before finding the best available option. The satisficing alternative against which model fit should be reported.</li>
+<li><strong><span class="citation" data-cites="Reutskaja_2011">Reutskaja et al. (<a href="#ref-Reutskaja_2011" role="doc-biblioref">2011</a>)</span>, <em>American Economic Review</em>. [H]</strong> Eye-tracking evidence on search under time pressure with supermarket-style displays.</li>
+</ul>
+<p><em>Net read.</em> The experimental apparatus is well validated and has been for decades. What has largely not been done is fitting a Weitzman model to acquisition data and reporting search costs in interpretable units.</p>
+</section>
+</section>
+<section id="sec-lit-preference" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="sec-lit-preference"><span class="header-section-number">2.4</span> Information Search inside Preference Measurement</h3>
+<p>The closest existing work in marketing, and the location of the sharpest threat to novelty.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Yang_2015">Yang et al. (<a href="#ref-Yang_2015" role="doc-biblioref">2015</a>)</span>, “A Bounded Rationality Model of Information Search and Choice in Preference Measurement,” <em>Journal of Marketing Research</em>. [M] — novelty gate</strong> Models within-task information search during a conjoint-style task using eye-tracking data, with an optimal-stopping flavor. If one paper threatens the contribution, it is this one. Read it first and read it carefully.</li>
+<li><strong><span class="citation" data-cites="Yang_2018">Yang et al. (<a href="#ref-Yang_2018" role="doc-biblioref">2018</a>)</span>, <em>Marketing Science</em>. [M]</strong> Attention and information processing in incentive-aligned choice experiments.</li>
+<li><strong><span class="citation" data-cites="Meissner_2016">Meißner et al. (<a href="#ref-Meissner_2016" role="doc-biblioref">2016</a>)</span>, <em>Journal of Marketing Research</em>. [M]</strong> Eye-tracking in conjoint; processing becomes measurably more efficient with practice. Directly relevant because a multi-task panel will exhibit learning across tasks, which appears in the model as drift in the search-cost parameter (<a href="#sec-lit-lab" class="quarto-xref">Section&nbsp;2.3</a>, <a href="#sec-discussion" class="quarto-xref">Section&nbsp;9</a>).</li>
+</ul>
+<p><em>Distinction to preserve — and to verify before relying on it.</em> These papers study search <em>within</em> a task, over the attributes of profiles already displayed, mostly in service of better preference estimates. SIFT studies search <em>across alternatives</em>, in a two-stage list-then-detail architecture, where the search cost is itself a deliverable rather than a nuisance parameter. Related, but not the same object. Confirm this holds before building on it.</p>
+</section>
+<section id="sec-lit-consideration" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="sec-lit-consideration"><span class="header-section-number">2.5</span> Consideration Sets and Screening Rules in Conjoint</h3>
+<p>The existing marketing answer to “people do not evaluate everything,” and the comparison a conjoint-literate reader will reach for first.</p>
+<ul>
+<li><strong><span class="citation" data-cites="Gilbride_Allenby_2004">Gilbride and Allenby (<a href="#ref-Gilbride_Allenby_2004" role="doc-biblioref">2004</a>)</span>, <em>Marketing Science</em>. [H]</strong> A choice model with conjunctive, disjunctive, and compensatory screening rules. The incumbent formulation.</li>
+<li><strong><span class="citation" data-cites="Hauser_2010">Hauser et al. (<a href="#ref-Hauser_2010" role="doc-biblioref">2010</a>)</span>, <em>Journal of Marketing Research</em>. [H]</strong> Disjunctions of conjunctions; cognitive simplicity in consideration rules.</li>
+<li><strong><span class="citation" data-cites="Yee_2007">Yee et al. (<a href="#ref-Yee_2007" role="doc-biblioref">2007</a>)</span>, <em>Marketing Science</em>. [M]</strong> Greedoid-based noncompensatory inference.</li>
+<li><strong><span class="citation" data-cites="Dzyabura_2011">Dzyabura and Hauser (<a href="#ref-Dzyabura_2011" role="doc-biblioref">2011</a>)</span>, <em>Marketing Science</em>. [M]</strong> Active machine learning for consideration heuristics.</li>
+<li><strong><span class="citation" data-cites="Hauser_2014">Hauser (<a href="#ref-Hauser_2014" role="doc-biblioref">2014</a>)</span>, <em>Journal of Business Research</em>. [M]</strong> Review of consideration-set heuristics.</li>
+</ul>
+<p><em>Sharpest one-line contrast.</em> This literature <em>infers</em> screening rules from choice outcomes, treating consideration as latent structure. SIFT <em>observes</em> the consideration process directly and prices it in units of search cost. Inference versus observation.</p>
+</section>
+<section id="sec-lit-practice" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="sec-lit-practice"><span class="header-section-number">2.6</span> Conjoint Practice, Incentive Alignment, and Commercial Precedent</h3>
+<ul>
+<li><strong><span class="citation" data-cites="Allenby_2019">Allenby et al. (<a href="#ref-Allenby_2019" role="doc-biblioref">2019</a>)</span>, <em>Handbook of the Economics of Marketing</em>. [H]</strong> Economic foundations of conjoint analysis; the statement of the workhorse model that SIFT nests.</li>
+<li><strong><span class="citation" data-cites="Marshall_Bradlow_2002">Marshall and Bradlow (<a href="#ref-Marshall_Bradlow_2002" role="doc-biblioref">2002</a>)</span>, <em>JASA</em>. [H]</strong> A unified approach to conjoint analysis models; precedent for treating distinct response formats as one likelihood family.</li>
+<li><strong><span class="citation" data-cites="Ding_2005">Ding et al. (<a href="#ref-Ding_2005" role="doc-biblioref">2005</a>)</span>, <em>Journal of Marketing Research</em>; <span class="citation" data-cites="Ding_2007">Ding (<a href="#ref-Ding_2007" role="doc-biblioref">2007</a>)</span>, <em>Journal of Marketing Research</em>. [H]</strong> Incentive alignment in conjoint. If estimated search costs are to carry units that mean anything, the task needs real stakes; this is the precedent for how to supply them.</li>
+<li><strong>Sawtooth ACBC (adaptive choice-based conjoint).</strong> Not an academic reference, but the closest commercial product to a two-stage consideration instrument: a screening section (must-haves, unacceptables) followed by a choice tournament. Study as design precedent, and as the thing a client may already have bought. <!-- TODO: cite the Sawtooth technical paper --></li>
+<li><strong>Virtual-shelf and shopper-simulation vendors.</strong> Several field shelf-set exercises with click data, reported descriptively (time to first click, click share). No known case of backing a structural search model out of one. <strong>This is where prior art most likely hides; check directly.</strong> <!-- TODO: vendor scan, then decide whether this belongs in the paper at all --></li>
+</ul>
+</section>
+<section id="sec-lit-positioning" class="level3" data-number="2.7">
+<h3 data-number="2.7" class="anchored" data-anchor-id="sec-lit-positioning"><span class="header-section-number">2.7</span> Positioning</h3>
+<!--
+TODO: prose. The four claims to be stated here as hypotheses the paper
+tests, not as established gaps:
+
+  1. A fieldable, productized survey instrument that yields Weitzman
+     search-cost parameters the way conjoint yields part-worths. Lab
+     analogues exist (@Gabaix_2006); a survey method with design norms
+     and reporting conventions does not.
+  2. Individual-level search costs identified from within-subject panel
+     data rather than cross-sectional heterogeneity.
+  3. Designed exogenous variation in position and information architecture
+     in every task, rather than obtained once from a platform (@Ursu_2018).
+  4. Segmentation on search behavior — how people shop — rather than on
+     preference. No prior art known.
+
+Each of these is a claim to disprove during the verification pass, not a
+result. Do not write them as results.
+-->
+</section>
+</section>
+<section id="sec-instrument" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="sec-instrument"><span class="header-section-number">3</span> The SIFT Instrument</h2>
+<section id="sec-instrument-architecture" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="sec-instrument-architecture"><span class="header-section-number">3.1</span> Task Architecture</h3>
+<p>A SIFT task presents the respondent with two kinds of screen, arranged the way online retail arranges them. The first is a <strong>listing page</strong>: a set of <span class="math inline">\(J\)</span> alternatives displayed as an ordered vertical list, each occupying one row. The second is a <strong>product page</strong>, one per alternative, reached by clicking its row. The pair corresponds to what commercial practice calls the product listing page and the product detail page, and the correspondence is deliberate — the instrument is meant to look to the respondent like the environments in which the category is actually shopped.</p>
+<p>The two screens differ in what they show. Every alternative is described by the same set of attributes, but the attributes are partitioned. A small number are displayed on the listing page for all <span class="math inline">\(J\)</span> alternatives at once — position in the list, brand, and price are the natural candidates, and are the ones that list pages typically carry in practice. The remainder are shown only on an alternative’s product page. A respondent who reads the listing page and clicks nothing therefore knows a little about every alternative; a respondent who opens a product page knows everything about that one alternative and still only a little about the rest.<!-- TODO: fix the partition for the empirical
+application in @sec-analysis, and state it explicitly there. --></p>
+<p>This partition is what gives the task its structure. Listing-page attributes are free: the respondent acquires them by looking at the screen she is already on. Product-page attributes are costly: acquiring them requires a click, a page load, and the time to read what the page contains. The respondent chooses how many of those costs to pay and in what order.</p>
+<p>The protocol within a task is as follows. The respondent begins on the listing page. She may open any alternative’s product page, return to the listing page, and open another, as many times as she likes and in any order she likes. Every alternative she has already opened remains available to her — she may return to a previously viewed product page at no further cost, and she may select an alternative she viewed several clicks ago. The task ends in one of two ways. She selects an alternative to purchase, which she may do only from a product page she has opened, so that no alternative can be purchased sight-unseen. Or she declines to purchase anything and exits the task, which she may do at any point, including immediately, without opening a single product page.</p>
+<p>Two features of this protocol deserve emphasis because the model in <a href="#sec-model" class="quarto-xref">Section&nbsp;4</a> rests on them. First, selection requires prior inspection, which is both realistic — one buys from the product page, not from the list — and what allows the observed choice to be read as a choice over resolved rather than expected utilities. Second, recall is free and unlimited, so a respondent is never punished for having looked at something and moved on. Together these place the task squarely in the Weitzman (1979) protocol: the listing page is a set of closed boxes whose contents are unknown but whose distributions are not, a click is the act of opening one at a cost, and the decision to stop and select is the decision to take the best prize already in hand rather than pay to open another. The no-purchase exit is the outside option, which the respondent may take whether or not she has searched.</p>
+<p>The exit option matters for what the instrument can measure. A respondent who searches nothing and leaves, a respondent who searches half the list and leaves, and a respondent who searches half the list and buys are producing three different pieces of evidence about the same two parameters. Conjoint’s no-choice option records only the first distinction between them.</p>
+<p>Respondents complete a sequence of tasks rather than one, exactly as in choice-based conjoint. Each task is a fresh listing page with a fresh set of alternatives, and the respondent searches and chooses within it independently. The current design fields ten tasks per respondent.<!-- TODO: confirm ten
+against the fielding partner's length constraints; the identification
+consequences are in @sec-estimation. --> This is the feature that separates the instrument most sharply from the field literature it borrows from. A platform dataset typically observes one search spell per consumer, so preferences and search costs must be told apart across consumers. Here each respondent supplies a panel of search spells, and the same respondent’s behavior across tasks can be used to separate what she likes from what looking costs her.</p>
+<!--
+TODO: making a click cost something.
+
+In a survey a click is nearly free, which is the central threat to
+interpreting estimated search-cost levels (see @sec-discussion). Design
+levers to consider, none yet chosen:
+  - a short enforced latency on each product-page load, so a click costs
+    real time rather than a mouse movement;
+  - an explicit click budget per task;
+  - incentive alignment in the sense of @Ding_2005 and @Ding_2007, so that
+    time spent searching has an opportunity cost denominated in something
+    the respondent wants;
+  - denominating the cost in time directly and modeling it against
+    observed dwell (@Ursu_2020).
+Whatever is chosen has to be described here and defended in @sec-discussion.
+Note that the enforced-latency option interacts with the timing data in
+@sec-instrument-data: an imposed delay must be separable from voluntary
+reading time.
+-->
+</section>
+<section id="sec-instrument-randomization" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="sec-instrument-randomization"><span class="header-section-number">3.2</span> Randomization and Experimental Design</h3>
+<p>Three things vary from task to task, and all three vary by design rather than by circumstance.</p>
+<p><strong>Position.</strong> The order in which the <span class="math inline">\(J\)</span> alternatives appear on the listing page is randomized independently of everything else about them. An alternative that appears first in one task appears fourth in another, with the same attributes and the same competitors. Position is thus uncorrelated by construction with quality, price, brand, and every other attribute — the correlation that makes observational ranking data so difficult to use, since platforms rank on relevance and relevance is a function of exactly the things that drive utility. Field work has obtained this variation only rarely and only as a gift, most cleanly in <span class="citation" data-cites="Ursu_2018">Ursu (<a href="#ref-Ursu_2018" role="doc-biblioref">2018</a>)</span>. Here it is free and present in every task.</p>
+<p><strong>Composition.</strong> The set of alternatives available on the listing page varies across tasks: which alternatives appear, and how many. This is the analogue of varying the choice set in a conjoint design, and it serves the same purpose of placing each alternative against varied competition, but it does additional work here because the attractiveness of the alternatives a respondent has <em>not</em> yet opened is what determines whether she keeps searching.</p>
+<p><strong>Attribute levels.</strong> The attributes themselves are fixed across tasks — the same characteristics describe every alternative in every task, as in conjoint — while the levels those attributes take on are varied across alternatives and across tasks according to an experimental design. This is conventional conjoint practice and needs no defense; what is new is only that some of these attributes are revealed on the listing page and the rest behind a click.</p>
+<p>A fourth lever is available and is not yet part of the design: the <em>partition</em> itself — which attributes appear on the listing page and which are held back for the product page — could be randomized across respondents rather than fixed. Doing so would make the information architecture an experimental treatment, and would let the instrument speak to what belongs on a list page versus a detail page. It also complicates identification, since it changes what the respondent knows before searching. We flag it here as a design option and return to it in <a href="#sec-managerial" class="quarto-xref">Section&nbsp;8</a>.</p>
+<p>We defer the question of what each of these three sources of variation identifies to <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a>, and the question of how they enter the likelihood to <a href="#sec-model" class="quarto-xref">Section&nbsp;4</a>. The point to carry forward from this section is only that the variation is designed rather than found: it is orthogonal by construction, it is present in every task rather than in a single natural experiment, and it costs nothing to produce.</p>
+</section>
+<section id="sec-instrument-data" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="sec-instrument-data"><span class="header-section-number">3.3</span> Data Recorded</h3>
+<p>The instrument records the full interaction, not merely its outcome. For each respondent <span class="math inline">\(i\)</span> and task <span class="math inline">\(t\)</span> we retain three layers.</p>
+<p><strong>The design.</strong> The complete attribute matrix for all <span class="math inline">\(J\)</span> alternatives shown, whether or not the respondent ever saw them; the position each alternative occupied on the listing page; and the partition of attributes into listing-page and product-page sets. The design is known without error because it was generated, which is a meaningful advantage over field data, where the analyst typically knows what was clicked but must reconstruct what was displayed.</p>
+<p><strong>The event stream.</strong> Every action the respondent takes, in order, with a timestamp: each product-page opening (which alternative, at which position, at what time), each return to the listing page, each re-opening of a previously viewed product page, and the terminal event — a purchase of a named alternative or an exit without purchase. The event stream is the raw object; everything below is derived from it.</p>
+<p><strong>Derived search quantities.</strong> From the event stream we construct the objects the model in <a href="#sec-model" class="quarto-xref">Section&nbsp;4</a> takes as data: the <em>search set</em>, meaning which alternatives were opened; the <em>search order</em>, meaning the sequence in which they were opened; the <em>stopping point</em>, meaning how many alternatives were opened before the respondent stopped; and the <em>choice</em>, meaning which member of the search set was purchased, or that none was. Timing data yield a parallel set of duration measures — time to first click, dwell time per product page, total task duration — which are informative about search effort in the sense of <span class="citation" data-cites="Ursu_2020">Ursu et al. (<a href="#ref-Ursu_2020" role="doc-biblioref">2020</a>)</span> and which will also be needed to net out any imposed latency from voluntary reading time.</p>
+<p>It is worth stating plainly what this means for the alternatives a respondent never opened. They are not missing data. Under the model they are the outcome of a decision — the respondent judged that opening them was not worth the cost, given what she had already found — and they carry information about both her preferences and her search cost. Non-inspection is the observation that conjoint has no way to record, and recovering it is much of the point of the instrument.</p>
+<!-- TODO: a figure showing one task's listing page and one product page, plus
+a schematic of the event stream for a single respondent-task. Deferred until
+the instrument is built. -->
+</section>
+</section>
+<section id="sec-model" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="sec-model"><span class="header-section-number">4</span> Model</h2>
+<section id="sec-model-setup" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="sec-model-setup"><span class="header-section-number">4.1</span> Setup and Notation</h3>
+<p>We follow the notation of 2 wherever the two are compatible, so that readers arriving from the sequential-search literature can map our objects onto theirs without translation. Two departures are forced on us by the instrument, and one by the object being searched over; we flag all three below. <a href="#sec-appendix-notation" class="quarto-xref">Section&nbsp;11.1</a> gives a crosswalk to 2 and <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> for readers coming from either.</p>
+<p><strong>Indices.</strong> Respondent <span class="math inline">\(i = 1,\dots,N\)</span> completes tasks <span class="math inline">\(t = 1,\dots,T\)</span>. Task <span class="math inline">\(t\)</span> presents respondent <span class="math inline">\(i\)</span> with a listing page holding the alternatives <span class="math inline">\(\Jset_{it} = \{1,\dots,J_{it}\}\)</span>, together with the no-purchase option <span class="math inline">\(j=0\)</span>, which is always available and never requires a click. The index <span class="math inline">\(j\)</span> names an <em>alternative</em>, not its rank and not its screen position: because position is randomized (<a href="#sec-instrument-randomization" class="quarto-xref">Section&nbsp;3.2</a>), the paper must hold three things apart at once — an alternative’s identity <span class="math inline">\(j\)</span>, the position it occupied on the listing page in task <span class="math inline">\(t\)</span>, and its rank in the respondent’s reservation-value ordering. Search order is carried by a separate index <span class="math inline">\(h\)</span>, where <span class="math inline">\(h=1\)</span> denotes the first product page the respondent opened.</p>
+<p><strong>Utility.</strong> Respondent <span class="math inline">\(i\)</span>’s utility from alternative <span class="math inline">\(j\)</span> in task <span class="math inline">\(t\)</span> is</p>
+<p><span id="eq-utility"><span class="math display">\[
+u_{itj} \;=\; \underbrace{\bfX_{itj}'\bfbeta_i + \mu_{itj}}_{\displaystyle \delta_{itj}\ \text{(known before clicking)}} \;+\; \underbrace{\bfL_{itj}'\bfkappa_i + \varepsilon_{itj}}_{\displaystyle \text{(revealed by clicking)}} ,
+\tag{1}\]</span></span></p>
+<p>where <span class="math inline">\(\bfX_{itj}\)</span> collects the attributes displayed on the listing page, <span class="math inline">\(\bfL_{itj}\)</span> the attributes displayed only on the product page, <span class="math inline">\(\mu_{itj}\)</span> is a pre-search taste shock observed by the respondent but not by us, and <span class="math inline">\(\varepsilon_{itj}\)</span> is a post-search taste shock. Write <span class="math inline">\(\xi_{itj} = \bfX_{itj}'\bfbeta_i\)</span> for the observed part of pre-search utility and <span class="math inline">\(\delta_{itj} = \xi_{itj} + \mu_{itj}\)</span> for pre-search utility. Both shocks are mean-zero normal, <span class="math inline">\(\mu_{itj} \iid N(0,\sigma_\mu^2)\)</span> and <span class="math inline">\(\varepsilon_{itj} \iid N(0,\sigma_\varepsilon^2)\)</span>, with <span class="math inline">\(\sigma_\mu = 1\)</span> imposed as the scale normalization. The no-purchase option has <span class="math inline">\(u_{it0} = \bfX_{it0}'\bfbeta_i + \mu_{it0}\)</span> with no post-search component: nothing about it is learned by clicking, so its utility is resolved from the outset.</p>
+<p>The term <span class="math inline">\(\bfL_{itj}'\bfkappa_i\)</span> is the departure that matters most. In the match-value formulations that dominate empirical work, everything learned through search is a scalar shock <span class="math inline">\(\varepsilon_{itj}\)</span> unobserved by the researcher both before and after search. Here the product page reveals <em>attributes we designed</em>, so part of what search delivers is observed, priced by <span class="math inline">\(\bfkappa_i\)</span>, and — critically — drawn from a distribution the analyst chose rather than assumed. 2 give exactly this general form in their §2.4 and note it is uncommon in practice; SIFT is a case where it is unavoidable, since recovering <span class="math inline">\(\bfkappa_i\)</span> for product-page attributes is half of what the instrument is for. The reservation-value discussion below takes up what this costs computationally.</p>
+<p><strong>Search costs.</strong> Opening alternative <span class="math inline">\(j\)</span>’s product page costs</p>
+<p><span id="eq-cost"><span class="math display">\[
+\cost_{itj} \;=\; \exp\!\left(\bfZ_{itj}'\bfgamma_i\right),
+\tag{2}\]</span></span></p>
+<p>exponentiated to enforce positivity, as is standard. <span class="math inline">\(\bfZ_{itj}\)</span> holds a respondent-level intercept and the randomized listing-page position, and may hold listing-page attributes that plausibly shift salience. Overlap between <span class="math inline">\(\bfX\)</span> and <span class="math inline">\(\bfZ\)</span> is permitted; <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a> takes up what separates the two.</p>
+<p><strong>Where the randomness lives.</strong> Reservation values must carry a stochastic component, or search order would be a deterministic function of observables and no observed order could be rationalized <span class="citation" data-cites="Ursu_Seiler_Honka_2024">(<a href="#ref-Ursu_Seiler_Honka_2024" role="doc-biblioref">Ursu et al. 2024</a>)</span>. Two specifications supply one. The first, used above and by most of the literature, puts a pre-search taste shock <span class="math inline">\(\mu_{itj}\)</span> in utility. The second, due to <span class="citation" data-cites="Chung_2025">Chung et al. (<a href="#ref-Chung_2025" role="doc-biblioref">2025</a>)</span>, drops <span class="math inline">\(\mu_{itj}\)</span> and instead treats the search cost itself as random at the respondent-alternative level, with <span class="math inline">\(\cost_{itj}\)</span> drawn from a distribution whose location carries the position effect. The two are observationally similar but econometrically quite different: under the first, the scale of reservation utilities and the scale of realized utilities are jointly determined by <span class="math inline">\(\sigma_\mu\)</span> and <span class="math inline">\(\sigma_\varepsilon\)</span>, and estimating both requires an auxiliary step; under the second, search-cost dispersion fixes the scale of reservation values while <span class="math inline">\(\sigma_\varepsilon\)</span> alone fixes the scale of realized utilities, and everything is estimable in one pass.</p>
+<p>2 §4.4.1 object to the second on interpretive grounds, asking why the cost of clicking a product detail page would vary at the consumer-product level. The objection has least force here, because we randomize the thing that makes it vary: the same alternative sits at a different position for different respondents and in different tasks, so respondent-alternative variation in click cost is designed in rather than assumed. <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a> takes up which specification to estimate; <span class="citation" data-cites="Chung_2025">Chung et al. (<a href="#ref-Chung_2025" role="doc-biblioref">2025</a>)</span> show that relative preference parameters survive getting this choice wrong, though search-cost <em>levels</em> do not.</p>
+<p><strong>Search and choice.</strong> Let <span class="math inline">\(\Sset_{it} \subseteq \Jset_{it}\)</span> denote the set of alternatives whose product pages respondent <span class="math inline">\(i\)</span> opened in task <span class="math inline">\(t\)</span>, <span class="math inline">\(\Sbar_{it}\)</span> its complement, <span class="math inline">\(H_{it} = |\Sset_{it}|\)</span> the number of clicks, and <span class="math inline">\(y_{it} \in \Sset_{it} \cup \{0\}\)</span> the alternative purchased, with <span class="math inline">\(y_{it}=0\)</span> recording exit without purchase. Recall is free, so <span class="math inline">\(y_{it}\)</span> may be any member of <span class="math inline">\(\Sset_{it}\)</span>, and selection requires prior inspection, so it may not be drawn from <span class="math inline">\(\Sbar_{it}\)</span>.</p>
+<p><strong>Reservation values.</strong> The reservation value <span class="math inline">\(\resv_{itj}\)</span> equates the marginal cost of opening a product page to the marginal expected benefit,</p>
+<p><span id="eq-reservation"><span class="math display">\[
+\int_{\resv_{itj}}^{\infty} \left(u - \resv_{itj}\right) dF_{itj}(u) \;=\; \cost_{itj},
+\tag{3}\]</span></span></p>
+<p>where <span class="math inline">\(F_{itj}\)</span> is the respondent’s belief about <span class="math inline">\(u_{itj}\)</span> prior to clicking. Additive separability gives <span class="math inline">\(\resv_{itj} = \delta_{itj} + g(\cost_{itj})\)</span>, with <span class="math inline">\(g\)</span> decreasing in search cost and depending on the belief distribution only through the post-search component.</p>
+<p>Here <a href="#eq-utility" class="quarto-xref">Equation&nbsp;1</a> exacts a price, though a smaller one than it first appears. When the post-search component is a single normal shock, <span class="math inline">\(g\)</span> has the familiar closed form <span class="math inline">\(g(\cost) = m(\cost/\sigma_\varepsilon)\,\sigma_\varepsilon\)</span> with <span class="math inline">\(m\)</span> solving <span class="math inline">\(\cost/\sigma_\varepsilon = \phi(m) + m[\Phi(m)-1]\)</span> <span class="citation" data-cites="Kim_2010">(<a href="#ref-Kim_2010" role="doc-biblioref">Kim et al. 2010</a>)</span>, and this is what every existing implementation computes. With designed product-page attributes the pre-click belief about <span class="math inline">\(\bfL_{itj}'\bfkappa_i + \varepsilon_{itj}\)</span> is instead a <em>mixture</em> of normals — one component per attribute-level combination the design can produce, with weights fixed by the design — and <span class="math inline">\(g\)</span> has no scalar closed form.</p>
+<p>Two properties of a designed instrument keep this cheap. First, the mixture is <em>common across alternatives</em>: a balanced design draws <span class="math inline">\(\bfL_{itj}\)</span> from the same distribution at every position, so the respondent’s pre-click belief is identical for every alternative she has not yet opened, and the mixture enters the model only through <span class="math inline">\(g\)</span> rather than alternative by alternative. The same balance delivers the independence across <span class="math inline">\(j\)</span> that Weitzman’s rules require. Second, the left side of <a href="#eq-reservation" class="quarto-xref">Equation&nbsp;3</a> is then a probability-weighted sum of normal partial expectations, strictly decreasing in <span class="math inline">\(\resv_{itj}\)</span>, so one root-find recovers <span class="math inline">\(g\)</span> for each distinct search cost — and because position is categorical, the number of distinct search costs per respondent is the number of positions, not the number of alternative-task pairs. The scalar-normal case is the one-component special case, and nothing in Weitzman’s rules requires normality, so the decision rules of <a href="#sec-model-policy" class="quarto-xref">Section&nbsp;4.2</a> carry over unchanged.</p>
+<p>A variance-matched normal approximation is also available, and it is the specification we estimate. Absorbing the design mean of <span class="math inline">\(\bfL'\bfkappa_i\)</span> into <span class="math inline">\(\delta_{itj}\)</span> and replacing the mixture with a normal of variance <span class="math inline">\(\tilde\sigma_i^2 = \bfkappa_i'\mathrm{Var}(\bfL)\bfkappa_i + \sigma_\varepsilon^2\)</span> returns the model exactly to the Kim closed form with an inflated post-search standard deviation. This is more than a computational convenience. The benefit of search — the object the literature normalizes away for want of variation to estimate it <span class="citation" data-cites="Ursu_2018 Morozov_2021">(<a href="#ref-Ursu_2018" role="doc-biblioref">Ursu 2018</a>; <a href="#ref-Morozov_2021" role="doc-biblioref">Morozov et al. 2021</a>)</span> — is here <em>partly known</em>, because <span class="math inline">\(\mathrm{Var}(\bfL)\)</span> is fixed by the design rather than assumed. Because <span class="math inline">\(g\)</span> then depends on its arguments only through <span class="math inline">\(\cost/\tilde\sigma_i\)</span>, a single one-dimensional inverse serves every respondent, which is what keeps estimation tractable at panel scale (<a href="#sec-est-estimation" class="quarto-xref">Section&nbsp;5.5</a>). We report the exact mixture as a generalization and use it as a robustness check.</p>
+<!--
+DECIDED: carry L'kappa; estimate the variance-matched normal, report the exact
+mixture as the generalization. Show the collapse into a scalar match value (giving
+up on pricing product-page attributes altogether) as a misspecification case in
+@sec-simstudy.
+
+DECIDED: randomized attribute profiles, freshly drawn each task -- NOT a fixed set of
+named alternatives recurring across tasks. Reasons to state in @sec-instrument:
+  - independence across tasks is true by construction rather than assumed; a fresh
+    profile really is a new object, whereas a recurring alternative would carry its
+    match value forward and the model would have to absorb that as learning
+    (cf. @Morozov_2021 §6.4, who estimate an MA(1) carryover of rho = 0.3 across
+    sessions that are weeks apart -- ours are minutes apart, so carryover would be
+    much larger);
+  - heterogeneity then lives in beta_i over attributes, which is the conjoint HB
+    object clients want, rather than in alternative-specific intercepts;
+  - the nesting result needs attribute part-worths. Brand intercepts are not conjoint.
+Note the generalization: a fixed recurring alternative set is the case
+@Morozov_2021 and @Chung_2025 estimate, and their identification arguments apply to
+it directly; ours are the attribute-level analogue.
+
+Note for @sec-lit: @Ursu_2018 has exactly this list-page / product-page architecture
+and needs no mixture, because she does not observe what the product page contains
+(her §3.2.1) and so models it as an unobserved scalar match value. The difference is
+not the architecture, it is that we design the page. Say so explicitly rather than
+letting a referee find it.
+-->
+<p><strong>Parameters.</strong> Collect the respondent-level parameters in <span class="math inline">\(\bftheta_i = (\bfbeta_i, \bfkappa_i, \bfgamma_i)\)</span> and the population parameters governing their distribution in <span class="math inline">\(\bfOmega\)</span>. We reserve <span class="math inline">\(\bftheta\)</span> for the parameter vector throughout and write <span class="math inline">\(\log \sigma_\varepsilon\)</span> explicitly where the log scale is meant.</p>
+</section>
+<section id="sec-model-policy" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="sec-model-policy"><span class="header-section-number">4.2</span> Optimal Search Policy</h3>
+<!--
+TODO. Weitzman's three rules, stated in the notation above and with the task
+subscript carried:
+
+  Selection:    z_{ith} >= max over not-yet-searched of z_{itk}
+  Continuation: z_{ith} >= max over already-searched (incl. j=0) of u_{itk}
+  Stopping:     max over searched (incl. j=0) u_{ith} >= max over unsearched z_{itl}
+  Choice:       u_{it y_it} >= max over searched (incl. j=0) of u_{ith}
+
+Note explicitly: the first click is COSTLY. Because we observe respondents who exit
+without clicking, we do not need the free-first-search assumption that the
+conditional-on-search literature relies on, and the effective-value and welfare
+expressions of @Ursu_Seiler_Honka_2024 §3 remain available to us.
+-->
+</section>
+<section id="sec-model-likelihood" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="sec-model-likelihood"><span class="header-section-number">4.3</span> Likelihood</h3>
+<!--
+TODO. Differenced conditions, following the ordering of @Ursu_Seiler_Honka_2024
+(nu_1 selection, nu_2 continuation, nu_3 stopping, nu_4 choice) -- note this is
+the OPPOSITE labelling from @Yavorsky_2021, where nu_1 is continuation and nu_2 is
+selection. Do not mix them.
+
+The task panel multiplies: L_i = prod over t of L_it. State the independence
+assumption across tasks and point forward to the learning/fatigue diagnostics.
+-->
+</section>
+<section id="sec-model-nesting" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="sec-model-nesting"><span class="header-section-number">4.4</span> Conjoint as the Zero-Search-Cost Special Case</h3>
+<!--
+TODO. The load-bearing proposition. As c -> 0, g(c) -> infinity, every reservation
+value exceeds every realized utility, the search set is the full choice set, and the
+choice rule reduces to argmax over fully realized utilities -- a standard
+choice-based conjoint model over (X, L) jointly. State as a proposition with proof
+in @sec-appendix.
+
+Note the corollary that makes it testable rather than rhetorical: conjoint is the
+boundary of the SIFT parameter space, so "is the search cost distinguishable from
+zero" is a testable restriction. Flag the boundary-testing subtlety -- the null sits
+at the edge of the parameter space, so the usual chi-squared reference distribution
+does not apply.
+-->
+</section>
+<section id="sec-model-alternatives" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="sec-model-alternatives"><span class="header-section-number">4.5</span> Alternative Search Protocols</h3>
+<!--
+TODO. Fixed-sample (Stigler) as the competing protocol, satisficing (@Caplin_2011)
+as the competing behavioral rule. What the task panel buys: @DeLosSantos_2012 and
+@Honka_Chintagunta_2017 test sequential against fixed-sample at the population
+level; with T tasks per respondent the test can in principle be run respondent by
+respondent.
+-->
+</section>
+</section>
+<section id="sec-estimation" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="sec-estimation"><span class="header-section-number">5</span> Identification and Estimation</h2>
+<section id="sec-est-variation" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="sec-est-variation"><span class="header-section-number">5.1</span> What the Designed Variation Buys</h3>
+<!--
+TODO: prose. The substance, from the papers now read in full:
+
+(a) POSITION ENTERS SEARCH COSTS, NOT UTILITY. @Ursu_2018 §4.3 enumerates all seven
+ways position could act (on v, on epsilon, on c, and combinations) and rules out all
+but c using three tests:
+   - purchases conditional on click are unaffected by position -> rules out any case
+     where position enters pre-search utility v (her Cases 1, 4, 5, 7);
+   - consumers click TOP-ranked alternatives first -> rules out position acting on
+     the post-search variance, which would predict reservation utility INCREASING in
+     position (her Cases 2 and, under common parameter values, 6);
+   - an exogenous demotion (opaque offers) lowers clicks on the demoted hotel ->
+     rules IN position acting on search costs.
+We can run the first two natively and better: we randomize position in every task and
+we observe click order directly, which she had to import from a companion data set.
+The third we do not need, because our demotions ARE the design.
+This is the argument that licenses putting position in Z and not in X. It should be
+run and reported as a design check in every SIFT study, not assumed.
+
+(b) SEPARATING PREFERENCES FROM SEARCH COSTS. @Morozov_2021 §4.3.2: stopping decisions
+depend on the REALIZED utilities of already-searched alternatives but not on their
+search costs, which are sunk. So trade xi against c holding the mean reservation value
+z-bar fixed: search order is unchanged, but the higher intercept raises realized utility
+and makes stopping more likely. Their Appendix D sharpens this into an observable
+moment -- the RECALL RATE, the probability of purchasing an alternative searched
+earlier in the sequence, responds to the intercept but NOT to search cost. We observe
+recall directly (free recall, full click sequence), which makes this our cleanest
+separation moment.
+
+(c) WHAT THE PANEL BUYS, AND WHAT IT DOES NOT. @Morozov_2021 §4.3 proves nonparametric
+identification of individual-level preferences AND search costs from panel search data,
+but the argument assumes the number of sessions per consumer goes to infinity; with
+2-35 sessions (mean 5) they estimate hyperparameters only, not individual parameters
+(their §5.1). At T = 10 we should claim hierarchical posteriors in the conjoint
+tradition, NOT nonparametric individual identification. Say this plainly.
+
+(d) WHAT NEITHER PANEL NOR SHIFTER BUYS ALONE. @Morozov_2021 has the panel and still
+normalizes sigma_epsilon, reporting that little variation in their data speaks to it
+(their Appendix C); @Yavorsky_2021 has an exogenous shifter and no panel, and estimates
+it. SIFT has both, and -- see @sec-model-setup -- part of the post-search variance is
+fixed by the design rather than assumed. This is the sharpest version of the
+identification claim and belongs in the introduction.
+
+(e) SEARCH-COST LEVELS AND SPELL LENGTH. @Ursu_2018 §6.1 reports baseline search costs
+above $102 and attributes the magnitude to observing one click per search impression
+with no way to link a consumer's impressions; restricting to impressions with two or
+more clicks cuts mean search costs by up to 83%. Single-spell data mechanically
+inflates search costs. The panel is a levels argument, not only a heterogeneity
+argument.
+-->
+</section>
+<section id="sec-est-normalization" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="sec-est-normalization"><span class="header-section-number">5.2</span> Normalization</h3>
+<!--
+TODO. sigma_mu = 1 fixes the scale of utility (@Ursu_Seiler_Honka_2024 §4.4.2,
+@Morozov_2021 Appendix C). The post-search standard deviation is identified in
+principle but hard to estimate in practice without a search-cost shifter
+(@Yavorsky_2021). State the consequence plainly: with both variances fixed, search
+costs cannot be monetized and search-cost counterfactuals are not interpretable
+(@Ursu_Seiler_Honka_2024 §4.4.4) -- which would rule out every friction counterfactual
+in @sec-managerial. This is why estimating it is load-bearing here rather than a
+refinement.
+-->
+</section>
+<section id="sec-est-nesting" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="sec-est-nesting"><span class="header-section-number">5.3</span> Testing the Zero-Search-Cost Restriction</h3>
+<!--
+TODO. IMPORTANT: the test cannot be a Wald test on the estimated search cost.
+Zero is a limit rather than an interior point -- c -> 0 corresponds to g(c) -> +infinity
+and log c -> -infinity -- so the null sits at a boundary in every parameterization.
+Construct the test from observable implications instead:
+   - holdout fit of SIFT against the nested conjoint model;
+   - the observable implication itself (does anyone leave alternatives unopened);
+   - a likelihood-ratio comparison with a simulated rather than chi-squared reference
+     distribution.
+Note also that this argues for estimating c rather than g directly, even though
+estimating g avoids the root-find during optimization (@Ursu_Seiler_Honka_2024 §5.2).
+-->
+</section>
+<section id="sec-est-panel" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="sec-est-panel"><span class="header-section-number">5.4</span> Individual-Level Estimation from a Task Panel</h3>
+<!--
+TODO. Two routes to the individual-level deliverable:
+   1. Full hierarchical Bayes. What the conjoint audience expects, and what makes
+      individual part-worths and individual search costs directly reportable.
+   2. Two-stage empirical Bayes: estimate the hyperparameters by simulated maximum
+      likelihood with importance sampling, then draw individual posteriors by
+      Metropolis-Hastings conditional on the estimated hyperparameters. This is
+      exactly what @Morozov_2021 do to compute personalized prices (their §7.2 and
+      Appendix H), and it is far cheaper than full HB.
+Route 2 is the fallback if route 1 will not run at commercial sample sizes.
+-->
+</section>
+<section id="sec-est-estimation" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="sec-est-estimation"><span class="header-section-number">5.5</span> Estimation</h3>
+<!--
+TODO. Runtime is a binding practical constraint: a fit has to complete overnight, not
+over a week. The four candidate simulators, with published timings:
+
+  @Ursu_Seiler_Honka_2024 Table 2 (1,000 consumers, 5 sessions, 5 alternatives,
+  heterogeneous):
+    importance sampling    5h20m,  RMSE 0.01
+    kernel-smoothed       29h48m,  RMSE 0.13  (+ ~32h to calibrate the scaling vector)
+    GHK                  198h24m,  RMSE 0.09
+
+  @Chung_2025 Table 1 (1,000 consumers, 5 alternatives + outside option,
+  cross-sectional, 100 replications):
+    their GHK-type simulator   0.48 min,  SSE 0.040   <- one to two orders faster
+    kernel-smoothed            5-7 min,   SSE 0.21-2.98
+    crude frequency           15-127 min, SSE ~0.11
+    @Jiang_2021 pre-search-shock GHK  1.2-1.5 min, but needs a grid search over sigma_e
+
+LEADING CANDIDATE: @Chung_2025. Three separate mechanisms make it fast, and all three
+bite harder in our setting than in theirs:
+
+  1. NO TUNING CONSTANTS. It computes actual probabilities rather than kernel-smoothed
+     indicator violations, so there is no scaling vector to calibrate. That removes an
+     entire pre-estimation stage -- @Ursu_Seiler_Honka_2024 Appendix B report ~32 hours
+     for it -- and @Chung_2025 §6.3 show the stage cannot be shortcut, because on field
+     data the maximized likelihood declines mechanically in the scaling factor, so
+     calibration has to run through out-of-sample prediction instead.
+  2. NO ROOT-FINDING IN THE INNER LOOP. Bounds on reservation values are obtained by
+     evaluating g FORWARD on a utility difference -- closed form, vectorizable -- and
+     g-inverse is needed only for the K search costs actually drawn, from a spline
+     precomputed once before estimation (their footnote 7). With K << J, which is the
+     SIFT regime, this is most of the work removed. Contrast the reference R code,
+     which root-finds per alternative per respondent per likelihood evaluation.
+  3. IT SCALES WELL IN J WHEN K IS SMALL. Unsearched alternatives enter as a product of
+     closed-form cdf evaluations, one per alternative. This is the opposite of the
+     kernel simulator's behaviour, where a large J-K adds smoothed penalty terms that
+     come to dominate the objective (the smoothing-convention issue discussed above).
+
+WHAT ADOPTING IT COMMITS US TO. Their simulator requires the stochastic component of the
+reservation value to be the search cost rather than a pre-search taste shock
+(@sec-model-setup). Consequences to verify in @sec-simstudy rather than assume:
+  - sigma_epsilon. @Chung_2025 fix it at one, as everyone does. Our randomized position
+    enters as the location parameter of the search-cost distribution -- exactly the
+    shifted-exponential specification of their §6.2 -- so @Yavorsky_2021's shifter
+    argument should apply, but nobody has estimated sigma_epsilon inside this simulator.
+    This is the single most important thing the simulation study has to establish,
+    because @sec-managerial depends on it.
+  - Misspecification. Their Table 7 shows RATIOS of preference parameters are recovered
+    correctly even when the randomness is put in the wrong place; their Table 6 shows
+    LEVELS are not, and their search-cost levels swing wildly. Relative part-worths are
+    safe; monetized search costs are not. Say so.
+  - Estimate both specifications on the same simulated data and report the comparison.
+
+THE ONE PIECE THAT ALREADY EXISTS FOR US. @Chung_2025 Appendix B.4 works out the case
+where the outside option's utility is known prior to search, so respondents who click
+nothing are representable in the likelihood, and shows parameter recovery for it. That
+is SIFT's no-click exit, and it is the only treatment of it in the four reference
+implementations.
+
+CONFLICTING EVIDENCE ON IMPORTANCE SAMPLING, to resolve before relying on either:
+@Morozov_2021 Appendix G and @Ursu_Seiler_Honka_2024 Table 2 both find importance
+sampling fast and accurate; @Chung_2025 Table 3 find it badly biased -- heterogeneity
+standard deviations collapse and preference means shrink most of the way to zero. The
+likely explanation is resourcing rather than a defect: @Chung_2025 give it 100^2 draws
+per observation where @Morozov_2021 use up to 10^6, and importance sampling is acutely
+sensitive to the proposal density, which @Morozov_2021 centre on moment-matched starting
+values and @Chung_2025 do not describe. Worth settling in the simulation study, since
+importance sampling remains the fallback.
+
+PANEL AND HETEROGENEITY. The per-task likelihood contributions multiply across tasks with
+no structural change. For individual-level output, @Chung_2025 Appendix B.5 run their
+simulator inside a Metropolis-within-Gibbs sampler and compare against the Bayesian
+approach of @Morozov_2023, which they find biased and no faster.
+
+ORDER OF WORK: aggregate first (it validates against the reference implementations), then
+heterogeneity, then HB. See @sec-appendix for the validation protocol.
+
+STARTING VALUES. The effective-value representation of @Armstrong_2017 and @Choi_2018,
+w = min(u, z), gives purchase probabilities in near-probit form
+(@Ursu_Seiler_Honka_2024 §3.1). Too coarse to estimate from, but cheap enough to
+generate starting values, which buys optimizer iterations.
+-->
+</section>
+<section id="sec-est-software" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="sec-est-software"><span class="header-section-number">5.6</span> Software</h3>
+<!--
+TODO. R package. Note what is genuinely new relative to the two reference
+implementations and therefore has to be built rather than translated:
+   - a task subscript (panel) throughout;
+   - an outside option that is always available at zero cost, and respondents who
+     exit without clicking;
+   - an estimable post-search standard deviation;
+   - the mixture-of-normals reservation value of @sec-model-setup.
+-->
+</section>
+</section>
+<section id="sec-simstudy" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="sec-simstudy"><span class="header-section-number">6</span> Simulation Study</h2>
+<!--
+TODO: awaiting guidance. Run this before any client sees the instrument.
+
+Proposed scope:
+
+  - Parameter recovery at commercial scale: how many tasks per respondent,
+    how many alternatives per list-screen, how many respondents.
+  - Recovery of individual-level search costs specifically — the most
+    optimistic claim in the paper, and the one most likely to fail.
+  - Sensitivity to search-cost heterogeneity and to the strength of the
+    randomization.
+  - Cost of misspecification in both directions: fitting SIFT data with a
+    conjoint model (search costs forced to zero), and fitting conjoint-like
+    data with the search model.
+  - Power to reject a zero search cost.
+  - Behavioral robustness: data generated by satisficing or by rules of
+    thumb, then fit with the Weitzman likelihood.
+-->
+<section id="design" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="design"><span class="header-section-number">6.1</span> Design</h3>
+</section>
+<section id="parameter-recovery" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="parameter-recovery"><span class="header-section-number">6.2</span> Parameter Recovery</h3>
+</section>
+<section id="power-to-detect-a-nonzero-search-cost" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="power-to-detect-a-nonzero-search-cost"><span class="header-section-number">6.3</span> Power to Detect a Nonzero Search Cost</h3>
+</section>
+<section id="misspecification-and-behavioral-robustness" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="misspecification-and-behavioral-robustness"><span class="header-section-number">6.4</span> Misspecification and Behavioral Robustness</h3>
+</section>
+</section>
+<section id="sec-analysis" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="sec-analysis"><span class="header-section-number">7</span> Empirical Application</h2>
+<!--
+TODO: awaiting guidance and data.
+
+Proposed scope — the split-sample pilot described in the project brief:
+
+  - Category, sample, and fielding partner.
+  - The design: a SIFT block fielded alongside a conventional conjoint in a
+    split sample, in a category with a genuine list-screen.
+  - Descriptive evidence first: how much do respondents actually search,
+    where do they click, does position move clicks.
+  - Convergent validity — do the preference parameters from the search block
+    agree with the conjoint part-worths. The most persuasive result
+    available, and the one to lead with.
+  - Is the estimated search cost distinguishable from zero.
+  - Holdout choice prediction, search model versus conjoint.
+  - Does position randomization move consideration in a way conjoint cannot
+    capture.
+  - Task-order effects: learning and fatigue as drift in the search cost.
+-->
+<section id="data-and-design" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="data-and-design"><span class="header-section-number">7.1</span> Data and Design</h3>
+</section>
+<section id="descriptive-evidence" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="descriptive-evidence"><span class="header-section-number">7.2</span> Descriptive Evidence</h3>
+</section>
+<section id="estimates" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="estimates"><span class="header-section-number">7.3</span> Estimates</h3>
+</section>
+<section id="convergent-validity-against-conjoint" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="convergent-validity-against-conjoint"><span class="header-section-number">7.4</span> Convergent Validity against Conjoint</h3>
+</section>
+<section id="holdout-prediction" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="holdout-prediction"><span class="header-section-number">7.5</span> Holdout Prediction</h3>
+</section>
+<section id="task-order-effects" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="task-order-effects"><span class="header-section-number">7.6</span> Task-Order Effects</h3>
+</section>
+</section>
+<section id="sec-managerial" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="sec-managerial"><span class="header-section-number">8</span> What the Model Delivers</h2>
+<!--
+TODO: awaiting guidance. This section is what makes the method useful rather
+than merely estimable. It is also the most speculative of the placeholders,
+and may end up merged into @sec-analysis or @sec-discussion.
+
+Proposed scope:
+
+  - Decomposing non-purchase into never-inspected and inspected-and-rejected.
+    The same observed outcome with opposite remedies — distribution,
+    placement, and media versus product and price.
+  - Position and merchandising counterfactuals: what happens to share when an
+    alternative moves from position 6 to position 2.
+  - Information-architecture counterfactuals: what belongs on the list-screen
+    versus the detail page.
+  - Friction counterfactuals: fewer clicks, better filters, better defaults.
+  - Segmentation on search behavior rather than on preference.
+  - Large attribute spaces: non-attention becomes data rather than noise.
+-->
+<section id="decomposing-non-purchase" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="decomposing-non-purchase"><span class="header-section-number">8.1</span> Decomposing Non-Purchase</h3>
+</section>
+<section id="position-and-merchandising-counterfactuals" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="position-and-merchandising-counterfactuals"><span class="header-section-number">8.2</span> Position and Merchandising Counterfactuals</h3>
+</section>
+<section id="information-architecture" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="information-architecture"><span class="header-section-number">8.3</span> Information Architecture</h3>
+</section>
+<section id="search-based-segmentation" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="search-based-segmentation"><span class="header-section-number">8.4</span> Search-Based Segmentation</h3>
+</section>
+</section>
+<section id="sec-discussion" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="sec-discussion"><span class="header-section-number">9</span> Discussion</h2>
+<!--
+TODO: awaiting guidance. Includes the limitations that should be stated
+before a referee states them.
+
+Proposed scope:
+
+  - Do survey clicks measure anything real? Clicking is nearly free, so
+    estimated search-cost LEVELS will not transfer to the field. Mitigations
+    to weigh: incentive alignment, artificial latency, an explicit click
+    budget, a time-denominated cost. Fallback: relative and comparative
+    statements transfer even when levels do not — which is the standing
+    defense of conjoint utilities, so it is defensible ground. Say it before
+    a reviewer does.
+  - Rational expectations about the unopened alternative. Weitzman requires
+    the respondent to know the distribution behind each click, which she does
+    not at the start of a survey. Implies a practice block, and possibly
+    modeling learning across tasks.
+  - Do respondents follow the reservation rule? The lab literature says
+    partially (@sec-lit-lab). Report fit against a satisficing alternative.
+  - Thin identification at commercial task counts.
+  - Where conjoint remains the right tool: feature-level willingness-to-pay
+    for a defined bundle, new-product configuration with nothing to search,
+    orthogonal designs for clean part-worths, mature share simulators,
+    categories with no list-screen, and any study where established norms and
+    benchmarks matter more than a new method.
+  - Extensions: filters and sorts as search actions [@Chen_Yao_2017],
+    discovery of alternatives [@Greminger_2022], search across sessions.
+-->
+<section id="what-the-nesting-result-changes" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="what-the-nesting-result-changes"><span class="header-section-number">9.1</span> What the Nesting Result Changes</h3>
+</section>
+<section id="implications-for-practice" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="implications-for-practice"><span class="header-section-number">9.2</span> Implications for Practice</h3>
+</section>
+<section id="limitations" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="limitations"><span class="header-section-number">9.3</span> Limitations</h3>
+</section>
+<section id="where-conjoint-remains-the-right-tool" class="level3" data-number="9.4">
+<h3 data-number="9.4" class="anchored" data-anchor-id="where-conjoint-remains-the-right-tool"><span class="header-section-number">9.4</span> Where Conjoint Remains the Right Tool</h3>
+</section>
+</section>
+<section id="sec-conclusion" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="sec-conclusion"><span class="header-section-number">10</span> Conclusion</h2>
+<!--
+TODO: awaiting guidance. Draft last.
+
+The closing argument, in one line: conjoint tells you what people prefer once
+they are looking; SIFT tells you what they look at, what it costs them to
+look, and what they never see at all. Because conjoint is the zero-search-cost
+special case, adopting the instrument costs nothing when search frictions are
+absent and buys a second set of parameters when they are not.
+-->
+</section>
+
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Allenby_2019" class="csl-entry" role="listitem">
+Allenby, Greg M., Nino Hardt, and Peter E. Rossi. 2019. <span>“Economic Foundations of Conjoint Analysis.”</span> In <em>Handbook of the Economics of Marketing</em>, edited by Jean-Pierre Dubé and Peter E. Rossi, vol. 1. North-Holland.
+</div>
+<div id="ref-Bronnenberg_2016" class="csl-entry" role="listitem">
+Bronnenberg, Bart J., Jun B. Kim, and Carl F. Mela. 2016. <span>“Zooming in on Choice: How Do Consumers Search for Cameras Online?”</span> <em>Journal of Marketing Research</em>.
+</div>
+<div id="ref-Brown_2011" class="csl-entry" role="listitem">
+Brown, Meta, Christopher J. Flinn, and Andrew Schotter. 2011. <span>“Real-Time Search in the Laboratory and the Market.”</span> <em>American Economic Review</em>.
+</div>
+<div id="ref-Caplin_2011" class="csl-entry" role="listitem">
+Caplin, Andrew, Mark Dean, and Daniel Martin. 2011. <span>“Search and Satisficing.”</span> <em>American Economic Review</em>.
+</div>
+<div id="ref-Chen_Yao_2017" class="csl-entry" role="listitem">
+Chen, Yuxin, and Song Yao. 2017. <span>“Sequential Search with Refinement: Model and Application with Click-Stream Data.”</span> <em>Management Science</em>.
+</div>
+<div id="ref-Chung_2025" class="csl-entry" role="listitem">
+Chung, Jae Hyen, Pradeep Chintagunta, and Sanjog Misra. 2025. <span>“Simulated Maximum Likelihood Estimation of the Sequential Search Model.”</span> <em>Quantitative Marketing and Economics</em> 23: 105–64. <a href="https://doi.org/10.1007/s11129-024-09281-4">https://doi.org/10.1007/s11129-024-09281-4</a>.
+</div>
+<div id="ref-Cox_Oaxaca_1989" class="csl-entry" role="listitem">
+Cox, James C., and Ronald L. Oaxaca. 1989. <span>“Laboratory Experiments with a Finite-Horizon Job-Search Model.”</span> <em>Journal of Risk and Uncertainty</em>.
+</div>
+<div id="ref-DeLosSantos_2012" class="csl-entry" role="listitem">
+De los Santos, Babur, Ali Hortaçsu, and Matthijs R. Wildenbeest. 2012. <span>“Testing Models of Consumer Search Using Data on Web Browsing.”</span> <em>American Economic Review</em>.
+</div>
+<div id="ref-Ding_2007" class="csl-entry" role="listitem">
+Ding, Min. 2007. <span>“An Incentive-Aligned Mechanism for Conjoint Analysis.”</span> <em>Journal of Marketing Research</em>.
+</div>
+<div id="ref-Ding_2005" class="csl-entry" role="listitem">
+Ding, Min, Rajdeep Grewal, and John Liechty. 2005. <span>“Incentive-Aligned Conjoint Analysis.”</span> <em>Journal of Marketing Research</em>.
+</div>
+<div id="ref-Dzyabura_2011" class="csl-entry" role="listitem">
+Dzyabura, Daria, and John R. Hauser. 2011. <span>“Active Machine Learning for Consideration Heuristics.”</span> <em>Marketing Science</em>.
+</div>
+<div id="ref-Gabaix_2006" class="csl-entry" role="listitem">
+Gabaix, Xavier, David Laibson, Guillermo Moloche, and Stephen Weinberg. 2006. <span>“Costly Information Acquisition: Experimental Analysis of a Boundedly Rational Model.”</span> <em>American Economic Review</em>.
+</div>
+<div id="ref-Gilbride_Allenby_2004" class="csl-entry" role="listitem">
+Gilbride, Timothy J., and Greg M. Allenby. 2004. <span>“A Choice Model with Conjunctive, Disjunctive, and Compensatory Screening Rules.”</span> <em>Marketing Science</em>.
+</div>
+<div id="ref-Greminger_2022" class="csl-entry" role="listitem">
+Greminger, Rafael P. 2022. <span>“Optimal Search and Discovery.”</span> <em>Management Science</em>.
+</div>
+<div id="ref-Hauser_2014" class="csl-entry" role="listitem">
+Hauser, John R. 2014. <span>“Consideration-Set Heuristics: Review and Research Agenda.”</span> <em>Journal of Business Research</em>.
+</div>
+<div id="ref-Hauser_2010" class="csl-entry" role="listitem">
+Hauser, John R., Olivier Toubia, Theodoros Evgeniou, Rene Befurt, and Daria Dzyabura. 2010. <span>“Disjunctions of Conjunctions, Cognitive Simplicity, and Consideration Sets.”</span> <em>Journal of Marketing Research</em>.
+</div>
+<div id="ref-Hey_1987" class="csl-entry" role="listitem">
+Hey, John D. 1987. <span>“Still Searching.”</span> <em>Journal of Economic Behavior and Organization</em>.
+</div>
+<div id="ref-Hong_Shum_2006" class="csl-entry" role="listitem">
+Hong, Han, and Matthew Shum. 2006. <span>“Using Price Distributions to Estimate Search Costs.”</span> <em>The RAND Journal of Economics</em>.
+</div>
+<div id="ref-Honka_2014" class="csl-entry" role="listitem">
+Honka, Elisabeth. 2014. <span>“Quantifying Search and Switching Costs in the <span>US</span> Auto Insurance Industry.”</span> <em>The RAND Journal of Economics</em>.
+</div>
+<div id="ref-Honka_Chintagunta_2017" class="csl-entry" role="listitem">
+Honka, Elisabeth, and Pradeep Chintagunta. 2017. <span>“Simultaneous or Sequential? Search Strategies in the <span>US</span> Auto Insurance Industry.”</span> <em>Marketing Science</em>.
+</div>
+<div id="ref-Hortacsu_Syverson_2004" class="csl-entry" role="listitem">
+Hortaçsu, Ali, and Chad Syverson. 2004. <span>“Product Differentiation, Search Costs, and Competition in the Mutual Fund Industry: A Case Study of <span>S&amp;P</span> 500 Index Funds.”</span> <em>The Quarterly Journal of Economics</em>.
+</div>
+<div id="ref-Kim_2010" class="csl-entry" role="listitem">
+Kim, Jun B., Paulo Albuquerque, and Bart J. Bronnenberg. 2010. <span>“Online Demand Under Limited Consumer Search.”</span> <em>Marketing Science</em>.
+</div>
+<div id="ref-Koulayev_2014" class="csl-entry" role="listitem">
+Koulayev, Sergei. 2014. <span>“Search for Differentiated Products: Identification and Estimation.”</span> <em>The RAND Journal of Economics</em>.
+</div>
+<div id="ref-Marshall_Bradlow_2002" class="csl-entry" role="listitem">
+Marshall, Pablo, and Eric T. Bradlow. 2002. <span>“A Unified Approach to Conjoint Analysis Models.”</span> <em>Journal of the American Statistical Association</em>.
+</div>
+<div id="ref-McCall_1970" class="csl-entry" role="listitem">
+McCall, J. J. 1970. <span>“Economics of Information and Job Search.”</span> <em>The Quarterly Journal of Economics</em>.
+</div>
+<div id="ref-Meissner_2016" class="csl-entry" role="listitem">
+Meißner, Martin, Andrés Musalem, and Joel Huber. 2016. <span>“Eye Tracking Reveals Processes That Enable Conjoint Choices to Become Increasingly Efficient with Practice.”</span> <em>Journal of Marketing Research</em>.
+</div>
+<div id="ref-Morozov_2021" class="csl-entry" role="listitem">
+Morozov, Ilya, Stephan Seiler, Xiaojing Dong, and Liwen Hou. 2021. <span>“Estimation of Preference Heterogeneity in Markets with Costly Search.”</span> <em>Marketing Science</em> 40 (5): 871–99. <a href="https://doi.org/10.1287/mksc.2021.1287">https://doi.org/10.1287/mksc.2021.1287</a>.
+</div>
+<div id="ref-Payne_1988" class="csl-entry" role="listitem">
+Payne, John W., James R. Bettman, and Eric J. Johnson. 1988. <span>“Adaptive Strategy Selection in Decision Making.”</span> <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>.
+</div>
+<div id="ref-Payne_1993" class="csl-entry" role="listitem">
+Payne, John W., James R. Bettman, and Eric J. Johnson. 1993. <em>The Adaptive Decision Maker</em>. Cambridge University Press.
+</div>
+<div id="ref-Reutskaja_2011" class="csl-entry" role="listitem">
+Reutskaja, Elena, Rosemarie Nagel, Colin F. Camerer, and Antonio Rangel. 2011. <span>“Search Dynamics in Consumer Choice Under Time Pressure: An Eye-Tracking Study.”</span> <em>American Economic Review</em>.
+</div>
+<div id="ref-Schotter_Braunstein_1981" class="csl-entry" role="listitem">
+Schotter, Andrew, and Yale M. Braunstein. 1981. <span>“Economic Search: An Experimental Study.”</span> <em>Economic Inquiry</em>.
+</div>
+<div id="ref-Sonnemans_1998" class="csl-entry" role="listitem">
+Sonnemans, Joep. 1998. <span>“Strategies of Search.”</span> <em>Journal of Economic Behavior and Organization</em>.
+</div>
+<div id="ref-Stigler_1961" class="csl-entry" role="listitem">
+Stigler, George J. 1961. <span>“The Economics of Information.”</span> <em>Journal of Political Economy</em>.
+</div>
+<div id="ref-Ursu_2018" class="csl-entry" role="listitem">
+Ursu, Raluca M. 2018. <span>“The Power of Rankings: Quantifying the Effect of Rankings on Online Consumer Search and Purchase Decisions.”</span> <em>Marketing Science</em> 37 (4): 530–52. <a href="https://doi.org/10.1287/mksc.2017.1072">https://doi.org/10.1287/mksc.2017.1072</a>.
+</div>
+<div id="ref-Ursu_2020" class="csl-entry" role="listitem">
+Ursu, Raluca M., Qianyun Wang, and Pradeep K. Chintagunta. 2020. <span>“Search Duration.”</span> <em>Marketing Science</em>.
+</div>
+<div id="ref-Ursu_Seiler_Honka_2024" class="csl-entry" role="listitem">
+Ursu, Raluca, Stephan Seiler, and Elisabeth Honka. 2024. <span>“The Sequential Search Model: A Framework for Empirical Research.”</span> <em>Quantitative Marketing and Economics</em>, ahead of print. <a href="https://doi.org/10.1007/s11129-024-09291-2">https://doi.org/10.1007/s11129-024-09291-2</a>.
+</div>
+<div id="ref-Weitzman_1979" class="csl-entry" role="listitem">
+Weitzman, Martin L. 1979. <span>“Optimal Search for the Best Alternative.”</span> <em>Econometrica</em> 47 (3): 641–54.
+</div>
+<div id="ref-Yang_2015" class="csl-entry" role="listitem">
+Yang, Liu, Olivier Toubia, and Martijn G. de Jong. 2015. <span>“A Bounded Rationality Model of Information Search and Choice in Preference Measurement.”</span> <em>Journal of Marketing Research</em>.
+</div>
+<div id="ref-Yang_2018" class="csl-entry" role="listitem">
+Yang, Liu, Olivier Toubia, and Martijn G. de Jong. 2018. <span>“Attention, Information Processing, and Choice in Incentive-Aligned Choice Experiments.”</span> <em>Marketing Science</em>.
+</div>
+<div id="ref-Yavorsky_2021" class="csl-entry" role="listitem">
+Yavorsky, Dan, Elisabeth Honka, and Keith Chen. 2021. <span>“Consumer Search in the <span>U.S.</span> Auto Industry: The Role of Dealership Visits.”</span> <em>Quantitative Marketing and Economics</em> 19 (1): 1–52. <a href="https://doi.org/10.1007/s11129-020-09229-4">https://doi.org/10.1007/s11129-020-09229-4</a>.
+</div>
+<div id="ref-Yee_2007" class="csl-entry" role="listitem">
+Yee, Michael, Ely Dahan, John R. Hauser, and James Orlin. 2007. <span>“Greedoid-Based Noncompensatory Inference.”</span> <em>Marketing Science</em>.
+</div>
+</div>
+</section>
+
+<div id="quarto-appendix" class="default"><section id="sec-appendix" class="level2 appendix" data-number="11"><h2 class="anchored quarto-appendix-heading"><span class="header-section-number">11</span> Appendix</h2><div class="quarto-appendix-contents">
+
+<section id="sec-appendix-notation" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="sec-appendix-notation"><span class="header-section-number">11.1</span> Notation Crosswalk</h3>
+<p>The two papers this one builds on use different symbols for the same objects, and in two places the same symbol for different objects. The table records the mapping, both for readers arriving from either literature and to keep our own implementation honest against the two reference codebases.</p>
+<div id="tbl-notation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-notation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Notation crosswalk
+</figcaption>
+<div aria-describedby="tbl-notation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Object</th>
+<th>This paper</th>
+<th>2</th>
+<th><span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Utility</td>
+<td><span class="math inline">\(u_{itj}\)</span></td>
+<td><span class="math inline">\(u_{ij}\)</span></td>
+<td><span class="math inline">\(u_{ij}\)</span></td>
+</tr>
+<tr class="even">
+<td>Pre-search utility</td>
+<td><span class="math inline">\(\delta_{itj}\)</span></td>
+<td><span class="math inline">\(\delta_{ij}\)</span></td>
+<td><span class="math inline">\(\delta_{ij}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Observed pre-search utility</td>
+<td><span class="math inline">\(\xi_{itj} = \bfX_{itj}'\bfbeta_i\)</span></td>
+<td><span class="math inline">\(\xi_{ij} = X_j'\bfbeta_i - \alpha_i p_{ij}\)</span></td>
+<td><span class="math inline">\(x_j'\bfbeta\)</span></td>
+</tr>
+<tr class="even">
+<td>Pre-search taste shock</td>
+<td><span class="math inline">\(\mu_{itj}\)</span></td>
+<td><span class="math inline">\(\mu_{ij}\)</span></td>
+<td><span class="math inline">\(\eta_{ij}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Post-search taste shock</td>
+<td><span class="math inline">\(\varepsilon_{itj}\)</span></td>
+<td><span class="math inline">\(\varepsilon_{ij}\)</span></td>
+<td><span class="math inline">\(\varepsilon_{ij}\)</span></td>
+</tr>
+<tr class="even">
+<td>Observed post-search utility</td>
+<td><span class="math inline">\(\bfL_{itj}'\bfkappa_i\)</span></td>
+<td><span class="math inline">\(L_j'\kappa_i\)</span> (§2.4 only)</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Post-search s.d.</td>
+<td><span class="math inline">\(\sigma_\varepsilon\)</span></td>
+<td><span class="math inline">\(\sigma_\varepsilon\)</span></td>
+<td><span class="math inline">\(\sigma\)</span> (“MVSD”)</td>
+</tr>
+<tr class="even">
+<td>Search cost</td>
+<td><span class="math inline">\(\cost_{itj}\)</span></td>
+<td><span class="math inline">\(c_{ij} = Z_j'\gamma_i\)</span></td>
+<td><span class="math inline">\(c_{ij} = \exp\{\gamma_0 + d_{ij}'\gamma\}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Reservation value</td>
+<td><span class="math inline">\(\resv_{itj}\)</span></td>
+<td><span class="math inline">\(z_{ij}\)</span></td>
+<td><span class="math inline">\(z_{ij}\)</span></td>
+</tr>
+<tr class="even">
+<td>Reservation offset</td>
+<td><span class="math inline">\(g(\cost)\)</span></td>
+<td><span class="math inline">\(g(c)\)</span>, <span class="math inline">\(m(c/\sigma_\varepsilon)\)</span></td>
+<td><span class="math inline">\(\zeta_{ij}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Searched set</td>
+<td><span class="math inline">\(\Sset_{it}\)</span></td>
+<td><span class="math inline">\(S_i\)</span></td>
+<td>(implicit)</td>
+</tr>
+<tr class="even">
+<td>Unsearched set</td>
+<td><span class="math inline">\(\Sbar_{it}\)</span></td>
+<td><span class="math inline">\(\bar S_i\)</span></td>
+<td>(implicit)</td>
+</tr>
+<tr class="odd">
+<td>Number of searches</td>
+<td><span class="math inline">\(H_{it}\)</span></td>
+<td><span class="math inline">\(H_i\)</span></td>
+<td><span class="math inline">\(K_i\)</span></td>
+</tr>
+<tr class="even">
+<td>Search-order index</td>
+<td><span class="math inline">\(h\)</span></td>
+<td><span class="math inline">\(h\)</span></td>
+<td>(folded into <span class="math inline">\(j\)</span>)</td>
+</tr>
+<tr class="odd">
+<td>Purchase</td>
+<td><span class="math inline">\(y_{it}\)</span></td>
+<td><span class="math inline">\(y_i\)</span></td>
+<td><span class="math inline">\(j^*\)</span></td>
+</tr>
+<tr class="even">
+<td>Parameter vector</td>
+<td><span class="math inline">\(\bftheta_i\)</span></td>
+<td><span class="math inline">\(\theta\)</span></td>
+<td>— (<span class="math inline">\(\theta = \log\sigma\)</span>)</td>
+</tr>
+<tr class="odd">
+<td>Population parameters</td>
+<td><span class="math inline">\(\bfOmega\)</span></td>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Smoothing constants</td>
+<td><span class="math inline">\(\rho_k\)</span></td>
+<td><span class="math inline">\(\rho_k\)</span></td>
+<td><span class="math inline">\(\lambda_k\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Four collisions are worth naming explicitly, because each is a live source of error when porting code or reading the two papers side by side.</p>
+<ol type="1">
+<li><strong>The differenced conditions <span class="math inline">\(\nu_1\)</span> and <span class="math inline">\(\nu_2\)</span> are swapped between the two papers.</strong> 2 label <span class="math inline">\(\nu_{1h}\)</span> the selection (order) condition and <span class="math inline">\(\nu_{2h}\)</span> the continuation condition; <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> label <span class="math inline">\(\nu_{1}\)</span> continuation and <span class="math inline">\(\nu_{2}\)</span> selection. Smoothing constants therefore do not correspond element-wise across the two implementations. We follow
+<ol start="2" class="example" type="1">
+<li></li>
+</ol></li>
+<li><strong><span class="math inline">\(\theta\)</span> denotes different objects.</strong> 2 use it for the full parameter vector; <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> use it specifically for <span class="math inline">\(\log \sigma\)</span>. We follow the former.</li>
+<li><strong><span class="math inline">\(\zeta\)</span> and <span class="math inline">\(\xi\)</span> are visually near-identical in print</strong> and denote unrelated objects across the two papers — the reservation-value offset in one, observed pre-search utility in the other. We retain <span class="math inline">\(\xi\)</span> and write the offset as <span class="math inline">\(g(\cdot)\)</span>.</li>
+<li><strong><span class="math inline">\(d\)</span> is a simulation-draw index in one and a distance vector in the other.</strong> We use it for neither.</li>
+</ol>
+</section>
+<section id="additional-appendices" class="level3" data-number="11.2">
+<h3 data-number="11.2" class="anchored" data-anchor-id="additional-appendices"><span class="header-section-number">11.2</span> Additional Appendices</h3>
+<!--
+TODO:
+  B. Derivation of the mixture-of-normals reservation value.
+  C. Proof of the zero-search-cost nesting result (@sec-model-nesting).
+  D. Sampler details and convergence diagnostics.
+  E. Validation against the reference implementations (see @sec-estimation).
+  F. Instrument screenshots and the full attribute list.
+  G. Additional simulation results.
+-->
+</section>
+</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{yavorsky2026,
+  author = {Yavorsky, Dan and T. Bradlow, Eric},
+  title = {SIFT: {Search} {Conjoint}},
+  date = {2026-08-25},
+  langid = {en},
+  abstract = {Conjoint analysis measures what consumers prefer among
+    alternatives they have been shown. It is silent on what they would
+    have looked at, what looking costs them, and what they never see at
+    all. We introduce SIFT, a survey instrument in which the respondent
+    faces a list-screen of alternatives, clicks through to inspect
+    individual listings at will, and then chooses — a task that
+    reproduces the two-stage list-then-detail architecture of the
+    environments in which many category purchases are actually made.
+    Each respondent completes a sequence of such tasks, and position,
+    list-screen content, and detail-page content are randomized by
+    design in every one. We fit the resulting click-and-choose data with
+    a sequential search model in the tradition of Weitzman (1979),
+    recovering both preference parameters, as conjoint does, and search
+    costs, for which conjoint has no analogue. Two features distinguish
+    the instrument from the structural search literature it borrows
+    from. First, the within-respondent panel of search spells supports
+    individual-level estimates of preferences and search costs jointly,
+    where field applications typically observe a single spell per
+    consumer and identify heterogeneity cross-sectionally. Second, the
+    exogenous variation that field studies obtain only rarely —
+    randomized position and information architecture — is designed in
+    rather than found. The framework nests conjoint: as the search cost
+    goes to zero every alternative is inspected, choice is made over
+    fully realized utilities, and the model collapses to a standard
+    choice-based conjoint model. Whether the search cost is
+    distinguishable from zero is therefore a testable question rather
+    than a maintained assumption, and the answer tells the analyst
+    whether consideration or preference is the binding constraint in a
+    category. We derive the likelihood, characterize what the designed
+    variation buys for identification, and provide aggregate and
+    hierarchical Bayesian estimation routines with replication code in
+    R. A simulation study documents parameter recovery at commercial
+    task counts, and an empirical application fielded in partnership
+    with a consumer insights consultancy compares SIFT’s preference
+    estimates against conjoint part-worths from a split sample, tests
+    whether estimated search costs are distinguishable from zero, and
+    decomposes non-purchase into never-inspected and
+    inspected-but-rejected — a distinction conjoint cannot draw, and one
+    that carries different managerial remedies.}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-yavorsky2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Yavorsky, Dan, and Eric T. Bradlow. 2026. <span>“SIFT: Search
+Conjoint.”</span> August 25.
+</div></div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

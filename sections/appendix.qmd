@@ -1,0 +1,61 @@
+## Appendix {.appendix #sec-appendix}
+
+### Notation Crosswalk {#sec-appendix-notation}
+
+The two papers this one builds on use different symbols for the same objects, and in
+two places the same symbol for different objects. The table records the mapping, both
+for readers arriving from either literature and to keep our own implementation honest
+against the two reference codebases.
+
+| Object | This paper | @Ursu_Seiler_Honka_2024 | @Yavorsky_2021 |
+|---|---|---|---|
+| Utility | $u_{itj}$ | $u_{ij}$ | $u_{ij}$ |
+| Pre-search utility | $\delta_{itj}$ | $\delta_{ij}$ | $\delta_{ij}$ |
+| Observed pre-search utility | $\xi_{itj} = \bfX_{itj}'\bfbeta_i$ | $\xi_{ij} = X_j'\bfbeta_i - \alpha_i p_{ij}$ | $x_j'\bfbeta$ |
+| Pre-search taste shock | $\mu_{itj}$ | $\mu_{ij}$ | $\eta_{ij}$ |
+| Post-search taste shock | $\varepsilon_{itj}$ | $\varepsilon_{ij}$ | $\varepsilon_{ij}$ |
+| Observed post-search utility | $\bfL_{itj}'\bfkappa_i$ | $L_j'\kappa_i$ (§2.4 only) | — |
+| Post-search s.d. | $\sigma_\varepsilon$ | $\sigma_\varepsilon$ | $\sigma$ ("MVSD") |
+| Search cost | $\cost_{itj}$ | $c_{ij} = Z_j'\gamma_i$ | $c_{ij} = \exp\{\gamma_0 + d_{ij}'\gamma\}$ |
+| Reservation value | $\resv_{itj}$ | $z_{ij}$ | $z_{ij}$ |
+| Reservation offset | $g(\cost)$ | $g(c)$, $m(c/\sigma_\varepsilon)$ | $\zeta_{ij}$ |
+| Searched set | $\Sset_{it}$ | $S_i$ | (implicit) |
+| Unsearched set | $\Sbar_{it}$ | $\bar S_i$ | (implicit) |
+| Number of searches | $H_{it}$ | $H_i$ | $K_i$ |
+| Search-order index | $h$ | $h$ | (folded into $j$) |
+| Purchase | $y_{it}$ | $y_i$ | $j^*$ |
+| Parameter vector | $\bftheta_i$ | $\theta$ | — ($\theta = \log\sigma$) |
+| Population parameters | $\bfOmega$ | $\Omega$ | — |
+| Smoothing constants | $\rho_k$ | $\rho_k$ | $\lambda_k$ |
+
+: Notation crosswalk {#tbl-notation}
+
+Four collisions are worth naming explicitly, because each is a live source of error
+when porting code or reading the two papers side by side.
+
+1. **The differenced conditions $\nu_1$ and $\nu_2$ are swapped between the two
+   papers.** @Ursu_Seiler_Honka_2024 label $\nu_{1h}$ the selection (order) condition
+   and $\nu_{2h}$ the continuation condition; @Yavorsky_2021 label $\nu_{1}$
+   continuation and $\nu_{2}$ selection. Smoothing constants therefore do not
+   correspond element-wise across the two implementations. We follow
+   @Ursu_Seiler_Honka_2024.
+2. **$\theta$ denotes different objects.** @Ursu_Seiler_Honka_2024 use it for the full
+   parameter vector; @Yavorsky_2021 use it specifically for $\log \sigma$. We follow
+   the former.
+3. **$\zeta$ and $\xi$ are visually near-identical in print** and denote unrelated
+   objects across the two papers — the reservation-value offset in one, observed
+   pre-search utility in the other. We retain $\xi$ and write the offset as $g(\cdot)$.
+4. **$d$ is a simulation-draw index in one and a distance vector in the other.** We use
+   it for neither.
+
+### Additional Appendices
+
+<!--
+TODO:
+  B. Derivation of the mixture-of-normals reservation value.
+  C. Proof of the zero-search-cost nesting result (@sec-model-nesting).
+  D. Sampler details and convergence diagnostics.
+  E. Validation against the reference implementations (see @sec-estimation).
+  F. Instrument screenshots and the full attribute list.
+  G. Additional simulation results.
+-->

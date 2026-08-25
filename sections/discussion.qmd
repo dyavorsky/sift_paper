@@ -1,0 +1,38 @@
+## Discussion {#sec-discussion}
+
+<!--
+TODO: awaiting guidance. Includes the limitations that should be stated
+before a referee states them.
+
+Proposed scope:
+
+  - Do survey clicks measure anything real? Clicking is nearly free, so
+    estimated search-cost LEVELS will not transfer to the field. Mitigations
+    to weigh: incentive alignment, artificial latency, an explicit click
+    budget, a time-denominated cost. Fallback: relative and comparative
+    statements transfer even when levels do not — which is the standing
+    defense of conjoint utilities, so it is defensible ground. Say it before
+    a reviewer does.
+  - Rational expectations about the unopened alternative. Weitzman requires
+    the respondent to know the distribution behind each click, which she does
+    not at the start of a survey. Implies a practice block, and possibly
+    modeling learning across tasks.
+  - Do respondents follow the reservation rule? The lab literature says
+    partially (@sec-lit-lab). Report fit against a satisficing alternative.
+  - Thin identification at commercial task counts.
+  - Where conjoint remains the right tool: feature-level willingness-to-pay
+    for a defined bundle, new-product configuration with nothing to search,
+    orthogonal designs for clean part-worths, mature share simulators,
+    categories with no list-screen, and any study where established norms and
+    benchmarks matter more than a new method.
+  - Extensions: filters and sorts as search actions [@Chen_Yao_2017],
+    discovery of alternatives [@Greminger_2022], search across sessions.
+-->
+
+### What the Nesting Result Changes
+
+### Implications for Practice
+
+### Limitations
+
+### Where Conjoint Remains the Right Tool

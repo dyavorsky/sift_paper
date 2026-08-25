@@ -1,0 +1,28 @@
+## What the Model Delivers {#sec-managerial}
+
+<!--
+TODO: awaiting guidance. This section is what makes the method useful rather
+than merely estimable. It is also the most speculative of the placeholders,
+and may end up merged into @sec-analysis or @sec-discussion.
+
+Proposed scope:
+
+  - Decomposing non-purchase into never-inspected and inspected-and-rejected.
+    The same observed outcome with opposite remedies — distribution,
+    placement, and media versus product and price.
+  - Position and merchandising counterfactuals: what happens to share when an
+    alternative moves from position 6 to position 2.
+  - Information-architecture counterfactuals: what belongs on the list-screen
+    versus the detail page.
+  - Friction counterfactuals: fewer clicks, better filters, better defaults.
+  - Segmentation on search behavior rather than on preference.
+  - Large attribute spaces: non-attention becomes data rather than noise.
+-->
+
+### Decomposing Non-Purchase
+
+### Position and Merchandising Counterfactuals
+
+### Information Architecture
+
+### Search-Based Segmentation

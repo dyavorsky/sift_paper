@@ -1,0 +1,50 @@
+---
+title: "Morozov (2021) vs SIFT"
+subtitle: "Does the recall rate separate tastes from search costs?"
+format: html
+bibliography: ../references.bib
+---
+
+::: {.callout-note}
+## Scoped, not yet run
+:::
+
+## The question
+
+@Morozov_2021 gives the cleanest statement of why preferences and search costs
+are separable: stopping decisions depend on the *realized* utilities of
+alternatives already searched but not on their search costs, which are sunk.
+Trade the utility intercept against the search cost so as to hold the mean
+reservation value fixed and the search *order* is unchanged — but the higher
+intercept raises realized utility and makes stopping more likely.
+
+His Appendix D turns this into an observable moment: the **recall rate**, the
+probability of buying an alternative encountered earlier in the sequence rather
+than the most recent one, responds to the intercept but not to the search cost.
+
+**Ask:** does the recall rate actually move that way in SIFT data, and is it
+sharp enough at realistic task counts to be worth reporting as a diagnostic?
+
+## Design
+
+1. Two sweeps holding the mean reservation value fixed: one varying the utility
+   intercept, one varying the search-cost intercept.
+2. Compute the recall rate directly from the click sequence — no model.
+3. Check that it responds to the first sweep and not the second, and estimate
+   how many tasks are needed to detect the difference.
+
+SIFT observes recall directly, because respondents have free recall and we
+record the entire sequence, so this needs no modelling assumption at all.
+
+## The second, harder question
+
+@Morozov_2021 proves nonparametric identification of individual-level
+preferences *and* search costs from panel search data, but the argument takes
+the number of sessions per consumer to infinity; with a mean of 5 he estimates
+hyperparameters rather than individual parameters.
+
+**Ask:** at $T \in \{4, 8, 16, 32\}$, how close do individual-level posteriors
+get to the truth, and where does the hierarchical prior stop doing most of the
+work? This is the number that tells a practitioner how many tasks to field, and
+it is the honest version of the claim that the panel buys individual-level
+estimates.

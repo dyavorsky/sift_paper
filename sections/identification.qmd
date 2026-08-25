@@ -1,192 +1,282 @@
 ## Identification and Estimation {#sec-estimation}
 
+Search models are identified from patterns that ordinary choice data cannot
+produce: *which* alternatives a respondent opened, *in what order*, *how many*,
+and *which* of the opened alternatives was ultimately bought. This section sets
+out what each of those margins identifies, what SIFT's designed variation adds
+to arguments that field studies must make on observational grounds, and what
+remains normalized rather than estimated.
+
+Throughout, the object of interest is the pair $(\bfbeta, \bfgamma)$ —
+preferences and search costs — together with the post-search standard deviation
+$\tilde\sigma$, which most of the literature fixes to one and which we argue
+must be estimated.
+
 ### What the Designed Variation Buys {#sec-est-variation}
 
+#### Position enters search costs, not utility
+
+The identifying assumption underlying every position-based search-cost shifter
+is that a listing's position affects what it costs to inspect an alternative,
+and nothing else. @Ursu_2018 §4.3 takes this seriously rather than asserting it,
+enumerating the ways position could instead enter the model — through pre-search
+utility, through the post-search spread, or through combinations — and ruling
+them out with observational tests. Because SIFT randomizes position within every
+task and records the full click sequence, we can run those tests as experimental
+contrasts rather than conditional comparisons.
+
+Two statistics suffice, and neither requires fitting a model.
+
+**T1. Among clicked alternatives, does position predict purchase?**
+**T2. Is the first click near the top of the page?**
+
+::: {.callout-important}
+## The sign of T1 is the opposite of the natural intuition
+
+It is tempting to reason that if position acts only on costs then it should
+have no bearing on what gets bought once someone has looked, so a flat T1
+indicates position-in-cost. Simulation says otherwise, and the reason is
+selection. When position raises the search cost, an alternative in a *bad*
+position must have unusually high pre-search utility to be worth opening at all.
+Conditional on having been clicked, bad-position alternatives are therefore
+*better* than good-position ones, and T1 comes out strongly **positive**. When
+position instead enters pre-search utility, the direct effect and the selection
+effect roughly cancel and T1 is approximately **flat**.
+
+In our simulations (400 respondents × 8 tasks) T1 has slope $+0.39$
+($p \approx 5\times10^{-15}$) when position acts on costs, and $-0.05$
+($p = 0.06$) when it acts on utility. Reading a flat T1 as evidence for
+position-in-cost would get the answer exactly backwards.
+:::
+
+T2 separates the remaining case. If position widens the post-search spread, the
+reservation value *rises* with position, so the worst-placed alternatives would
+be opened first. That is what we see: mean first-click position 4.96 against a
+uniform benchmark of 3.5, versus 2.21 and 2.57 in the cost and utility arms.
+
+The two tests together form a decision rule:
+
+| T2 | T1 | position acts on |
+|---|---|---|
+| first click near top | strongly positive | **search cost** |
+| first click near top | flat | pre-search utility |
+| first click near bottom | — | post-search spread |
+
+We regard this as a design check to be run and reported in every SIFT study
+rather than assumed. Details, code, and the full three-arm simulation are in
+[the position comparison](../comparisons/compare-ursu-position.qmd).
+
 <!--
-TODO: prose. The substance, from the papers now read in full:
-
-(a) POSITION ENTERS SEARCH COSTS, NOT UTILITY. @Ursu_2018 §4.3 enumerates all seven
-ways position could act (on v, on epsilon, on c, and combinations) and rules out all
-but c using three tests:
-   - purchases conditional on click are unaffected by position -> rules out any case
-     where position enters pre-search utility v (her Cases 1, 4, 5, 7);
-   - consumers click TOP-ranked alternatives first -> rules out position acting on
-     the post-search variance, which would predict reservation utility INCREASING in
-     position (her Cases 2 and, under common parameter values, 6);
-   - an exogenous demotion (opaque offers) lowers clicks on the demoted hotel ->
-     rules IN position acting on search costs.
-We can run the first two natively and better: we randomize position in every task and
-we observe click order directly, which she had to import from a companion data set.
-The third we do not need, because our demotions ARE the design.
-This is the argument that licenses putting position in Z and not in X. It should be
-run and reported as a design check in every SIFT study, not assumed.
-
-(b) SEPARATING PREFERENCES FROM SEARCH COSTS. @Morozov_2021 §4.3.2: stopping decisions
-depend on the REALIZED utilities of already-searched alternatives but not on their
-search costs, which are sunk. So trade xi against c holding the mean reservation value
-z-bar fixed: search order is unchanged, but the higher intercept raises realized utility
-and makes stopping more likely. Their Appendix D sharpens this into an observable
-moment -- the RECALL RATE, the probability of purchasing an alternative searched
-earlier in the sequence, responds to the intercept but NOT to search cost. We observe
-recall directly (free recall, full click sequence), which makes this our cleanest
-separation moment.
-
-(c) WHAT THE PANEL BUYS, AND WHAT IT DOES NOT. @Morozov_2021 §4.3 proves nonparametric
-identification of individual-level preferences AND search costs from panel search data,
-but the argument assumes the number of sessions per consumer goes to infinity; with
-2-35 sessions (mean 5) they estimate hyperparameters only, not individual parameters
-(their §5.1). At T = 10 we should claim hierarchical posteriors in the conjoint
-tradition, NOT nonparametric individual identification. Say this plainly.
-
-(d) WHAT NEITHER PANEL NOR SHIFTER BUYS ALONE. @Morozov_2021 has the panel and still
-normalizes sigma_epsilon, reporting that little variation in their data speaks to it
-(their Appendix C); @Yavorsky_2021 has an exogenous shifter and no panel, and estimates
-it. SIFT has both, and -- see @sec-model-setup -- part of the post-search variance is
-fixed by the design rather than assumed. This is the sharpest version of the
-identification claim and belongs in the introduction.
-
-(e) SEARCH-COST LEVELS AND SPELL LENGTH. @Ursu_2018 §6.1 reports baseline search costs
-above $102 and attributes the magnitude to observing one click per search impression
-with no way to link a consumer's impressions; restricting to impressions with two or
-more clicks cuts mean search costs by up to 83%. Single-spell data mechanically
-inflates search costs. The panel is a levels argument, not only a heterogeneity
-argument.
+TODO: verify against Ursu (2018) §4.3 directly before asserting what SHE
+concludes from conversion-on-rank. Our simulation establishes what the tests do
+in OUR model; her data-generating environment differs (platform-assigned rather
+than randomized position, one click per impression), and the selection channel
+that drives our T1 result may operate differently there. Do not attribute the
+sign pattern above to her.
 -->
+
+#### Separating preferences from search costs
+
+The sharper problem is not whether position shifts costs but whether a high
+search cost can be distinguished from a low taste. @Morozov_2021 gives the
+cleanest statement of the separation (his §4.3.2): stopping decisions depend on
+the *realized* utilities of alternatives already searched, but not on their
+search costs, which are sunk by the time the stopping decision is made. Trade
+the utility intercept against the search cost so as to hold the mean reservation
+value fixed, and the search *order* is unchanged — but the higher intercept
+raises realized utility and so makes stopping more likely.
+
+His Appendix D sharpens this into an observable moment: the **recall rate**, the
+probability of purchasing an alternative encountered earlier in the sequence
+rather than the most recent one, responds to the utility intercept but not to
+the search cost. SIFT observes recall directly, because respondents have free
+recall and we record the entire click sequence. This is our cleanest separation
+moment, and it is available in the raw data without any modelling.
+
+#### What the panel buys, and what it does not
+
+@Morozov_2021 proves nonparametric identification of individual-level
+preferences *and* search costs from panel search data. It is worth being precise
+about the strength of that result, because it is easy to overclaim. The argument
+assumes the number of sessions per consumer grows without bound; with between 2
+and 35 sessions per consumer and a mean of 5, @Morozov_2021 estimates
+hyperparameters rather than individual parameters (his §5.1).
+
+At the task counts SIFT can realistically field — call it $T=10$ — we are in the
+same position, and we say so plainly: what the panel delivers is *hierarchical
+posteriors in the conjoint tradition*, not nonparametric individual
+identification. That is the standard the conjoint audience already applies to
+part-worths, and it is the right standard here.
+
+The panel also does something less obvious. @Ursu_2018 reports baseline search
+costs above \$102 and attributes the magnitude to observing a single click per
+search impression with no way to link a consumer's impressions; restricting
+attention to impressions with two or more clicks cuts mean estimated search
+costs by up to 83%. Single-spell data mechanically inflates search costs. The
+panel is therefore a *levels* argument as much as a heterogeneity argument.
+
+#### What neither the panel nor the shifter buys alone
+
+The two ingredients are complements, and the literature illustrates this by
+having one or the other but never both. @Morozov_2021 has the panel and still
+normalizes the post-search standard deviation, reporting that little variation
+in his data speaks to it (his Appendix C). @Yavorsky_2021 has an exogenous
+search-cost shifter and no panel, and does estimate it — finding
+$\tilde\sigma = 8.16$ against the conventional normalization of one, with a
+confidence interval that excludes one and consequences large enough to reverse
+the sign of one search-cost coefficient and to understate a counterfactual by a
+factor of three to four.
+
+SIFT has both. It also has something neither has: because we design the product
+page, part of the post-search component is *fixed by the design* rather than
+inferred.
+
+This last point is stronger than it first appears, and it is worth stating
+carefully. In a field setting the analyst never observes what inspection
+revealed; the post-search shock is a residual, and all that can be recovered is
+its variance. In SIFT the analyst *wrote* the product page. So for every clicked
+alternative the revealed attributes $\bfL_{ijt}$ are known, and they enter
+realized utility as $\bfL_{ijt}'\bfkappa$ — a mean shift, not a variance.
+Preferences over attributes that are only visible *after* a click are therefore
+identified in exactly the way conjoint part-worths are: from which alternative
+gets bought given what was shown.
+
+The distinction is easy to lose in implementation, with consequences that are
+silent. The ex ante spread $\tilde\sigma$ belongs in the reservation value,
+because that is computed before the click; the realized $\bfL$ belongs in the
+utility, because that is evaluated after it. Use $\tilde\sigma$ for both and
+$\bfkappa$ enters the likelihood only through
+$\tilde\sigma^2 = \bfkappa'\mathrm{Var}(\bfL)\bfkappa + \sigma_\xi^2$, where it
+trades off exactly against $\sigma_\xi$ and is not identified at all — while
+every other parameter continues to recover normally, so nothing looks wrong.
+This is the sharpest version of the identification claim in the paper and it
+belongs in the introduction.
 
 ### Normalization {#sec-est-normalization}
 
-<!--
-TODO. sigma_mu = 1 fixes the scale of utility (@Ursu_Seiler_Honka_2024 §4.4.2,
-@Morozov_2021 Appendix C). The post-search standard deviation is identified in
-principle but hard to estimate in practice without a search-cost shifter
-(@Yavorsky_2021). State the consequence plainly: with both variances fixed, search
-costs cannot be monetized and search-cost counterfactuals are not interpretable
-(@Ursu_Seiler_Honka_2024 §4.4.4) -- which would rule out every friction counterfactual
-in @sec-managerial. This is why estimating it is load-bearing here rather than a
-refinement.
--->
+Setting the standard deviation of the pre-search shock to one fixes the scale of
+utility, as in @Ursu_Seiler_Honka_2024 §4.4.2 and @Morozov_2021 Appendix C. That
+normalization is innocuous and we adopt it.
+
+The post-search standard deviation $\tilde\sigma$ is a different matter. It is
+identified in principle by functional form — $\tilde\sigma$ appears on both
+sides of $g(\zeta) = \cost/\tilde\sigma$ — but @Yavorsky_2021 shows by
+simulation that functional-form identification alone is not enough to estimate
+it in practice, and that an exogenous, alternative-specific cost shifter is what
+makes estimation work.
+
+The consequence of fixing it deserves to be stated without hedging. With both
+variances normalized, search costs cannot be monetized and search-cost
+counterfactuals are not interpretable (@Ursu_Seiler_Honka_2024 §4.4.4). That
+would rule out every friction counterfactual in @sec-managerial. Estimating
+$\tilde\sigma$ is therefore load-bearing for this paper rather than a
+refinement, and it is the single clearest reason SIFT needs a randomized
+position rather than merely a rich attribute design.
 
 ### Testing the Zero-Search-Cost Restriction {#sec-est-nesting}
 
-<!--
-TODO. IMPORTANT: the test cannot be a Wald test on the estimated search cost.
-Zero is a limit rather than an interior point -- c -> 0 corresponds to g(c) -> +infinity
-and log c -> -infinity -- so the null sits at a boundary in every parameterization.
-Construct the test from observable implications instead:
-   - holdout fit of SIFT against the nested conjoint model;
-   - the observable implication itself (does anyone leave alternatives unopened);
-   - a likelihood-ratio comparison with a simulated rather than chi-squared reference
-     distribution.
-Note also that this argues for estimating c rather than g directly, even though
-estimating g avoids the root-find during optimization (@Ursu_Seiler_Honka_2024 §5.2).
--->
+SIFT nests conjoint: as the search cost goes to zero every alternative is
+inspected, choice is made over fully realized utilities, and the model collapses
+to a standard choice-based conjoint model. Whether search costs are
+distinguishable from zero is therefore a testable question rather than a
+maintained assumption — but the test requires care.
+
+::: {.callout-warning}
+## The obvious test is invalid
+
+The natural move is a Wald test on the estimated search cost. It does not work.
+Zero is a limit rather than an interior point of the parameter space:
+$\cost \to 0$ corresponds to $g(\cost) \to +\infty$ and $\log \cost \to
+-\infty$. The null sits at a boundary under every parameterization, so the
+standard asymptotics do not apply.
+:::
+
+We construct the test from observable implications instead, in three ways. The
+first is holdout fit: SIFT against the nested conjoint model on tasks withheld
+from estimation. The second is the observable implication itself — whether any
+respondent leaves alternatives unopened, which under zero search costs no one
+would. The third is a likelihood-ratio comparison against a *simulated* rather
+than $\chi^2$ reference distribution.
+
+This also bears on a parameterization choice. @Ursu_Seiler_Honka_2024 §5.2 notes
+that estimating $g$ directly avoids a root-find inside the optimization loop.
+Convenient — but it puts the quantity we most want to test on a scale where the
+null is at infinity. We estimate $\log \cost$ and pay the root-find, which in
+our implementation is a spline evaluation rather than an iterative solve (see
+[`R/README.md`](../R/README.md)).
 
 ### Individual-Level Estimation from a Task Panel {#sec-est-panel}
 
-<!--
-TODO. Two routes to the individual-level deliverable:
-   1. Full hierarchical Bayes. What the conjoint audience expects, and what makes
-      individual part-worths and individual search costs directly reportable.
-   2. Two-stage empirical Bayes: estimate the hyperparameters by simulated maximum
-      likelihood with importance sampling, then draw individual posteriors by
-      Metropolis-Hastings conditional on the estimated hyperparameters. This is
-      exactly what @Morozov_2021 do to compute personalized prices (their §7.2 and
-      Appendix H), and it is far cheaper than full HB.
-Route 2 is the fallback if route 1 will not run at commercial sample sizes.
--->
+There are two routes to the individual-level deliverable that makes SIFT a
+conjoint substitute rather than a search paper.
+
+**Full hierarchical Bayes** is what the conjoint audience expects and what makes
+individual part-worths and individual search costs directly reportable.
+
+**Two-stage empirical Bayes** estimates the hyperparameters by simulated maximum
+likelihood and then draws individual posteriors by Metropolis–Hastings
+conditional on those estimates. This is what @Morozov_2021 does to compute
+personalized prices (his §7.2 and Appendix H), and it is considerably cheaper.
+
+Our runtime work reverses the ordering we originally expected. Because HB never
+integrates over the heterogeneity distribution — each respondent sits at their
+own $\bftheta_i$ — the mixing-draw multiplier that makes random-coefficients
+SMLE expensive simply does not arise. On measured per-evaluation costs, full HB
+is the *cheaper* of the two routes at SIFT's dimensions, not the fallback. We
+therefore treat HB as the primary estimator and empirical Bayes as the
+robustness check.
 
 ### Estimation {#sec-est-estimation}
 
+Runtime is a binding practical constraint rather than an implementation detail:
+a fit has to complete overnight, not over a week. The published timings make the
+point. @Ursu_Seiler_Honka_2024 Table 2, for 1,000 consumers with heterogeneity,
+report 5h20m for importance sampling, 29h48m for the kernel-smoothed simulator
+plus roughly 32 further hours to calibrate its scaling vector, and 198h24m for
+GHK. @Chung_2025 Table 1, for a cross-sectional design of comparable size,
+reports 0.48 minutes for their probability-mapping simulator against 5–7 minutes
+kernel-smoothed and 15–127 minutes for crude frequency — one to two orders of
+magnitude.
+
+We have ported and validated the @Chung_2025 estimator and reproduced their
+Table 1; the port, its five validation checks, and two bugs we found in their
+shipped code are documented in [`R/README.md`](../R/README.md).
+
+For SIFT itself we exploit a structural feature of the design. Conditional on
+the observed purchase, every Weitzman condition is a conjunction of linear
+inequalities — the stopping rule is a statement about a maximum and therefore a
+union in general, but the choice rule names which alternative attains that
+maximum. Continuation then collapses to the single binding constraint
+$\resv_{s_K}$, because reservation values decrease along the search order. And
+conditional on $\bfeta$ and on the post-search shock to the chosen alternative,
+the remaining shocks are independent one-sided constraints that integrate out in
+closed form, leaving a one-dimensional integral.
+
+This yields a hybrid estimator: GHK on the pre-search block, quadrature on the
+post-search block. Measured against the kernel-smoothed accept–reject simulator
+of @Yavorsky_2021 at equal draw counts, its simulation variance is lower by a
+factor of 21 to 100 depending on the design. Because runtime is exactly linear
+in the number of draws, the relevant summary is time to a given precision, on
+which the hybrid is 3 to 21 times cheaper; crude frequency is not competitive on
+either margin. The kernel-smoothed simulator also shows the upward bias in the
+negative log-likelihood that @Yavorsky_2021 notes is intrinsic to it. The
+construction and its validation are in
+[`notebooks/sift_likelihood.qmd`](../notebooks/sift_likelihood.qmd).
+
 <!--
-TODO. Runtime is a binding practical constraint: a fit has to complete overnight, not
-over a week. The four candidate simulators, with published timings:
-
-  @Ursu_Seiler_Honka_2024 Table 2 (1,000 consumers, 5 sessions, 5 alternatives,
-  heterogeneous):
-    importance sampling    5h20m,  RMSE 0.01
-    kernel-smoothed       29h48m,  RMSE 0.13  (+ ~32h to calibrate the scaling vector)
-    GHK                  198h24m,  RMSE 0.09
-
-  @Chung_2025 Table 1 (1,000 consumers, 5 alternatives + outside option,
-  cross-sectional, 100 replications):
-    their GHK-type simulator   0.48 min,  SSE 0.040   <- one to two orders faster
-    kernel-smoothed            5-7 min,   SSE 0.21-2.98
-    crude frequency           15-127 min, SSE ~0.11
-    @Jiang_2021 pre-search-shock GHK  1.2-1.5 min, but needs a grid search over sigma_e
-
-LEADING CANDIDATE: @Chung_2025. Three separate mechanisms make it fast, and all three
-bite harder in our setting than in theirs:
-
-  1. NO TUNING CONSTANTS. It computes actual probabilities rather than kernel-smoothed
-     indicator violations, so there is no scaling vector to calibrate. That removes an
-     entire pre-estimation stage -- @Ursu_Seiler_Honka_2024 Appendix B report ~32 hours
-     for it -- and @Chung_2025 §6.3 show the stage cannot be shortcut, because on field
-     data the maximized likelihood declines mechanically in the scaling factor, so
-     calibration has to run through out-of-sample prediction instead.
-  2. NO ROOT-FINDING IN THE INNER LOOP. Bounds on reservation values are obtained by
-     evaluating g FORWARD on a utility difference -- closed form, vectorizable -- and
-     g-inverse is needed only for the K search costs actually drawn, from a spline
-     precomputed once before estimation (their footnote 7). With K << J, which is the
-     SIFT regime, this is most of the work removed. Contrast the reference R code,
-     which root-finds per alternative per respondent per likelihood evaluation.
-  3. IT SCALES WELL IN J WHEN K IS SMALL. Unsearched alternatives enter as a product of
-     closed-form cdf evaluations, one per alternative. This is the opposite of the
-     kernel simulator's behaviour, where a large J-K adds smoothed penalty terms that
-     come to dominate the objective (the smoothing-convention issue discussed above).
-
-WHAT ADOPTING IT COMMITS US TO. Their simulator requires the stochastic component of the
-reservation value to be the search cost rather than a pre-search taste shock
-(@sec-model-setup). Consequences to verify in @sec-simstudy rather than assume:
-  - sigma_epsilon. @Chung_2025 fix it at one, as everyone does. Our randomized position
-    enters as the location parameter of the search-cost distribution -- exactly the
-    shifted-exponential specification of their §6.2 -- so @Yavorsky_2021's shifter
-    argument should apply, but nobody has estimated sigma_epsilon inside this simulator.
-    This is the single most important thing the simulation study has to establish,
-    because @sec-managerial depends on it.
-  - Misspecification. Their Table 7 shows RATIOS of preference parameters are recovered
-    correctly even when the randomness is put in the wrong place; their Table 6 shows
-    LEVELS are not, and their search-cost levels swing wildly. Relative part-worths are
-    safe; monetized search costs are not. Say so.
-  - Estimate both specifications on the same simulated data and report the comparison.
-
-THE ONE PIECE THAT ALREADY EXISTS FOR US. @Chung_2025 Appendix B.4 works out the case
-where the outside option's utility is known prior to search, so respondents who click
-nothing are representable in the likelihood, and shows parameter recovery for it. That
-is SIFT's no-click exit, and it is the only treatment of it in the four reference
-implementations.
-
-CONFLICTING EVIDENCE ON IMPORTANCE SAMPLING, to resolve before relying on either:
-@Morozov_2021 Appendix G and @Ursu_Seiler_Honka_2024 Table 2 both find importance
-sampling fast and accurate; @Chung_2025 Table 3 find it badly biased -- heterogeneity
-standard deviations collapse and preference means shrink most of the way to zero. The
-likely explanation is resourcing rather than a defect: @Chung_2025 give it 100^2 draws
-per observation where @Morozov_2021 use up to 10^6, and importance sampling is acutely
-sensitive to the proposal density, which @Morozov_2021 centre on moment-matched starting
-values and @Chung_2025 do not describe. Worth settling in the simulation study, since
-importance sampling remains the fallback.
-
-PANEL AND HETEROGENEITY. The per-task likelihood contributions multiply across tasks with
-no structural change. For individual-level output, @Chung_2025 Appendix B.5 run their
-simulator inside a Metropolis-within-Gibbs sampler and compare against the Bayesian
-approach of @Morozov_2023, which they find biased and no faster.
-
-ORDER OF WORK: aggregate first (it validates against the reference implementations), then
-heterogeneity, then HB. See @sec-appendix for the validation protocol.
-
-STARTING VALUES. The effective-value representation of @Armstrong_2017 and @Choi_2018,
-w = min(u, z), gives purchase probabilities in near-probit form
-(@Ursu_Seiler_Honka_2024 §3.1). Too coarse to estimate from, but cheap enough to
-generate starting values, which buys optimizer iterations.
+TODO once the simulation study exists (@sec-simstudy):
+  - timings at commercial task counts with random coefficients, replacing the
+    extrapolations in R/README.md with measured HB fits;
+  - RMSE of the hybrid estimator against the kernel-smoothed one on identical
+    data, which is the apples-to-apples number reviewers will want;
+  - the recall-rate separation moment (Morozov Appendix D) computed on simulated
+    data, to show it moves with the intercept and not with search cost.
 -->
 
 ### Software {#sec-est-software}
 
-<!--
-TODO. R package. Note what is genuinely new relative to the two reference
-implementations and therefore has to be built rather than translated:
-   - a task subscript (panel) throughout;
-   - an outside option that is always available at zero cost, and respondents who
-     exit without clicking;
-   - an estimable post-search standard deviation;
-   - the mixture-of-normals reservation value of @sec-model-setup.
--->
+All estimation code is in R and is released with the paper. The reservation-value
+inverse $g^{-1}$ is evaluated by a cubic spline built once in the standardized
+argument $\cost/\tilde\sigma$, so a single spline serves every $\tilde\sigma$;
+it covers costs down to $3.9\times10^{-16}$, well below the range any optimizer
+will propose.

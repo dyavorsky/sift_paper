@@ -1,0 +1,106 @@
+---
+title: "Ursu (2018) position analysis vs SIFT"
+subtitle: "Can we test where position acts, instead of assuming it?"
+format: html
+bibliography: ../references.bib
+execute: {echo: false, warning: false}
+---
+
+```{r}
+#| include: false
+# works whether Quarto runs from the project root or from comparisons/
+res <- function(n) {
+  p <- file.path("out", paste0(n, ".rds"))
+  if (!file.exists(p)) p <- file.path("comparisons", "out", paste0(n, ".rds"))
+  readRDS(p)
+}
+```
+
+## The question
+
+Every position-based search-cost shifter rests on one assumption: position
+affects the **cost** of inspecting an alternative and nothing else. If position
+instead shifted pre-search utility, it would be an attribute, not a cost
+shifter, and the search-cost estimates built on it would be meaningless.
+
+@Ursu_2018 §4.3 takes this seriously rather than asserting it, enumerating the
+ways position could enter the model and ruling them out observationally. She has
+to work hard because position on her platform is *assigned*. SIFT randomizes
+position within every task, so the same tests become experimental contrasts.
+
+The question here: **do the tests actually discriminate?**
+
+## Design
+
+Three data-generating processes, identical except for where position acts.
+
+| arm | position … |
+|---|---|
+| `cost` | raises the search cost (the maintained assumption) |
+| `utility` | lowers pre-search utility |
+| `variance` | widens the post-search spread |
+
+Two statistics, both computed from raw data with no model fitted:
+
+- **T1** — among *clicked* alternatives, does position predict purchase?
+- **T2** — is the first click near the top of the page?
+
+Code: [`exp_position.R`](exp_position.R).
+
+```{r}
+r <- res("position")$res
+knitr::kable(data.frame(
+  `position acts on` = r$dgp,
+  `mean clicks`      = round(r$mean_clicks, 2),
+  `T1 slope`         = sprintf("%+.3f", r$t1_slope),
+  `T1 95% CI`        = sprintf("[%+.2f, %+.2f]", r$t1_lo, r$t1_hi),
+  `T2 first click`   = sprintf("%.2f", r$t2_first_pos),
+  `T2 vs uniform`    = sprintf("%.1f", r$t2_uniform),
+  check.names = FALSE), align = "r")
+```
+
+## Result
+
+The tests discriminate — but **T1's sign is the opposite of the natural
+intuition**, and getting it wrong would invert the conclusion.
+
+The tempting reasoning is: if position acts only on costs, it should not bear on
+what gets bought once someone has looked, so a *flat* T1 indicates
+position-in-cost. That is wrong, because of selection. When position raises the
+search cost, an alternative in a bad position must have unusually high
+pre-search utility to be worth opening at all. Conditional on having been
+clicked, bad-position alternatives are therefore *better* than good-position
+ones, and T1 comes out strongly **positive** ($+0.39$, $p\approx5\times10^{-15}$).
+
+When position enters pre-search utility instead, the direct effect and the
+selection effect roughly cancel, and T1 is approximately **flat** ($-0.05$,
+$p=0.06$) — the signature that the naive reading would have attributed to costs.
+
+T2 separates the third case cleanly. A wider post-search spread *raises* the
+reservation value, so the worst-placed alternatives get opened first: mean
+first-click position 4.96 against a uniform benchmark of 3.5, versus 2.21 and
+2.57 in the other two arms.
+
+### The decision rule
+
+| T2 | T1 | position acts on |
+|---|---|---|
+| near top | strongly positive | **search cost** |
+| near top | flat | pre-search utility |
+| near bottom | — | post-search spread |
+
+Neither statistic identifies the case alone. Read jointly, they do.
+
+## What this does and does not establish
+
+It establishes what these two tests do **in this model**, and that SIFT's
+randomization makes them available without any modelling assumption. That is
+worth reporting as a design check in every SIFT study.
+
+It does **not** establish what @Ursu_2018 concludes from conversion-on-rank in
+her data. Her environment differs in ways that plausibly matter — position is
+platform-assigned rather than randomized, and she observes one click per
+impression — so the selection channel driving our T1 result may operate
+differently there. The characterization of her argument in
+[`sections/identification.qmd`](../sections/identification.qmd) carries a TODO
+to check §4.3 directly before we attribute any sign pattern to her.

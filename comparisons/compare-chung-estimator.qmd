@@ -1,0 +1,56 @@
+---
+title: "Chung, Chintagunta & Misra (2025) vs SIFT"
+subtitle: "Probability mapping against the GHK hybrid"
+format: html
+bibliography: ../references.bib
+---
+
+::: {.callout-note}
+## Scoped, not yet run. The Chung estimator is already ported and validated —
+see [`R/README.md`](../R/README.md) — so this is a comparison, not a build.
+:::
+
+## The question
+
+Both estimators avoid the tuning constants that kernel smoothing requires, and
+both compute actual probabilities rather than smoothed indicators. They get
+there differently.
+
+**Chung's probability mapping** makes the *search cost* the stochastic component
+of the reservation value instead of a pre-search taste shock, converting
+$\Pr(z<a)$ into $\Pr(c > \sigma g((a-\mu)/\sigma))$ and drawing recursively from
+truncated exponentials. Memorylessness then makes truncation-from-below a shift
+and every unsearched-alternative term a single division.
+
+**Our hybrid** keeps the taste shock stochastic, uses GHK on the pre-search
+block, and integrates the post-search block analytically — which is available
+because conditioning on the observed purchase turns the stopping rule from a
+union into a conjunction.
+
+**Ask:** on a common DGP, which is faster at equal accuracy, and does either
+degrade as $J$ grows or as clicks become rare?
+
+## Design
+
+1. A DGP both estimators can represent — exponential search costs, no designed
+   product page, so that Chung's assumptions hold exactly.
+2. Sweep $J \in \{5, 8, 12\}$ and mean clicks $\in \{1.2, 2.5, 4\}$.
+3. Report per-evaluation time, simulation variance, and RMSE across
+   replications.
+
+## Why the answer is not obvious
+
+Chung's approach should degrade more slowly in $J$, because its unsearched
+terms are divisions rather than CDF evaluations. Ours should degrade more slowly
+as clicks become *rare*, because the analytic post-search block does more of the
+work when $K$ is small — and rare clicks are the empirically relevant regime
+(@Yavorsky_2021 observes mean searches of 1.1).
+
+If that is right, the choice is design-dependent and the paper should say so
+rather than declaring a winner.
+
+## Known caveat
+
+Chung's shipped loop code computes $\Pr(F)$ with $z_{\text{next}}$ rather than
+$z_K$, which biases $\log \bar c$ by 26.6 standard errors. Use `pr_F_use = "zK"`.
+Documented in [`R/README.md`](../R/README.md).

@@ -94,3 +94,7 @@ design/*_files/
 
 # replication checkpoints (regenerable; raw results are kept)
 R/out/parts/
+
+# rendered comparison notebooks (regenerate with sh comparisons/render_all.sh)
+comparisons/*.html
+comparisons/*_files/

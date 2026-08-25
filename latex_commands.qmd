@@ -4,6 +4,7 @@ $$
   \newcommand{\bfbeta}{\boldsymbol{\beta}}
   \newcommand{\bfgamma}{\boldsymbol{\gamma}}
   \newcommand{\bfkappa}{\boldsymbol{\kappa}}
+  \newcommand{\bfeta}{\boldsymbol{\eta}}
   \newcommand{\bftheta}{\boldsymbol{\theta}}
   \newcommand{\bfOmega}{\boldsymbol{\Omega}}
   \newcommand{\bfX}{\mathbf{X}}
@@ -23,6 +24,7 @@ $$
   \newcommand{\bfbeta}{\boldsymbol{\beta}}
   \newcommand{\bfgamma}{\boldsymbol{\gamma}}
   \newcommand{\bfkappa}{\boldsymbol{\kappa}}
+  \newcommand{\bfeta}{\boldsymbol{\eta}}
   \newcommand{\bftheta}{\boldsymbol{\theta}}
   \newcommand{\bfOmega}{\boldsymbol{\Omega}}
   \newcommand{\bfX}{\mathbf{X}}

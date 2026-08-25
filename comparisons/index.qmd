@@ -1,0 +1,61 @@
+---
+title: "SIFT: comparison studies"
+subtitle: "A lab record, kept deliberately separate from the paper"
+format: html
+bibliography: ../references.bib
+---
+
+## What this is
+
+Each notebook here answers one question of the form *"how does SIFT compare
+against X?"*, where X is a specific piece of existing work. They exist so that
+what we try, and what we learn, is written down and reproducible — including the
+things that turned out to be wrong.
+
+They are **not part of the manuscript**. The paper stays focused on making a
+baby out of conjoint and search; these are the working notes behind it. The one
+notebook that *is* part of the manuscript,
+[`notebooks/sift_likelihood.qmd`](../notebooks/sift_likelihood.qmd), is there
+because it documents the paper's own estimator rather than a comparison.
+
+## How they work
+
+Each comparison is a pair:
+
+- `exp_<name>.R` — the experiment. Run **from the repo root**
+  (`Rscript comparisons/exp_<name>.R`); writes its result to
+  `comparisons/out/<name>.rds`.
+- `compare-<name>.qmd` — the write-up. Loads the saved result and displays it.
+
+Splitting them this way means the notebooks render in seconds and always show
+numbers that were actually produced, never numbers that were typed in.
+
+Shared setup lives in [`_common.R`](_common.R).
+
+## Status
+
+| comparison | against | asks | status |
+|---|---|---|---|
+| [Conjoint](compare-conjoint.qmd) | standard choice-based conjoint | what does an analyst get wrong when search is costly? | **done** |
+| [Position](compare-ursu-position.qmd) | @Ursu_2018 §4.3 | can we test where position acts instead of assuming it? | **done** |
+| [Simulators](compare-simulators.qmd) | @Ursu_Seiler_Honka_2024 Table 2 | does their simulator ranking hold on the SIFT design? | **done** |
+| [MVSD](compare-yavorsky-mvsd.qmd) | @Yavorsky_2021 | what does normalizing the post-search spread to 1 cost? | scoped |
+| [Estimator](compare-chung-estimator.qmd) | @Chung_2025 | probability mapping vs the GHK hybrid | scoped |
+| [Panel](compare-morozov-panel.qmd) | @Morozov_2021 | does the recall rate separate tastes from search costs? | scoped |
+
+## What these have already changed
+
+Two claims in the paper were corrected because of work done here, which is the
+point of keeping the record.
+
+The **simulator comparison** retired a headline of "399× lower simulation
+variance". It was measured before a fix to the likelihood and on six
+replications; re-measured properly it is 21–100×, design-dependent, and the
+defensible claim is precision-per-second of 3–21×.
+
+The **position comparison** reversed a sign. The draft asserted that a flat
+relationship between position and purchase-conditional-on-click rules out
+position entering pre-search utility. Simulation shows the opposite: selection
+makes that relationship strongly *positive* when position acts on costs, and
+flat when it acts on utility. Reading it the intuitive way inverts the
+conclusion.

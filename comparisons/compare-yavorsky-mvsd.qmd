@@ -1,0 +1,49 @@
+---
+title: "Yavorsky, Honka & Chen (2021) vs SIFT"
+subtitle: "What does normalizing the post-search spread to one actually cost?"
+format: html
+bibliography: ../references.bib
+---
+
+::: {.callout-note}
+## Scoped, not yet run
+:::
+
+## The question
+
+@Yavorsky_2021 shows that the match-value standard deviation — the post-search
+spread, $\tilde\sigma$ here — can be estimated rather than normalized to one,
+given an exogenous search-cost shifter, and that the normalization does real
+damage: he estimates 8.16, and fixing it to one reverses the sign of the urban
+search-cost coefficient and understates a counterfactual by a factor of three to
+four.
+
+He has the shifter (driving distance) but no panel. @Morozov_2021 has the panel
+but normalizes the spread. SIFT has both, plus a designed product page that
+fixes part of the spread rather than inferring it.
+
+**Ask:** across a grid of true $\tilde\sigma$, what is the bias in search costs,
+in preferences, and in a friction counterfactual, when $\tilde\sigma$ is fixed to
+one instead of estimated? And how much does the panel reduce the variance of
+$\hat{\tilde\sigma}$ relative to a single spell per respondent?
+
+## Design
+
+1. Simulate SIFT data at $\tilde\sigma \in \{1, 2, 4, 8\}$, spanning the
+   normalized value and Yavorsky's field estimate.
+2. Fit twice: $\tilde\sigma$ free, and $\tilde\sigma \equiv 1$.
+3. Report bias in $\gamma_0$, $\gamma_p$, $\boldsymbol\beta$, $\boldsymbol\kappa$,
+   and in a counterfactual that halves search costs.
+4. Repeat with $T=1$ to isolate what the panel contributes over and above the
+   shifter.
+
+The $T=1$ arm is the interesting one, because it is the closest simulated
+analogue of @Yavorsky_2021's own design and lets us say what SIFT adds rather
+than merely that SIFT works.
+
+## Expected obstacle
+
+$\gamma_0$ and $\log\tilde\sigma$ lie on a ridge — @Yavorsky_2021 reports a
+correlation of 0.95 between them even with 6,511 consumers. Expect the
+$\tilde\sigma$-free arm to be imprecise, and report the ridge explicitly rather
+than hiding it in a standard error.

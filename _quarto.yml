@@ -13,7 +13,7 @@ format:
       - text: |
           \usepackage{mathtools}
 
-# manuscript:
-#   notebooks:
-#     - notebook: notebooks/example_sift.ipynb
-#       title: SIFT Example
+manuscript:
+  notebooks:
+    - notebook: notebooks/sift_likelihood.qmd
+      title: The SIFT Likelihood

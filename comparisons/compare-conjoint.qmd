@@ -1,0 +1,93 @@
+---
+title: "Conjoint vs SIFT"
+subtitle: "What a conjoint analyst gets wrong when search is costly"
+format: html
+bibliography: ../references.bib
+execute: {echo: false, warning: false}
+---
+
+```{r}
+#| include: false
+# works whether Quarto runs from the project root or from comparisons/
+res <- function(n) {
+  p <- file.path("out", paste0(n, ".rds"))
+  if (!file.exists(p)) p <- file.path("comparisons", "out", paste0(n, ".rds"))
+  readRDS(p)
+}
+```
+
+## The question
+
+SIFT nests conjoint. As the search cost goes to zero every alternative is
+inspected, choice is made over fully realized utilities, and the model collapses
+to a standard choice-based conjoint model. So the interesting question is not
+whether the two differ in principle but **what a conjoint analyst gets wrong, by
+how much, and in which direction**, when search costs are not zero.
+
+## Design
+
+Sweep the search-cost intercept from nearly free to expensive. At each level
+simulate SIFT data (250 respondents × 8 tasks, $J=6$) and fit the model a
+conjoint analyst would actually fit: a conditional logit over the **full** choice
+set, using every attribute, with no notion of search.
+
+Comparison is on **ratios** of coefficients rather than levels, because logit
+and probit scales differ. Ratios are scale-free and are what a conjoint analyst
+interprets — relative importance, willingness-to-pay.
+
+The hypothesis worth testing is directional. Attributes visible only *after* a
+click should be attenuated **more** than attributes visible on the landing page,
+because conjoint assumes everyone saw everything, while in fact the post-click
+attributes only influenced the choices of respondents who actually looked.
+
+Code: [`exp_conjoint.R`](exp_conjoint.R).
+
+```{r}
+r <- res("conjoint")
+knitr::kable(
+  data.frame(
+    `mean search cost` = r$res$cost,
+    `mean clicks`      = round(r$res$mean_clicks, 2),
+    `share of set seen`= sprintf("%.0f%%", 100 * r$res$frac_seen),
+    `no purchase`      = sprintf("%.0f%%", 100 * r$res$frac_nobuy),
+    `pre-click recovery`  = sprintf("%.2f", r$res$atten_pre),
+    `post-click recovery` = sprintf("%.2f", r$res$atten_post),
+    check.names = FALSE),
+  align = "r")
+```
+
+The last two columns are the estimated coefficient ratio divided by its true
+value. **1.00 means conjoint recovered the preference correctly; below 1 means
+attenuated toward zero.**
+
+## Result
+
+The two columns behave completely differently.
+
+**Pre-click attributes are recovered fine at every search cost.** The landing-page
+ratio sits between 0.95 and 1.04 across the entire sweep, including where
+respondents open only 2% of the choice set. Conjoint has no trouble with
+attributes that respondents could see without clicking.
+
+**Post-click attributes collapse monotonically.** Recovery falls from 0.93 when
+search is nearly free, through 0.59, to 0.14 when clicking is expensive, and
+turns slightly negative at the extreme. At a mean of 1.17 clicks out of 6 — an
+inspection rate close to what @Yavorsky_2021 observes in the field, where mean
+searches are 1.1 — **conjoint attenuates post-click part-worths by 64%**.
+
+This is the paper's central claim made concrete. Conjoint is not uniformly
+biased by search frictions; it is biased *selectively*, on exactly the
+attributes that require inspection. An analyst running conjoint on a category
+with real search costs will conclude that experience attributes barely matter,
+when in fact respondents simply never saw them.
+
+## Caveats
+
+- One draw per cost level, so the numbers carry simulation noise; the monotone
+  pattern is the result, not any individual entry.
+- The conjoint model here is a homogeneous conditional logit. Random
+  coefficients would absorb some — not all — of the attenuation, since the
+  problem is a misspecified consideration set rather than unmodelled taste
+  variation.
+- The zero-search-cost limit is approached but not attained; at the cheapest
+  level respondents still open only 45% of the set.

@@ -277,6 +277,7 @@ cannot draw, and one that carries different managerial remedies.
   \newcommand{\bfbeta}{\boldsymbol{\beta}}
   \newcommand{\bfgamma}{\boldsymbol{\gamma}}
   \newcommand{\bfkappa}{\boldsymbol{\kappa}}
+  \newcommand{\bfeta}{\boldsymbol{\eta}}
   \newcommand{\bftheta}{\boldsymbol{\theta}}
   \newcommand{\bfOmega}{\boldsymbol{\Omega}}
   \newcommand{\bfX}{\mathbf{X}}
@@ -361,7 +362,7 @@ economics audience depends on connecting to it cleanly.
   search data. The extreme case of how little the field has typically
   had to work with.
 \item
-  \textbf{Hortaçsu and Syverson (2004), \emph{Quarterly Journal of
+  \textbf{Hortacsu and Syverson (2004), \emph{Quarterly Journal of
   Economics}. {[}H{]}} S\&P 500 index funds. Search frictions with
   differentiated products, in a setting where the products are nearly
   identical and the frictions are not.
@@ -446,7 +447,7 @@ rule?}\label{does-anyone-follow-the-optimal-rule}
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Schotter and Braunstein (1981), \emph{Economic Inquiry}.
+  \textbf{SCHOTTER and BRAUNSTEIN (1981), \emph{Economic Inquiry}.
   {[}M{]}} Early sequential-search experiments with real incentives.
 \item
   \textbf{Hey (1987), ``Still Searching,'' \emph{Journal of Economic
@@ -856,7 +857,7 @@ stochastic component, or search order would be a deterministic function
 of observables and no observed order could be rationalized (Ursu et al.
 2024). Two specifications supply one. The first, used above and by most
 of the literature, puts a pre-search taste shock \(\mu_{itj}\) in
-utility. The second, due to Chung et al. (2025), drops \(\mu_{itj}\) and
+utility. The second, due to Chung et al. (2024), drops \(\mu_{itj}\) and
 instead treats the search cost itself as random at the
 respondent-alternative level, with \(\cost_{itj}\) drawn from a
 distribution whose location carries the position effect. The two are
@@ -875,7 +876,7 @@ randomize the thing that makes it vary: the same alternative sits at a
 different position for different respondents and in different tasks, so
 respondent-alternative variation in click cost is designed in rather
 than assumed. Section~\ref{sec-estimation} takes up which specification
-to estimate; Chung et al. (2025) show that relative preference
+to estimate; Chung et al. (2024) show that relative preference
 parameters survive getting this choice wrong, though search-cost
 \emph{levels} do not.
 
@@ -965,19 +966,306 @@ Case}\label{sec-model-nesting}
 
 \section{Identification and Estimation}\label{sec-estimation}
 
+Search models are identified from patterns that ordinary choice data
+cannot produce: \emph{which} alternatives a respondent opened, \emph{in
+what order}, \emph{how many}, and \emph{which} of the opened
+alternatives was ultimately bought. This section sets out what each of
+those margins identifies, what SIFT's designed variation adds to
+arguments that field studies must make on observational grounds, and
+what remains normalized rather than estimated.
+
+Throughout, the object of interest is the pair \((\bfbeta, \bfgamma)\)
+--- preferences and search costs --- together with the post-search
+standard deviation \(\tilde\sigma\), which most of the literature fixes
+to one and which we argue must be estimated.
+
 \subsection{What the Designed Variation Buys}\label{sec-est-variation}
 
+\subsubsection{Position enters search costs, not
+utility}\label{position-enters-search-costs-not-utility}
+
+The identifying assumption underlying every position-based search-cost
+shifter is that a listing's position affects what it costs to inspect an
+alternative, and nothing else. Ursu (2018) §4.3 takes this seriously
+rather than asserting it, enumerating the ways position could instead
+enter the model --- through pre-search utility, through the post-search
+spread, or through combinations --- and ruling them out with
+observational tests. Because SIFT randomizes position within every task
+and records the full click sequence, we can run those tests as
+experimental contrasts rather than conditional comparisons.
+
+Two statistics suffice, and neither requires fitting a model.
+
+\textbf{T1. Among clicked alternatives, does position predict purchase?}
+\textbf{T2. Is the first click near the top of the page?}
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-important-color!10!white, colframe=quarto-callout-important-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{The sign of T1 is the opposite of the natural intuition}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+It is tempting to reason that if position acts only on costs then it
+should have no bearing on what gets bought once someone has looked, so a
+flat T1 indicates position-in-cost. Simulation says otherwise, and the
+reason is selection. When position raises the search cost, an
+alternative in a \emph{bad} position must have unusually high pre-search
+utility to be worth opening at all. Conditional on having been clicked,
+bad-position alternatives are therefore \emph{better} than good-position
+ones, and T1 comes out strongly \textbf{positive}. When position instead
+enters pre-search utility, the direct effect and the selection effect
+roughly cancel and T1 is approximately \textbf{flat}.
+
+In our simulations (400 respondents × 8 tasks) T1 has slope \(+0.39\)
+(\(p \approx 5\times10^{-15}\)) when position acts on costs, and
+\(-0.05\) (\(p = 0.06\)) when it acts on utility. Reading a flat T1 as
+evidence for position-in-cost would get the answer exactly backwards.
+
+\end{tcolorbox}
+
+T2 separates the remaining case. If position widens the post-search
+spread, the reservation value \emph{rises} with position, so the
+worst-placed alternatives would be opened first. That is what we see:
+mean first-click position 4.96 against a uniform benchmark of 3.5,
+versus 2.21 and 2.57 in the cost and utility arms.
+
+The two tests together form a decision rule:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+T2 & T1 & position acts on \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+first click near top & strongly positive & \textbf{search cost} \\
+first click near top & flat & pre-search utility \\
+first click near bottom & --- & post-search spread \\
+\end{longtable}
+}
+
+We regard this as a design check to be run and reported in every SIFT
+study rather than assumed. Details, code, and the full three-arm
+simulation are in \href{../comparisons/compare-ursu-position.qmd}{the
+position comparison}.
+
+\subsubsection{Separating preferences from search
+costs}\label{separating-preferences-from-search-costs}
+
+The sharper problem is not whether position shifts costs but whether a
+high search cost can be distinguished from a low taste. Morozov et al.
+(2021) gives the cleanest statement of the separation (his §4.3.2):
+stopping decisions depend on the \emph{realized} utilities of
+alternatives already searched, but not on their search costs, which are
+sunk by the time the stopping decision is made. Trade the utility
+intercept against the search cost so as to hold the mean reservation
+value fixed, and the search \emph{order} is unchanged --- but the higher
+intercept raises realized utility and so makes stopping more likely.
+
+His Appendix D sharpens this into an observable moment: the
+\textbf{recall rate}, the probability of purchasing an alternative
+encountered earlier in the sequence rather than the most recent one,
+responds to the utility intercept but not to the search cost. SIFT
+observes recall directly, because respondents have free recall and we
+record the entire click sequence. This is our cleanest separation
+moment, and it is available in the raw data without any modelling.
+
+\subsubsection{What the panel buys, and what it does
+not}\label{what-the-panel-buys-and-what-it-does-not}
+
+Morozov et al. (2021) proves nonparametric identification of
+individual-level preferences \emph{and} search costs from panel search
+data. It is worth being precise about the strength of that result,
+because it is easy to overclaim. The argument assumes the number of
+sessions per consumer grows without bound; with between 2 and 35
+sessions per consumer and a mean of 5, Morozov et al. (2021) estimates
+hyperparameters rather than individual parameters (his §5.1).
+
+At the task counts SIFT can realistically field --- call it \(T=10\) ---
+we are in the same position, and we say so plainly: what the panel
+delivers is \emph{hierarchical posteriors in the conjoint tradition},
+not nonparametric individual identification. That is the standard the
+conjoint audience already applies to part-worths, and it is the right
+standard here.
+
+The panel also does something less obvious. Ursu (2018) reports baseline
+search costs above \$102 and attributes the magnitude to observing a
+single click per search impression with no way to link a consumer's
+impressions; restricting attention to impressions with two or more
+clicks cuts mean estimated search costs by up to 83\%. Single-spell data
+mechanically inflates search costs. The panel is therefore a
+\emph{levels} argument as much as a heterogeneity argument.
+
+\subsubsection{What neither the panel nor the shifter buys
+alone}\label{what-neither-the-panel-nor-the-shifter-buys-alone}
+
+The two ingredients are complements, and the literature illustrates this
+by having one or the other but never both. Morozov et al. (2021) has the
+panel and still normalizes the post-search standard deviation, reporting
+that little variation in his data speaks to it (his Appendix C).
+Yavorsky et al. (2021) has an exogenous search-cost shifter and no
+panel, and does estimate it --- finding \(\tilde\sigma = 8.16\) against
+the conventional normalization of one, with a confidence interval that
+excludes one and consequences large enough to reverse the sign of one
+search-cost coefficient and to understate a counterfactual by a factor
+of three to four.
+
+SIFT has both. It also has something neither has: because we design the
+product page, part of the post-search component is \emph{fixed by the
+design} rather than inferred.
+
+This last point is stronger than it first appears, and it is worth
+stating carefully. In a field setting the analyst never observes what
+inspection revealed; the post-search shock is a residual, and all that
+can be recovered is its variance. In SIFT the analyst \emph{wrote} the
+product page. So for every clicked alternative the revealed attributes
+\(\bfL_{ijt}\) are known, and they enter realized utility as
+\(\bfL_{ijt}'\bfkappa\) --- a mean shift, not a variance. Preferences
+over attributes that are only visible \emph{after} a click are therefore
+identified in exactly the way conjoint part-worths are: from which
+alternative gets bought given what was shown.
+
+The distinction is easy to lose in implementation, with consequences
+that are silent. The ex ante spread \(\tilde\sigma\) belongs in the
+reservation value, because that is computed before the click; the
+realized \(\bfL\) belongs in the utility, because that is evaluated
+after it. Use \(\tilde\sigma\) for both and \(\bfkappa\) enters the
+likelihood only through
+\(\tilde\sigma^2 = \bfkappa'\mathrm{Var}(\bfL)\bfkappa + \sigma_\xi^2\),
+where it trades off exactly against \(\sigma_\xi\) and is not identified
+at all --- while every other parameter continues to recover normally, so
+nothing looks wrong. This is the sharpest version of the identification
+claim in the paper and it belongs in the introduction.
+
 \subsection{Normalization}\label{sec-est-normalization}
+
+Setting the standard deviation of the pre-search shock to one fixes the
+scale of utility, as in 2 §4.4.2 and Morozov et al. (2021) Appendix C.
+That normalization is innocuous and we adopt it.
+
+The post-search standard deviation \(\tilde\sigma\) is a different
+matter. It is identified in principle by functional form ---
+\(\tilde\sigma\) appears on both sides of
+\(g(\zeta) = \cost/\tilde\sigma\) --- but Yavorsky et al. (2021) shows
+by simulation that functional-form identification alone is not enough to
+estimate it in practice, and that an exogenous, alternative-specific
+cost shifter is what makes estimation work.
+
+The consequence of fixing it deserves to be stated without hedging. With
+both variances normalized, search costs cannot be monetized and
+search-cost counterfactuals are not interpretable (2 §4.4.4). That would
+rule out every friction counterfactual in Section~\ref{sec-managerial}.
+Estimating \(\tilde\sigma\) is therefore load-bearing for this paper
+rather than a refinement, and it is the single clearest reason SIFT
+needs a randomized position rather than merely a rich attribute design.
 
 \subsection{Testing the Zero-Search-Cost
 Restriction}\label{sec-est-nesting}
 
+SIFT nests conjoint: as the search cost goes to zero every alternative
+is inspected, choice is made over fully realized utilities, and the
+model collapses to a standard choice-based conjoint model. Whether
+search costs are distinguishable from zero is therefore a testable
+question rather than a maintained assumption --- but the test requires
+care.
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{The obvious test is invalid}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+The natural move is a Wald test on the estimated search cost. It does
+not work. Zero is a limit rather than an interior point of the parameter
+space: \(\cost \to 0\) corresponds to \(g(\cost) \to +\infty\) and
+\(\log \cost \to
+-\infty\). The null sits at a boundary under every parameterization, so
+the standard asymptotics do not apply.
+
+\end{tcolorbox}
+
+We construct the test from observable implications instead, in three
+ways. The first is holdout fit: SIFT against the nested conjoint model
+on tasks withheld from estimation. The second is the observable
+implication itself --- whether any respondent leaves alternatives
+unopened, which under zero search costs no one would. The third is a
+likelihood-ratio comparison against a \emph{simulated} rather than
+\(\chi^2\) reference distribution.
+
+This also bears on a parameterization choice. 2 §5.2 notes that
+estimating \(g\) directly avoids a root-find inside the optimization
+loop. Convenient --- but it puts the quantity we most want to test on a
+scale where the null is at infinity. We estimate \(\log \cost\) and pay
+the root-find, which in our implementation is a spline evaluation rather
+than an iterative solve (see
+\href{../R/README.md}{\texttt{R/README.md}}).
+
 \subsection{Individual-Level Estimation from a Task
 Panel}\label{sec-est-panel}
 
+There are two routes to the individual-level deliverable that makes SIFT
+a conjoint substitute rather than a search paper.
+
+\textbf{Full hierarchical Bayes} is what the conjoint audience expects
+and what makes individual part-worths and individual search costs
+directly reportable.
+
+\textbf{Two-stage empirical Bayes} estimates the hyperparameters by
+simulated maximum likelihood and then draws individual posteriors by
+Metropolis--Hastings conditional on those estimates. This is what
+Morozov et al. (2021) does to compute personalized prices (his §7.2 and
+Appendix H), and it is considerably cheaper.
+
+Our runtime work reverses the ordering we originally expected. Because
+HB never integrates over the heterogeneity distribution --- each
+respondent sits at their own \(\bftheta_i\) --- the mixing-draw
+multiplier that makes random-coefficients SMLE expensive simply does not
+arise. On measured per-evaluation costs, full HB is the \emph{cheaper}
+of the two routes at SIFT's dimensions, not the fallback. We therefore
+treat HB as the primary estimator and empirical Bayes as the robustness
+check.
+
 \subsection{Estimation}\label{sec-est-estimation}
 
+Runtime is a binding practical constraint rather than an implementation
+detail: a fit has to complete overnight, not over a week. The published
+timings make the point. 2 Table 2, for 1,000 consumers with
+heterogeneity, report 5h20m for importance sampling, 29h48m for the
+kernel-smoothed simulator plus roughly 32 further hours to calibrate its
+scaling vector, and 198h24m for GHK. Chung et al. (2024) Table 1, for a
+cross-sectional design of comparable size, reports 0.48 minutes for
+their probability-mapping simulator against 5--7 minutes kernel-smoothed
+and 15--127 minutes for crude frequency --- one to two orders of
+magnitude.
+
+We have ported and validated the Chung et al. (2024) estimator and
+reproduced their Table 1; the port, its five validation checks, and two
+bugs we found in their shipped code are documented in
+\href{../R/README.md}{\texttt{R/README.md}}.
+
+For SIFT itself we exploit a structural feature of the design.
+Conditional on the observed purchase, every Weitzman condition is a
+conjunction of linear inequalities --- the stopping rule is a statement
+about a maximum and therefore a union in general, but the choice rule
+names which alternative attains that maximum. Continuation then
+collapses to the single binding constraint \(\resv_{s_K}\), because
+reservation values decrease along the search order. And conditional on
+\(\bfeta\) and on the post-search shock to the chosen alternative, the
+remaining shocks are independent one-sided constraints that integrate
+out in closed form, leaving a one-dimensional integral.
+
+This yields a hybrid estimator: GHK on the pre-search block, quadrature
+on the post-search block. Measured against the kernel-smoothed
+accept--reject simulator of Yavorsky et al. (2021) at equal draw counts,
+its simulation variance is lower by a factor of 21 to 100 depending on
+the design. Because runtime is exactly linear in the number of draws,
+the relevant summary is time to a given precision, on which the hybrid
+is 3 to 21 times cheaper; crude frequency is not competitive on either
+margin. The kernel-smoothed simulator also shows the upward bias in the
+negative log-likelihood that Yavorsky et al. (2021) notes is intrinsic
+to it. The construction and its validation are in
+\href{../notebooks/sift_likelihood.qmd}{\texttt{notebooks/sift\_likelihood.qmd}}.
+
 \subsection{Software}\label{sec-est-software}
+
+All estimation code is in R and is released with the paper. The
+reservation-value inverse \(g^{-1}\) is evaluated by a cubic spline
+built once in the standardized argument \(\cost/\tilde\sigma\), so a
+single spline serves every \(\tilde\sigma\); it covers costs down to
+\(3.9\times10^{-16}\), well below the range any optimizer will propose.
 
 \section{Simulation Study}\label{sec-simstudy}
 
@@ -1146,123 +1434,145 @@ side.
 \bibitem[\citeproctext]{ref-Allenby_2019}
 Allenby, Greg M., Nino Hardt, and Peter E. Rossi. 2019. {``Economic
 Foundations of Conjoint Analysis.''} In \emph{Handbook of the Economics
-of Marketing}, edited by Jean-Pierre Dubé and Peter E. Rossi, vol. 1.
-North-Holland.
+of Marketing}. Elsevier.
+\url{https://doi.org/10.1016/bs.hem.2019.04.002}.
 
 \bibitem[\citeproctext]{ref-Bronnenberg_2016}
 Bronnenberg, Bart J., Jun B. Kim, and Carl F. Mela. 2016. {``Zooming in
-on Choice: How Do Consumers Search for Cameras Online?''} \emph{Journal
-of Marketing Research}.
+on Choice: How Do Consumers Search for Cameras Online?''}
+\emph{Marketing Science} 35 (5): 693--712.
+\url{https://doi.org/10.1287/mksc.2016.0977}.
 
 \bibitem[\citeproctext]{ref-Brown_2011}
-Brown, Meta, Christopher J. Flinn, and Andrew Schotter. 2011.
+Brown, Meta, Christopher J Flinn, and Andrew Schotter. 2011.
 {``Real-Time Search in the Laboratory and the Market.''} \emph{American
-Economic Review}.
+Economic Review} 101 (2): 948--74.
+\url{https://doi.org/10.1257/aer.101.2.948}.
 
 \bibitem[\citeproctext]{ref-Caplin_2011}
 Caplin, Andrew, Mark Dean, and Daniel Martin. 2011. {``Search and
-Satisficing.''} \emph{American Economic Review}.
+Satisficing.''} \emph{American Economic Review} 101 (7): 2899--922.
+\url{https://doi.org/10.1257/aer.101.7.2899}.
 
 \bibitem[\citeproctext]{ref-Chen_Yao_2017}
 Chen, Yuxin, and Song Yao. 2017. {``Sequential Search with Refinement:
 Model and Application with Click-Stream Data.''} \emph{Management
-Science}.
+Science} 63 (12): 4345--65.
+\url{https://doi.org/10.1287/mnsc.2016.2557}.
 
 \bibitem[\citeproctext]{ref-Chung_2025}
-Chung, Jae Hyen, Pradeep Chintagunta, and Sanjog Misra. 2025.
+Chung, Jae Hyen, Pradeep Chintagunta, and Sanjog Misra. 2024.
 {``Simulated Maximum Likelihood Estimation of the Sequential Search
-Model.''} \emph{Quantitative Marketing and Economics} 23: 105--64.
+Model.''} \emph{Quantitative Marketing and Economics} 23 (1): 105--64.
 \url{https://doi.org/10.1007/s11129-024-09281-4}.
 
 \bibitem[\citeproctext]{ref-Cox_Oaxaca_1989}
-Cox, James C., and Ronald L. Oaxaca. 1989. {``Laboratory Experiments
-with a Finite-Horizon Job-Search Model.''} \emph{Journal of Risk and
-Uncertainty}.
+Cox, JamesC., and RonaldL. Oaxaca. 1989. {``Laboratory Experiments with
+a Finite-Horizon Job-Search Model.''} \emph{Journal of Risk and
+Uncertainty} 2 (3). \url{https://doi.org/10.1007/bf00209391}.
 
 \bibitem[\citeproctext]{ref-DeLosSantos_2012}
-De los Santos, Babur, Ali Hortaçsu, and Matthijs R. Wildenbeest. 2012.
-{``Testing Models of Consumer Search Using Data on Web Browsing.''}
-\emph{American Economic Review}.
+De los Santos, Babur, Ali Hortaçsu, and Matthijs R Wildenbeest. 2012.
+{``Testing Models of Consumer Search Using Data on Web Browsing and
+Purchasing Behavior.''} \emph{American Economic Review} 102 (6):
+2955--80. \url{https://doi.org/10.1257/aer.102.6.2955}.
 
 \bibitem[\citeproctext]{ref-Ding_2007}
 Ding, Min. 2007. {``An Incentive-Aligned Mechanism for Conjoint
-Analysis.''} \emph{Journal of Marketing Research}.
+Analysis.''} \emph{Journal of Marketing Research} 44 (2): 214--23.
+\url{https://doi.org/10.1509/jmkr.44.2.214}.
 
 \bibitem[\citeproctext]{ref-Ding_2005}
 Ding, Min, Rajdeep Grewal, and John Liechty. 2005. {``Incentive-Aligned
-Conjoint Analysis.''} \emph{Journal of Marketing Research}.
+Conjoint Analysis.''} \emph{Journal of Marketing Research} 42 (1):
+67--82. \url{https://doi.org/10.1509/jmkr.42.1.67.56890}.
 
 \bibitem[\citeproctext]{ref-Dzyabura_2011}
 Dzyabura, Daria, and John R. Hauser. 2011. {``Active Machine Learning
-for Consideration Heuristics.''} \emph{Marketing Science}.
+for Consideration Heuristics.''} \emph{Marketing Science} 30 (5):
+801--19. \url{https://doi.org/10.1287/mksc.1110.0660}.
 
 \bibitem[\citeproctext]{ref-Gabaix_2006}
 Gabaix, Xavier, David Laibson, Guillermo Moloche, and Stephen Weinberg.
 2006. {``Costly Information Acquisition: Experimental Analysis of a
-Boundedly Rational Model.''} \emph{American Economic Review}.
+Boundedly Rational Model.''} \emph{American Economic Review} 96 (4):
+1043--68. \url{https://doi.org/10.1257/aer.96.4.1043}.
 
 \bibitem[\citeproctext]{ref-Gilbride_Allenby_2004}
 Gilbride, Timothy J., and Greg M. Allenby. 2004. {``A Choice Model with
 Conjunctive, Disjunctive, and Compensatory Screening Rules.''}
-\emph{Marketing Science}.
+\emph{Marketing Science} 23 (3): 391--406.
+\url{https://doi.org/10.1287/mksc.1030.0032}.
 
 \bibitem[\citeproctext]{ref-Greminger_2022}
 Greminger, Rafael P. 2022. {``Optimal Search and Discovery.''}
-\emph{Management Science}.
+\emph{Management Science} 68 (5): 3904--24.
+\url{https://doi.org/10.1287/mnsc.2021.4085}.
 
 \bibitem[\citeproctext]{ref-Hauser_2014}
-Hauser, John R. 2014. {``Consideration-Set Heuristics: Review and
-Research Agenda.''} \emph{Journal of Business Research}.
+Hauser, John R. 2014. {``Consideration-Set Heuristics.''} \emph{Journal
+of Business Research} 67 (8): 1688--99.
+\url{https://doi.org/10.1016/j.jbusres.2014.02.015}.
 
 \bibitem[\citeproctext]{ref-Hauser_2010}
 Hauser, John R., Olivier Toubia, Theodoros Evgeniou, Rene Befurt, and
 Daria Dzyabura. 2010. {``Disjunctions of Conjunctions, Cognitive
 Simplicity, and Consideration Sets.''} \emph{Journal of Marketing
-Research}.
+Research} 47 (3): 485--96. \url{https://doi.org/10.1509/jmkr.47.3.485}.
 
 \bibitem[\citeproctext]{ref-Hey_1987}
 Hey, John D. 1987. {``Still Searching.''} \emph{Journal of Economic
-Behavior and Organization}.
+Behavior \&Amp; Organization} 8 (1): 137--44.
+\url{https://doi.org/10.1016/0167-2681(87)90026-6}.
 
 \bibitem[\citeproctext]{ref-Hong_Shum_2006}
 Hong, Han, and Matthew Shum. 2006. {``Using Price Distributions to
-Estimate Search Costs.''} \emph{The RAND Journal of Economics}.
+Estimate Search Costs.''} \emph{The RAND Journal of Economics} 37 (2):
+257--75. \url{https://doi.org/10.1111/j.1756-2171.2006.tb00015.x}.
 
 \bibitem[\citeproctext]{ref-Honka_2014}
 Honka, Elisabeth. 2014. {``Quantifying Search and Switching Costs in the
-{US} Auto Insurance Industry.''} \emph{The RAND Journal of Economics}.
+{US} Auto Insurance Industry.''} \emph{The RAND Journal of Economics} 45
+(4): 847--84. \url{https://doi.org/10.1111/1756-2171.12073}.
 
 \bibitem[\citeproctext]{ref-Honka_Chintagunta_2017}
 Honka, Elisabeth, and Pradeep Chintagunta. 2017. {``Simultaneous or
-Sequential? Search Strategies in the {US} Auto Insurance Industry.''}
-\emph{Marketing Science}.
+Sequential? Search Strategies in the u.s. Auto Insurance Industry.''}
+\emph{Marketing Science} 36 (1): 21--42.
+\url{https://doi.org/10.1287/mksc.2016.0995}.
 
 \bibitem[\citeproctext]{ref-Hortacsu_Syverson_2004}
-Hortaçsu, Ali, and Chad Syverson. 2004. {``Product Differentiation,
-Search Costs, and Competition in the Mutual Fund Industry: A Case Study
-of {S\&P} 500 Index Funds.''} \emph{The Quarterly Journal of Economics}.
+Hortacsu, A., and C. Syverson. 2004. {``Product Differentiation, Search
+Costs, and Competition in the Mutual Fund Industry: A Case Study of
+s\&amp;p 500 Index Funds.''} \emph{The Quarterly Journal of Economics}
+119 (2): 403--56. \url{https://doi.org/10.1162/0033553041382184}.
 
 \bibitem[\citeproctext]{ref-Kim_2010}
 Kim, Jun B., Paulo Albuquerque, and Bart J. Bronnenberg. 2010. {``Online
-Demand Under Limited Consumer Search.''} \emph{Marketing Science}.
+Demand Under Limited Consumer Search.''} \emph{Marketing Science} 29
+(6): 1001--23. \url{https://doi.org/10.1287/mksc.1100.0574}.
 
 \bibitem[\citeproctext]{ref-Koulayev_2014}
 Koulayev, Sergei. 2014. {``Search for Differentiated Products:
-Identification and Estimation.''} \emph{The RAND Journal of Economics}.
+Identification and Estimation.''} \emph{The RAND Journal of Economics}
+45 (3): 553--75. \url{https://doi.org/10.1111/1756-2171.12062}.
 
 \bibitem[\citeproctext]{ref-Marshall_Bradlow_2002}
-Marshall, Pablo, and Eric T. Bradlow. 2002. {``A Unified Approach to
+Marshall, Pablo, and Eric T Bradlow. 2002. {``A Unified Approach to
 Conjoint Analysis Models.''} \emph{Journal of the American Statistical
-Association}.
+Association} 97 (459): 674--82.
+\url{https://doi.org/10.1198/016214502388618410}.
 
 \bibitem[\citeproctext]{ref-McCall_1970}
 McCall, J. J. 1970. {``Economics of Information and Job Search.''}
-\emph{The Quarterly Journal of Economics}.
+\emph{The Quarterly Journal of Economics} 84 (1): 113.
+\url{https://doi.org/10.2307/1879403}.
 
 \bibitem[\citeproctext]{ref-Meissner_2016}
-Meißner, Martin, Andrés Musalem, and Joel Huber. 2016. {``Eye Tracking
+Meißner, Martin, Andres Musalem, and Joel Huber. 2016. {``Eye Tracking
 Reveals Processes That Enable Conjoint Choices to Become Increasingly
-Efficient with Practice.''} \emph{Journal of Marketing Research}.
+Efficient with Practice.''} \emph{Journal of Marketing Research} 53 (1):
+1--17. \url{https://doi.org/10.1509/jmr.13.0467}.
 
 \bibitem[\citeproctext]{ref-Morozov_2021}
 Morozov, Ilya, Stephan Seiler, Xiaojing Dong, and Liwen Hou. 2021.
@@ -1273,28 +1583,34 @@ Search.''} \emph{Marketing Science} 40 (5): 871--99.
 \bibitem[\citeproctext]{ref-Payne_1988}
 Payne, John W., James R. Bettman, and Eric J. Johnson. 1988. {``Adaptive
 Strategy Selection in Decision Making.''} \emph{Journal of Experimental
-Psychology: Learning, Memory, and Cognition}.
+Psychology: Learning, Memory, and Cognition} 14 (3): 534--52.
+\url{https://doi.org/10.1037/0278-7393.14.3.534}.
 
 \bibitem[\citeproctext]{ref-Payne_1993}
 Payne, John W., James R. Bettman, and Eric J. Johnson. 1993. \emph{The
 Adaptive Decision Maker}. Cambridge University Press.
+\url{https://doi.org/10.1017/cbo9781139173933}.
 
 \bibitem[\citeproctext]{ref-Reutskaja_2011}
-Reutskaja, Elena, Rosemarie Nagel, Colin F. Camerer, and Antonio Rangel.
+Reutskaja, Elena, Rosemarie Nagel, Colin F Camerer, and Antonio Rangel.
 2011. {``Search Dynamics in Consumer Choice Under Time Pressure: An
-Eye-Tracking Study.''} \emph{American Economic Review}.
+Eye-Tracking Study.''} \emph{American Economic Review} 101 (2):
+900--926. \url{https://doi.org/10.1257/aer.101.2.900}.
 
 \bibitem[\citeproctext]{ref-Schotter_Braunstein_1981}
-Schotter, Andrew, and Yale M. Braunstein. 1981. {``Economic Search: An
-Experimental Study.''} \emph{Economic Inquiry}.
+SCHOTTER, ANDREW, and YALE M. BRAUNSTEIN. 1981. {``Economic Search: An
+Experimental Study.''} \emph{Economic Inquiry} 19 (1): 1--25.
+\url{https://doi.org/10.1111/j.1465-7295.1981.tb00600.x}.
 
 \bibitem[\citeproctext]{ref-Sonnemans_1998}
 Sonnemans, Joep. 1998. {``Strategies of Search.''} \emph{Journal of
-Economic Behavior and Organization}.
+Economic Behavior \&Amp; Organization} 35 (3): 309--32.
+\url{https://doi.org/10.1016/s0167-2681(98)00051-1}.
 
 \bibitem[\citeproctext]{ref-Stigler_1961}
 Stigler, George J. 1961. {``The Economics of Information.''}
-\emph{Journal of Political Economy}.
+\emph{Journal of Political Economy} 69 (3): 213--25.
+\url{https://doi.org/10.1086/258464}.
 
 \bibitem[\citeproctext]{ref-Ursu_2018}
 Ursu, Raluca M. 2018. {``The Power of Rankings: Quantifying the Effect
@@ -1303,28 +1619,32 @@ of Rankings on Online Consumer Search and Purchase Decisions.''}
 \url{https://doi.org/10.1287/mksc.2017.1072}.
 
 \bibitem[\citeproctext]{ref-Ursu_2020}
-Ursu, Raluca M., Qianyun Wang, and Pradeep K. Chintagunta. 2020.
-{``Search Duration.''} \emph{Marketing Science}.
+Ursu, Raluca M., Qingliang Wang, and Pradeep K. Chintagunta. 2020.
+{``Search Duration.''} \emph{Marketing Science} 39 (5): 849--71.
+\url{https://doi.org/10.1287/mksc.2020.1225}.
 
 \bibitem[\citeproctext]{ref-Ursu_Seiler_Honka_2024}
 Ursu, Raluca, Stephan Seiler, and Elisabeth Honka. 2024. {``The
 Sequential Search Model: A Framework for Empirical Research.''}
-\emph{Quantitative Marketing and Economics}, ahead of print.
+\emph{Quantitative Marketing and Economics} 23 (1): 165--213.
 \url{https://doi.org/10.1007/s11129-024-09291-2}.
 
 \bibitem[\citeproctext]{ref-Weitzman_1979}
 Weitzman, Martin L. 1979. {``Optimal Search for the Best Alternative.''}
 \emph{Econometrica} 47 (3): 641--54.
+\url{https://doi.org/10.2307/1910412}.
 
 \bibitem[\citeproctext]{ref-Yang_2015}
-Yang, Liu, Olivier Toubia, and Martijn G. de Jong. 2015. {``A Bounded
-Rationality Model of Information Search and Choice in Preference
-Measurement.''} \emph{Journal of Marketing Research}.
+Yang, Liu (Cathy), Olivier Toubia, and Martijn G. De Jong. 2015. {``A
+Bounded Rationality Model of Information Search and Choice in Preference
+Measurement.''} \emph{Journal of Marketing Research} 52 (2): 166--83.
+\url{https://doi.org/10.1509/jmr.13.0288}.
 
 \bibitem[\citeproctext]{ref-Yang_2018}
-Yang, Liu, Olivier Toubia, and Martijn G. de Jong. 2018. {``Attention,
-Information Processing, and Choice in Incentive-Aligned Choice
-Experiments.''} \emph{Marketing Science}.
+Yang, Liu (Cathy), Olivier Toubia, and Martijn G. de Jong. 2018.
+{``Attention, Information Processing, and Choice in Incentive-Aligned
+Choice Experiments.''} \emph{Journal of Marketing Research}, ahead of
+print. \url{https://doi.org/10.1509/jmr.15.0474}.
 
 \bibitem[\citeproctext]{ref-Yavorsky_2021}
 Yavorsky, Dan, Elisabeth Honka, and Keith Chen. 2021. {``Consumer Search
@@ -1334,8 +1654,8 @@ in the {U.S.} Auto Industry: The Role of Dealership Visits.''}
 
 \bibitem[\citeproctext]{ref-Yee_2007}
 Yee, Michael, Ely Dahan, John R. Hauser, and James Orlin. 2007.
-{``Greedoid-Based Noncompensatory Inference.''} \emph{Marketing
-Science}.
+{``Greedoid-Based Noncompensatory Inference.''} \emph{Marketing Science}
+26 (4): 532--49. \url{https://doi.org/10.1287/mksc.1060.0213}.
 
 \end{CSLReferences}
 

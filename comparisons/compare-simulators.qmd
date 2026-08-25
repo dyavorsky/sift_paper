@@ -1,0 +1,85 @@
+---
+title: "Simulator choice"
+subtitle: "Crude frequency, kernel smoothing, and the GHK hybrid on the SIFT design"
+format: html
+bibliography: ../references.bib
+execute: {echo: false, warning: false}
+---
+
+```{r}
+#| include: false
+# works whether Quarto runs from the project root or from comparisons/
+res <- function(n) {
+  p <- file.path("out", paste0(n, ".rds"))
+  if (!file.exists(p)) p <- file.path("comparisons", "out", paste0(n, ".rds"))
+  readRDS(p)
+}
+```
+
+## The question
+
+@Ursu_Seiler_Honka_2024 Table 2 compares simulators for search models and
+reports both accuracy and runtime, with a ranking derived from a field design.
+Does that ranking survive on SIFT, where position is randomized and the product
+page is designed?
+
+## Design
+
+One SIFT data set per size. Evaluate the log-likelihood **at the true
+parameters** with each simulator, across 20 independent draw sets. Two things
+matter and they are not the same: the *spread* across draw sets, which is the
+noise the optimiser must fight, and the *level*, since neither crude frequency
+nor kernel smoothing is unbiased for the log-likelihood.
+
+Code: [`exp_simulators.R`](exp_simulators.R).
+
+```{r}
+r <- res("simulators")$res
+knitr::kable(data.frame(
+  tasks        = r$tasks,
+  simulator    = r$simulator,
+  `mean -logL` = sprintf("%.0f", r$mean_nll),
+  `sd`         = sprintf("%.2f (±%.2f)", r$sd_nll, r$sd_se),
+  `variance ratio` = r$var_ratio_vs_ghk,
+  `s / eval`   = sprintf("%.3f", r$sec_per_eval),
+  `s for GHK precision` = sprintf("%.2f", r$sec_for_ghk_precision),
+  check.names = FALSE), align = "r")
+```
+
+## Result
+
+The last column is the one that matters. Runtime is exactly linear in the number
+of draws, so matching GHK's precision with a noisier simulator means multiplying
+its per-evaluation cost by the variance ratio.
+
+**GHK + analytic wins on precision per second, by 3–21×** over kernel smoothing
+depending on design size. It is 3–6× *slower* per evaluation, which is why the
+per-eval column alone is misleading.
+
+**Crude frequency is not competitive.** It is 175–260× more expensive at equal
+precision, and badly biased on top of that — its mean negative log-likelihood is
+459 against GHK's 295 at 150 tasks, because tasks whose simulated probability
+comes out exactly zero must be floored, and each floored task contributes a
+large fixed penalty.
+
+**Kernel smoothing carries a visible upward bias**: 305 against 295 at 150
+tasks, 600 against 593 at 320. This is the asymptotic-only unbiasedness that
+@Yavorsky_2021 flags in his footnote 21 — the bias shrinks as the smoothing
+scale grows, but a larger scale destroys the smoothness the optimiser needs.
+
+## A correction to an earlier claim
+
+An earlier draft of this project reported that the GHK hybrid had **399× lower
+simulation variance** than kernel smoothing. That number did not survive
+re-measurement and should not be cited.
+
+Two things were wrong with it. It was computed before a fix to how realized
+product-page attributes enter the likelihood, so it described a different
+estimator. And it rested on six replications, where the standard deviation of a
+standard deviation is roughly 30% — far too noisy to support a headline. The
+same quantity measured at two designs with 20 replications gives 100× and 21×,
+which is itself wide enough to show that the ratio is design-dependent rather
+than a constant of the method.
+
+The stable claim is the precision-per-second one, and it is a factor of a few to
+a factor of twenty — not a factor of four hundred.

@@ -1,0 +1,96 @@
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+/.quarto/
+/_manuscript
+/_freeze/
+
+/agujournal2019.cls
+/trackchanges.sty
+
+/.luarc.json
+.Rproj.user
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Sandbox
+sandbox/
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+## Intermediate documents:
+*.dvi
+*.xdv
+*-converted-to.*
+
+## Bibliography auxiliary files (bibtex/biblatex/biber):
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+## Build tool auxiliary files:
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+*.rubbercache
+rubber.cache
+
+# OSX
+.DS_Store
+
+# Etc
+.idea
+
+# Claude Code
+CLAUDE.md
+
+# rendered design docs (regenerate with quarto render design/*.qmd)
+design/*.html
+design/*_files/
+
+**/*.quarto_ipynb
+
+# Claude Code
+.claude/
+
+# replication checkpoints (regenerable; raw results are kept)
+R/out/parts/

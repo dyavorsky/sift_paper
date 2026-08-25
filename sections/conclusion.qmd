@@ -1,0 +1,11 @@
+## Conclusion {#sec-conclusion}
+
+<!--
+TODO: awaiting guidance. Draft last.
+
+The closing argument, in one line: conjoint tells you what people prefer once
+they are looking; SIFT tells you what they look at, what it costs them to
+look, and what they never see at all. Because conjoint is the zero-search-cost
+special case, adopting the instrument costs nothing when search frictions are
+absent and buys a second set of parameters when they are not.
+-->

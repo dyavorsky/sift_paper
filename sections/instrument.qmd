@@ -1,0 +1,181 @@
+## The SIFT Instrument {#sec-instrument}
+
+### Task Architecture {#sec-instrument-architecture}
+
+A SIFT task presents the respondent with two kinds of screen, arranged the way
+online retail arranges them. The first is a **listing page**: a set of $J$
+alternatives displayed as an ordered vertical list, each occupying one row.
+The second is a **product page**, one per alternative, reached by clicking its
+row. The pair corresponds to what commercial practice calls the product
+listing page and the product detail page, and the correspondence is deliberate
+— the instrument is meant to look to the respondent like the environments in
+which the category is actually shopped.
+
+The two screens differ in what they show. Every alternative is described by the
+same set of attributes, but the attributes are partitioned. A small number are
+displayed on the listing page for all $J$ alternatives at once — position in
+the list, brand, and price are the natural candidates, and are the ones that
+list pages typically carry in practice. The remainder are shown only on an
+alternative's product page. A respondent who reads the listing page and clicks
+nothing therefore knows a little about every alternative; a respondent who
+opens a product page knows everything about that one alternative and still
+only a little about the rest.<!-- TODO: fix the partition for the empirical
+application in @sec-analysis, and state it explicitly there. -->
+
+This partition is what gives the task its structure. Listing-page attributes
+are free: the respondent acquires them by looking at the screen she is already
+on. Product-page attributes are costly: acquiring them requires a click, a page
+load, and the time to read what the page contains. The respondent chooses how
+many of those costs to pay and in what order.
+
+The protocol within a task is as follows. The respondent begins on the listing
+page. She may open any alternative's product page, return to the listing page,
+and open another, as many times as she likes and in any order she likes. Every
+alternative she has already opened remains available to her — she may return to
+a previously viewed product page at no further cost, and she may select an
+alternative she viewed several clicks ago. The task ends in one of two ways.
+She selects an alternative to purchase, which she may do only from a product
+page she has opened, so that no alternative can be purchased sight-unseen. Or
+she declines to purchase anything and exits the task, which she may do at any
+point, including immediately, without opening a single product page.
+
+Two features of this protocol deserve emphasis because the model in @sec-model
+rests on them. First, selection requires prior inspection, which is both
+realistic — one buys from the product page, not from the list — and what
+allows the observed choice to be read as a choice over resolved rather than
+expected utilities. Second, recall is free and unlimited, so a respondent is
+never punished for having looked at something and moved on. Together these
+place the task squarely in the Weitzman (1979) protocol: the listing page is a
+set of closed boxes whose contents are unknown but whose distributions are not,
+a click is the act of opening one at a cost, and the decision to stop and
+select is the decision to take the best prize already in hand rather than pay
+to open another. The no-purchase exit is the outside option, which the
+respondent may take whether or not she has searched.
+
+The exit option matters for what the instrument can measure. A respondent who
+searches nothing and leaves, a respondent who searches half the list and leaves,
+and a respondent who searches half the list and buys are producing three
+different pieces of evidence about the same two parameters. Conjoint's
+no-choice option records only the first distinction between them.
+
+Respondents complete a sequence of tasks rather than one, exactly as in
+choice-based conjoint. Each task is a fresh listing page with a fresh set of
+alternatives, and the respondent searches and chooses within it independently.
+The current design fields ten tasks per respondent.<!-- TODO: confirm ten
+against the fielding partner's length constraints; the identification
+consequences are in @sec-estimation. --> This is the feature that separates
+the instrument most sharply from the field literature it borrows from. A
+platform dataset typically observes one search spell per consumer, so
+preferences and search costs must be told apart across consumers. Here each
+respondent supplies a panel of search spells, and the same respondent's
+behavior across tasks can be used to separate what she likes from what looking
+costs her.
+
+<!--
+TODO: making a click cost something.
+
+In a survey a click is nearly free, which is the central threat to
+interpreting estimated search-cost levels (see @sec-discussion). Design
+levers to consider, none yet chosen:
+  - a short enforced latency on each product-page load, so a click costs
+    real time rather than a mouse movement;
+  - an explicit click budget per task;
+  - incentive alignment in the sense of @Ding_2005 and @Ding_2007, so that
+    time spent searching has an opportunity cost denominated in something
+    the respondent wants;
+  - denominating the cost in time directly and modeling it against
+    observed dwell (@Ursu_2020).
+Whatever is chosen has to be described here and defended in @sec-discussion.
+Note that the enforced-latency option interacts with the timing data in
+@sec-instrument-data: an imposed delay must be separable from voluntary
+reading time.
+-->
+
+### Randomization and Experimental Design {#sec-instrument-randomization}
+
+Three things vary from task to task, and all three vary by design rather than
+by circumstance.
+
+**Position.** The order in which the $J$ alternatives appear on the listing
+page is randomized independently of everything else about them. An alternative
+that appears first in one task appears fourth in another, with the same
+attributes and the same competitors. Position is thus uncorrelated by
+construction with quality, price, brand, and every other attribute — the
+correlation that makes observational ranking data so difficult to use, since
+platforms rank on relevance and relevance is a function of exactly the things
+that drive utility. Field work has obtained this variation only rarely and
+only as a gift, most cleanly in @Ursu_2018. Here it is free and present in
+every task.
+
+**Composition.** The set of alternatives available on the listing page varies
+across tasks: which alternatives appear, and how many. This is the analogue of
+varying the choice set in a conjoint design, and it serves the same purpose of
+placing each alternative against varied competition, but it does additional
+work here because the attractiveness of the alternatives a respondent has *not*
+yet opened is what determines whether she keeps searching.
+
+**Attribute levels.** The attributes themselves are fixed across tasks — the
+same characteristics describe every alternative in every task, as in conjoint —
+while the levels those attributes take on are varied across alternatives and
+across tasks according to an experimental design. This is conventional conjoint
+practice and needs no defense; what is new is only that some of these attributes
+are revealed on the listing page and the rest behind a click.
+
+A fourth lever is available and is not yet part of the design: the *partition*
+itself — which attributes appear on the listing page and which are held back
+for the product page — could be randomized across respondents rather than fixed.
+Doing so would make the information architecture an experimental treatment, and
+would let the instrument speak to what belongs on a list page versus a detail
+page. It also complicates identification, since it changes what the respondent
+knows before searching. We flag it here as a design option and return to it in
+@sec-managerial.
+
+We defer the question of what each of these three sources of variation
+identifies to @sec-estimation, and the question of how they enter the
+likelihood to @sec-model. The point to carry forward from this section is only
+that the variation is designed rather than found: it is orthogonal by
+construction, it is present in every task rather than in a single natural
+experiment, and it costs nothing to produce.
+
+### Data Recorded {#sec-instrument-data}
+
+The instrument records the full interaction, not merely its outcome. For each
+respondent $i$ and task $t$ we retain three layers.
+
+**The design.** The complete attribute matrix for all $J$ alternatives shown,
+whether or not the respondent ever saw them; the position each alternative
+occupied on the listing page; and the partition of attributes into
+listing-page and product-page sets. The design is known without error because
+it was generated, which is a meaningful advantage over field data, where the
+analyst typically knows what was clicked but must reconstruct what was
+displayed.
+
+**The event stream.** Every action the respondent takes, in order, with a
+timestamp: each product-page opening (which alternative, at which position,
+at what time), each return to the listing page, each re-opening of a previously
+viewed product page, and the terminal event — a purchase of a named alternative
+or an exit without purchase. The event stream is the raw object; everything
+below is derived from it.
+
+**Derived search quantities.** From the event stream we construct the objects
+the model in @sec-model takes as data: the *search set*, meaning which
+alternatives were opened; the *search order*, meaning the sequence in which
+they were opened; the *stopping point*, meaning how many alternatives were
+opened before the respondent stopped; and the *choice*, meaning which member
+of the search set was purchased, or that none was. Timing data yield a parallel
+set of duration measures — time to first click, dwell time per product page,
+total task duration — which are informative about search effort in the sense
+of @Ursu_2020 and which will also be needed to net out any imposed latency
+from voluntary reading time.
+
+It is worth stating plainly what this means for the alternatives a respondent
+never opened. They are not missing data. Under the model they are the outcome
+of a decision — the respondent judged that opening them was not worth the cost,
+given what she had already found — and they carry information about both her
+preferences and her search cost. Non-inspection is the observation that
+conjoint has no way to record, and recovering it is much of the point of the
+instrument.
+
+<!-- TODO: a figure showing one task's listing page and one product page, plus
+a schematic of the event stream for a single respondent-task. Deferred until
+the instrument is built. -->

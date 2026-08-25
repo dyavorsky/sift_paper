@@ -1,0 +1,19 @@
+project:
+  type: manuscript
+
+execute:
+  freeze: auto
+
+format:
+  html:
+    toc: true
+  pdf:
+    pdf-engine: pdflatex
+    include-in-header:
+      - text: |
+          \usepackage{mathtools}
+
+# manuscript:
+#   notebooks:
+#     - notebook: notebooks/example_sift.ipynb
+#       title: SIFT Example

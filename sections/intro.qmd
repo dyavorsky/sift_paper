@@ -1,0 +1,21 @@
+## Introduction {#sec-intro}
+
+<!--
+TODO: draft. Left intentionally blank.
+
+Elements to hit when drafting (from the project brief, not yet prose):
+  - Conjoint measures preference among alternatives the respondent was shown;
+    it is silent on what she would have looked at and what looking costs.
+  - The two-stage list-then-detail architecture is how many categories are
+    actually shopped; the instrument reproduces it.
+  - The nesting claim is load-bearing: conjoint is the zero-search-cost
+    special case of SIFT. Non-adversarial, roughly true, and testable.
+  - Two technical claims: (i) within-respondent panel of search spells
+    supports individual-level preference AND search-cost estimates;
+    (ii) exogenous variation in position and information architecture is
+    designed in rather than found.
+  - One-line version: conjoint tells you what people prefer once they are
+    looking; SIFT tells you what they look at, what it costs them to look,
+    and what they never see at all.
+  - Contributions list, then roadmap paragraph pointing at each section.
+-->

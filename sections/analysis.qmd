@@ -1,0 +1,33 @@
+## Empirical Application {#sec-analysis}
+
+<!--
+TODO: awaiting guidance and data.
+
+Proposed scope — the split-sample pilot described in the project brief:
+
+  - Category, sample, and fielding partner.
+  - The design: a SIFT block fielded alongside a conventional conjoint in a
+    split sample, in a category with a genuine list-screen.
+  - Descriptive evidence first: how much do respondents actually search,
+    where do they click, does position move clicks.
+  - Convergent validity — do the preference parameters from the search block
+    agree with the conjoint part-worths. The most persuasive result
+    available, and the one to lead with.
+  - Is the estimated search cost distinguishable from zero.
+  - Holdout choice prediction, search model versus conjoint.
+  - Does position randomization move consideration in a way conjoint cannot
+    capture.
+  - Task-order effects: learning and fatigue as drift in the search cost.
+-->
+
+### Data and Design
+
+### Descriptive Evidence
+
+### Estimates
+
+### Convergent Validity against Conjoint
+
+### Holdout Prediction
+
+### Task-Order Effects

@@ -164,12 +164,25 @@ Assume 800 respondents × 10 tasks = **8000 task observations**, J = 8 per landi
 page, p = 20 (attribute levels plus search cost), nd = 100 with an nd = 25 first
 stage. Then sec/eval ≈ 4.0 (stage 2) and ≈ 1.0 (stage 1), and ≈ 550 evals/stage:
 
-| specification | estimated fit time | verdict |
-|---|---|---|
-| homogeneous, SMLE | **~45 min** | comfortable |
-| random coefficients, SMLE, 100 mixing draws | ~75 h | **infeasible in R** |
-| ... same, with an Rcpp likelihood (~6×) | ~13 h | borderline |
-| hierarchical Bayes, 20k draws, nd = 50 | **~11 h** | feasible, and parallel over respondents |
+| specification | fit time | basis | verdict |
+|---|---|---|---|
+| homogeneous, SMLE | ~45 min | extrapolated | comfortable |
+| random coefficients, SMLE, 100 mixing draws | ~75 h | extrapolated | **infeasible in R** |
+| hierarchical Bayes, 20k iterations, single-threaded | **~80 h** | **measured** | **infeasible** |
+| hierarchical Bayes, 20k iterations, 12 cores | **~11 h** | **measured** | feasible |
+
+The HB rows are measured rather than extrapolated, and they corrected an earlier
+estimate. `sift_hb()` costs **1.8 ms per task per iteration** — linear in tasks,
+and only weakly increasing in `nd` because per-task overhead dominates the draw
+count. An earlier extrapolation of ~11 h single-threaded was wrong by a factor
+of seven: it assumed one pass over the data per iteration, where the sampler
+makes two and carries per-respondent overhead on top.
+
+Parallelising the `theta_i` step (`sift_hb_par()`) measures a **7.5× speedup on
+12 cores** at 640 tasks, which is conservative — at that size communication is a
+material share of each iteration, and the share falls as the problem grows. That
+is what brings a commercial-scale fit inside an overnight budget. **HB meets the
+12-hour target only in parallel.**
 
 Two consequences worth carrying into the paper. First, the homogeneous model is not
 the constraint — heterogeneity is, and it is the whole point, since recovering

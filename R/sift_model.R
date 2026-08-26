@@ -206,107 +206,127 @@ sel_system <- function(a, J) {
   list(A = A, kind = "search")
 }
 
-# GHK: P(A eta >= b) with eta ~ N(0, I_J), returning draws from the region
+# GHK: P(A eta >= b) with eta ~ N(0, I_J), returning draws from the region.
+#
+# The weight is accumulated in LOG space. Accumulating it as a running product
+# underflows to zero whenever the observed outcome is unlikely under the current
+# parameters -- and a floored zero contributes ~ -691 to the log-likelihood,
+# which swamps everything else and makes the optimiser flee the underflow region
+# rather than fit the data. That single defect produced every spurious "bias"
+# result in this project's diagnostics; see R/DIAGNOSTICS.md.
 ghk <- function(A, b, U) {
   J <- nrow(A); nd <- ncol(U)
   Sg <- A %*% t(A)
   Ch <- tryCatch(t(chol(Sg)), error = function(e) NULL)
   if (is.null(Ch)) return(NULL)
-  W <- matrix(0, J, nd); w <- rep(1, nd)
+  W <- matrix(0, J, nd); logw <- numeric(nd)
   for (r in seq_len(J)) {
     mu <- if (r == 1L) rep(0, nd) else as.vector(Ch[r, 1:(r - 1), drop = FALSE] %*%
                                                 W[1:(r - 1), , drop = FALSE])
-    lo <- (b[r] - mu) / Ch[r, r]
-    pr <- pnorm(lo, lower.tail = FALSE)
-    pr <- pmin(pmax(pr, 1e-300), 1)
-    w  <- w * pr
-    # draw from N(0,1) truncated below at lo, by inverse CDF
-    W[r, ] <- qnorm(pmin(pmax(pnorm(lo) + U[r, ] * pr, 1e-300), 1 - 1e-16))
+    lo  <- (b[r] - mu) / Ch[r, r]
+    lpr <- pnorm(lo, lower.tail = FALSE, log.p = TRUE)      # log P(Z > lo)
+    logw <- logw + lpr
+    # draw Z | Z > lo entirely through the upper tail, so tiny probabilities
+    # stay representable instead of collapsing to 0 or 1
+    W[r, ] <- qnorm(lpr + log(pmax(U[r, ], 1e-300)),
+                    lower.tail = FALSE, log.p = TRUE)
   }
-  # W holds the standardized draws v; the constrained vector is w = Ch %*% v,
-  # and eta solves A eta = w.
-  list(w = w, eta = solve(A, Ch %*% W))
+  list(logw = logw, eta = solve(A, Ch %*% W))
+}
+
+# log(mean(exp(x))), overflow-safe
+logmeanexp <- function(x) {
+  m <- max(x)
+  if (!is.finite(m)) return(-Inf)
+  m + log(mean(exp(x - m)))
 }
 
 # quadrature nodes on the probability scale for the one-dimensional eps integral
 gq_nodes <- function(nq = 24L) (seq_len(nq) - 0.5) / nq
 
-nll_sift_ghk <- function(p, d, info, draws, ginv, nb = 2L, nk = 2L,
-                         nq = 24L, return_vec = FALSE) {
-  th <- unpack(p, nb, nk)
-  sig_t <- sqrt(sum(th$kappa^2) + th$sig_xi^2)
-  Xb  <- as.vector(d$X %*% th$beta)
-  mL  <- as.vector(d$L %*% th$kappa)     # revealed on click, observed by us
-  cst <- exp(th$gamma0 + th$gpos * d$pos)
-  qn  <- gq_nodes(nq)
-  u0  <- th$a0
-  ll  <- numeric(d$S)
-
-  for (s in seq_len(d$S)) {
-    a <- info[[s]]; ix <- a$ix; K <- a$K; J <- d$J
-    m  <- Xb[ix] + ginv(cst[ix] / sig_t) * sig_t     # z = m + eta
-    mu <- Xb[ix]                                     # delta = mu + eta
-    sys <- sel_system(a, J)
-    b <- if (K == 0L) -(u0 - m) else {
-      bb <- numeric(J); r <- 0L
-      if (K >= 2L) for (k in 1:(K - 1L)) { r <- r + 1L; bb[r] <- m[a$S[k + 1L]] - m[a$S[k]] }
-      for (l in a$U) { r <- r + 1L; bb[r] <- m[l] - m[a$S[K]] }
-      r <- r + 1L; bb[r] <- u0 - m[a$S[K]]
-      bb
-    }
-    G <- ghk(sys$A, b, draws$U[[s]])
-    if (is.null(G)) { ll[s] <- -1e6; next }
-
-    if (K == 0L) { ll[s] <- log(mean(G$w)); next }   # no eps to integrate
-
-    eta <- G$eta                                     # J x nd, inside the region
-    zK  <- m[a$S[K]] + eta[a$S[K], ]
-    # A click reveals the product page. Because WE designed it, the revealed
-    # attributes L are observed for every searched alternative, so realized
-    # utility is delta + L'kappa + xi with xi ~ N(0, sigma_xi^2). The ex ante
-    # spread sigma_tilde belongs in the reservation value (computed BEFORE the
-    # click); it must not be reused here. Folding L into the mean is what
-    # identifies kappa -- without it kappa enters only through sigma_tilde and
-    # trades off exactly against sigma_xi.
-    dS  <- mu[a$S] + eta[a$S, , drop = FALSE] +
-           matrix(mL[ix][a$S], K, ncol(eta))         # K x nd, delta + L'kappa
-    sx  <- th$sig_xi
-    znx <- if (length(a$U)) apply(m[a$U] + eta[a$U, , drop = FALSE], 2, max) else -Inf
-
-    if (a$ch == 0L) {
-      # no purchase: u0 beats every searched u, and u0 >= z_next
-      ok <- if (length(a$U)) as.numeric(u0 >= znx) else 1
-      ub <- matrix(u0, K, ncol(eta))
-      if (K >= 2L) ub[1:(K - 1L), ] <- pmin(ub[1:(K - 1L), , drop = FALSE],
-                                            matrix(zK, K - 1L, ncol(eta), byrow = TRUE))
-      lp <- colSums(pnorm((ub - dS) / sx, log.p = TRUE))
-      ll[s] <- log(mean(G$w * ok * exp(lp)))
-    } else {
-      cp <- a$ch_pos
-      lo <- pmax(znx, u0) - dS[cp, ]                 # xi_choice >= lo
-      # If the chosen alternative was NOT the last click, continuing past it
-      # required u_choice < z_K. That caps xi_choice from above.
-      hi <- if (cp < K) zK - dS[cp, ] else rep(Inf, ncol(eta))
-      lo_p <- pnorm(lo / sx); hi_p <- pnorm(hi / sx)
-      tail <- pmax(hi_p - lo_p, 0)
-      acc <- numeric(ncol(eta))
-      for (q in qn) {                                # integrate xi_choice
-        e <- qnorm(pmin(pmax(lo_p + q * tail, 1e-300), 1 - 1e-16)) * sx
-        uc <- dS[cp, ] + e
-        others <- setdiff(seq_len(K), cp)
-        if (length(others)) {
-          ub <- matrix(uc, length(others), ncol(eta), byrow = TRUE)
-          keep <- others < K
-          if (any(keep)) ub[keep, ] <- pmin(ub[keep, , drop = FALSE],
-                                            matrix(zK, sum(keep), ncol(eta), byrow = TRUE))
-          lp <- colSums(pnorm((ub - dS[others, , drop = FALSE]) / sx, log.p = TRUE))
-        } else lp <- 0
-        acc <- acc + exp(lp)
-      }
-      ll[s] <- log(mean(G$w * tail * acc / nq))
-    }
+# Core: log-likelihood of ONE task. Kept separate from the loop so that the HB
+# sampler can evaluate a single respondent's tasks at that respondent's own
+# theta without touching anybody else's rows.
+ll_task_ghk <- function(a, mu, m, mLs, u0, sig_t, sx, U, qn) {
+  K <- a$K; J <- length(mu)
+  sys <- sel_system(a, J)
+  b <- if (K == 0L) -(u0 - m) else {
+    bb <- numeric(J); r <- 0L
+    if (K >= 2L) for (k in 1:(K - 1L)) { r <- r + 1L; bb[r] <- m[a$S[k + 1L]] - m[a$S[k]] }
+    for (l in a$U) { r <- r + 1L; bb[r] <- m[l] - m[a$S[K]] }
+    r <- r + 1L; bb[r] <- u0 - m[a$S[K]]
+    bb
   }
-  ll <- pmax(ll, -1e4)          # a zero-probability task must not return -Inf
+  G <- ghk(sys$A, b, U)
+  if (is.null(G)) return(-1e4)
+  if (K == 0L) return(logmeanexp(G$logw))
+
+  eta <- G$eta
+  zK  <- m[a$S[K]] + eta[a$S[K], ]
+  dS  <- mu[a$S] + eta[a$S, , drop = FALSE] + matrix(mLs[a$S], K, ncol(eta))
+  znx <- if (length(a$U)) apply(m[a$U] + eta[a$U, , drop = FALSE], 2, max) else -Inf
+
+  if (a$ch == 0L) {
+    ok <- if (length(a$U)) as.numeric(u0 >= znx) else 1
+    ub <- matrix(u0, K, ncol(eta))
+    if (K >= 2L) ub[1:(K - 1L), ] <- pmin(ub[1:(K - 1L), , drop = FALSE],
+                                          matrix(zK, K - 1L, ncol(eta), byrow = TRUE))
+    lp <- colSums(pnorm((ub - dS) / sx, log.p = TRUE))
+    return(logmeanexp(G$logw + log(ok) + lp))
+  }
+  cp <- a$ch_pos
+  lo <- pmax(znx, u0) - dS[cp, ]
+  hi <- if (cp < K) zK - dS[cp, ] else rep(Inf, ncol(eta))
+  lo_p <- pnorm(lo / sx); hi_p <- pnorm(hi / sx)
+  tail <- pmax(hi_p - lo_p, 0)
+  acc  <- numeric(ncol(eta))
+  others <- setdiff(seq_len(K), cp)
+  keep <- others < K
+  for (q in qn) {
+    e  <- qnorm(pmin(pmax(lo_p + q * tail, 1e-300), 1 - 1e-16)) * sx
+    uc <- dS[cp, ] + e
+    if (length(others)) {
+      ub <- matrix(uc, length(others), ncol(eta), byrow = TRUE)
+      if (any(keep)) ub[keep, ] <- pmin(ub[keep, , drop = FALSE],
+                                        matrix(zK, sum(keep), ncol(eta), byrow = TRUE))
+      lp <- colSums(pnorm((ub - dS[others, , drop = FALSE]) / sx, log.p = TRUE))
+    } else lp <- 0
+    acc <- acc + exp(lp)
+  }
+  logmeanexp(G$logw + log(tail) + log(acc / length(qn)))
+}
+
+# Log-likelihood over a set of tasks. `beta`, `kappa`, `a0`, `gamma0` may vary
+# by task (pass length-S vectors / S x p matrices) which is what the HB sampler
+# needs; scalars are recycled.
+ll_tasks_ghk <- function(tasks, d, info, draws, ginv, th, nq = 24L) {
+  qn <- gq_nodes(nq)
+  # th$sig_fix, when supplied, IMPOSES the post-search spread used in the
+  # reservation value -- the literature's normalization -- while kappa and
+  # sigma_xi continue to govern realized utility. That mismatch is exactly the
+  # misspecification a normalizing analyst commits.
+  sig_t <- if (!is.null(th$sig_fix)) th$sig_fix
+           else sqrt(sum(th$kappa^2) + th$sig_xi^2)
+  out <- numeric(length(tasks))
+  for (n in seq_along(tasks)) {
+    s <- tasks[n]; a <- info[[s]]; ix <- a$ix
+    mu  <- as.vector(d$X[ix, , drop = FALSE] %*% th$beta)
+    mLs <- as.vector(d$L[ix, , drop = FALSE] %*% th$kappa)
+    cst <- exp(th$gamma0 + th$gpos * d$pos[ix])
+    m   <- mu + ginv(pmin(pmax(cst / sig_t, attr(ginv, "c_range")[1]),
+                          attr(ginv, "c_range")[2])) * sig_t
+    out[n] <- ll_task_ghk(a, mu, m, mLs, th$a0, sig_t, th$sig_xi,
+                          draws$U[[s]], qn)
+  }
+  out
+}
+
+nll_sift_ghk <- function(p, d, info, draws, ginv, nb = 2L, nk = 2L,
+                         nq = 24L, return_vec = FALSE, tasks = NULL,
+                         sig_fix = NULL) {
+  th <- unpack(p, nb, nk); th$sig_fix <- sig_fix
+  if (is.null(tasks)) tasks <- seq_len(d$S)
+  ll <- pmax(ll_tasks_ghk(tasks, d, info, draws, ginv, th, nq), -1e4)
   if (return_vec) return(ll)
   -sum(ll)
 }

@@ -10,6 +10,31 @@ click-and-choose data are fit with a sequential search model, recovering both
 preference parameters — as conjoint does — and search costs, for which conjoint
 has no analogue. Conjoint is the zero-search-cost special case.
 
+## The name
+
+**SIFT — Search Intensity and Feature Tradeoffs.**
+
+The expansion names both deliverables, which is the whole pitch: preferences
+*and* search costs from one instrument. "Feature tradeoffs" deliberately borrows
+conjoint's own vocabulary, which makes the nesting argument quietly.
+
+The bare word carries the pitch — it is one syllable, it is verbable ("we ran a
+SIFT", "the SIFT data"), and it describes what the respondent actually does. The
+expansion is meant to appear once, on first use, and then be retired. The test
+applied when choosing it: TURF works as an acronym precisely because nobody ever
+expands it. So the criterion is whether an expansion can survive a single
+footnote and never be spoken again — which argues for the version most
+defensible in front of a referee, not the one most memorable in a pitch.
+
+Alternates considered and set aside:
+
+| candidate | why not |
+|---|---|
+| Sequential Inspection and Feature Tradeoffs | leads with mechanism, truer to the Weitzman protocol, less client-friendly |
+| Shopping Information Foraging Task | nods to information foraging theory (Pirolli & Card), but "Task" names an activity rather than a method |
+| Search-Inferred Feature Tradeoffs | cleanest grammar, but hides the search cost, which is the actual differentiator |
+| Search in Field Testing | **rejected** — in this literature "field" means a real market experiment with real money, so this promises the opposite of what a survey instrument delivers |
+
 ## Status
 
 Skeleton manuscript. The introduction is intentionally blank; the literature

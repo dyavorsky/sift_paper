@@ -221,10 +221,28 @@ personalized prices (his §7.2 and Appendix H), and it is considerably cheaper.
 Our runtime work reverses the ordering we originally expected. Because HB never
 integrates over the heterogeneity distribution — each respondent sits at their
 own $\bftheta_i$ — the mixing-draw multiplier that makes random-coefficients
-SMLE expensive simply does not arise. On measured per-evaluation costs, full HB
-is the *cheaper* of the two routes at SIFT's dimensions, not the fallback. We
-therefore treat HB as the primary estimator and empirical Bayes as the
-robustness check.
+SMLE expensive simply does not arise. We therefore treat HB as the primary
+estimator and empirical Bayes as the robustness check.
+
+The runtime claim is worth stating precisely, because our first estimate of it
+was wrong. Extrapolating from per-evaluation costs we expected roughly 11 hours
+for a commercial-scale fit. The implemented sampler measures at **1.8 ms per
+task per iteration** — linear in tasks, and only weakly increasing in the number
+of simulation draws, because per-task overhead rather than draw count dominates.
+For 800 respondents × 10 tasks and 20,000 iterations that is **about 80 hours
+single-threaded**, not 11. The earlier figure assumed one pass over the data per
+iteration; the sampler makes two, and carries per-respondent overhead besides.
+
+What rescues the budget is that the $\bftheta_i$ step is embarrassingly
+parallel: each respondent's Metropolis update touches only that respondent's
+tasks. Parallelised across 12 cores we measure a 7.5× speedup — conservative,
+since at that problem size communication is a material share of each iteration —
+bringing a commercial fit to roughly **11 hours**, inside an overnight budget.
+
+The honest form of the claim is therefore conditional. HB is the cheaper route
+to heterogeneity *and* it fits in the budget, **but only in parallel**. A
+single-threaded implementation does not, and any replication attempt should be
+told so.
 
 ### Estimation {#sec-est-estimation}
 

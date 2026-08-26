@@ -44,18 +44,42 @@ and outright failed fits (beta1 = 0.47) disappeared.
 **But this did not remove the bias.** It is a real bug that had to be fixed; it
 was not the explanation.
 
-## What it actually was: finite-sample bias
+## What it actually was: finite-sample bias, quantified
 
-The estimator is consistent. Search-block bias falls roughly like 1/N:
+The estimator is not broken. `beta` is essentially unbiased everywhere
+(|bias| 0.007-0.06). The `(kappa, sigma_xi, a0, gamma0)` block carries a
+persistent POSITIVE bias in `gamma0` that declines slowly in both sample size
+and simulation draws.
 
-| tasks | search-block \|bias\| | gamma0 bias |
-|---|---|---|
-| 1200 | 0.446 | +0.709 |
-| 9600 | 0.098 | +0.124 |
+Factorial, 8 replications per cell, data seeds held fixed across `nd` so only
+the draw count varies within a row:
 
-`beta` is unbiased at every size (t < 1). The `(kappa, sigma_xi, a0, gamma0)`
-block is weakly identified and needs substantially more data — which is a
-sample-size recommendation for the paper, not a defect.
+| tasks | nd=30 | nd=60 | nd=120 |
+|---|---|---|---|
+| 1200 | +0.686 | +0.401 | +0.597 |
+| 2400 | +0.330 | +0.245 | +0.209 |
+
+Sample size roughly halves the bias at every draw count. Draws help monotonically
+at 2400 tasks. The non-monotonicity at 1200 is within one standard error — with
+8 reps and gamma0 SD ~0.3 the SE per cell is ~0.1, which is exactly why single
+cells looked erratic and produced several false diagnoses above.
+
+Even at the best cell measured, gamma0 bias is +0.209 against a true −1.05:
+**20% of the parameter value.** Reaching a negligible bias needs both a large
+sample and many draws.
+
+This is a known property of the literature rather than a SIFT defect.
+@Yavorsky_2021 writes of his own simulations that "some of the average parameter
+estimates are not within two standard errors of their true values. This is not
+uncommon for search models estimated using SMLE," citing Honka (2014),
+Ursu (2018) and Ursu et al. (2020). What is new here is the quantification.
+
+### Earlier cells that looked anomalous were noise
+
+A 12-replication cell at 2400 tasks / nd=60 gave 0.070 and looked clean; the
+same cell with different seeds gives 0.149, as does 9600 tasks / nd=60. Nothing
+was anomalous. The apparent non-monotonicity in sample size that prompted three
+separate investigations was run-to-run variation being read as signal.
 
 ## Rules this session earned
 

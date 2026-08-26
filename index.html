@@ -8,7 +8,7 @@
 
 <meta name="author" content="Dan Yavorsky">
 <meta name="author" content="Eric T. Bradlow">
-<meta name="dcterms.date" content="2026-08-25">
+<meta name="dcterms.date" content="2026-08-26">
 <meta name="keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
 
 <title>SIFT: Search Conjoint</title>
@@ -100,10 +100,10 @@ window.Quarto = {
 <meta name="citation_keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
 <meta name="citation_author" content="Dan Yavorsky">
 <meta name="citation_author" content="Eric T. Bradlow">
-<meta name="citation_publication_date" content="2026-08-25">
-<meta name="citation_cover_date" content="2026-08-25">
+<meta name="citation_publication_date" content="2026-08-26">
+<meta name="citation_cover_date" content="2026-08-26">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-08-25">
+<meta name="citation_online_date" content="2026-08-26">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=Optimal search for the best alternative;,citation_author=Martin L. Weitzman;,citation_publication_date=1979;,citation_cover_date=1979;,citation_year=1979;,citation_issue=3;,citation_doi=10.2307/1910412;,citation_volume=47;,citation_journal_title=Econometrica;">
 <meta name="citation_reference" content="citation_title=The economics of information;,citation_author=George J. Stigler;,citation_publication_date=1961;,citation_cover_date=1961;,citation_year=1961;,citation_issue=3;,citation_doi=10.1086/258464;,citation_volume=69;,citation_journal_title=Journal of Political Economy;">
@@ -199,7 +199,7 @@ window.Quarto = {
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">August 25, 2026</p>
+              <p class="date">August 26, 2026</p>
             </div>
           </div>
           
@@ -766,7 +766,10 @@ sign pattern above to her.
 <p>There are two routes to the individual-level deliverable that makes SIFT a conjoint substitute rather than a search paper.</p>
 <p><strong>Full hierarchical Bayes</strong> is what the conjoint audience expects and what makes individual part-worths and individual search costs directly reportable.</p>
 <p><strong>Two-stage empirical Bayes</strong> estimates the hyperparameters by simulated maximum likelihood and then draws individual posteriors by Metropolis–Hastings conditional on those estimates. This is what <span class="citation" data-cites="Morozov_2021">Morozov et al. (<a href="#ref-Morozov_2021" role="doc-biblioref">2021</a>)</span> does to compute personalized prices (his §7.2 and Appendix H), and it is considerably cheaper.</p>
-<p>Our runtime work reverses the ordering we originally expected. Because HB never integrates over the heterogeneity distribution — each respondent sits at their own <span class="math inline">\(\bftheta_i\)</span> — the mixing-draw multiplier that makes random-coefficients SMLE expensive simply does not arise. On measured per-evaluation costs, full HB is the <em>cheaper</em> of the two routes at SIFT’s dimensions, not the fallback. We therefore treat HB as the primary estimator and empirical Bayes as the robustness check.</p>
+<p>Our runtime work reverses the ordering we originally expected. Because HB never integrates over the heterogeneity distribution — each respondent sits at their own <span class="math inline">\(\bftheta_i\)</span> — the mixing-draw multiplier that makes random-coefficients SMLE expensive simply does not arise. We therefore treat HB as the primary estimator and empirical Bayes as the robustness check.</p>
+<p>The runtime claim is worth stating precisely, because our first estimate of it was wrong. Extrapolating from per-evaluation costs we expected roughly 11 hours for a commercial-scale fit. The implemented sampler measures at <strong>1.8 ms per task per iteration</strong> — linear in tasks, and only weakly increasing in the number of simulation draws, because per-task overhead rather than draw count dominates. For 800 respondents × 10 tasks and 20,000 iterations that is <strong>about 80 hours single-threaded</strong>, not 11. The earlier figure assumed one pass over the data per iteration; the sampler makes two, and carries per-respondent overhead besides.</p>
+<p>What rescues the budget is that the <span class="math inline">\(\bftheta_i\)</span> step is embarrassingly parallel: each respondent’s Metropolis update touches only that respondent’s tasks. Parallelised across 12 cores we measure a 7.5× speedup — conservative, since at that problem size communication is a material share of each iteration — bringing a commercial fit to roughly <strong>11 hours</strong>, inside an overnight budget.</p>
+<p>The honest form of the claim is therefore conditional. HB is the cheaper route to heterogeneity <em>and</em> it fits in the budget, <strong>but only in parallel</strong>. A single-threaded implementation does not, and any replication attempt should be told so.</p>
 </section>
 <section id="sec-est-estimation" class="level3" data-number="5.5">
 <h3 data-number="5.5" class="anchored" data-anchor-id="sec-est-estimation"><span class="header-section-number">5.5</span> Estimation</h3>
@@ -1246,7 +1249,7 @@ TODO:
 </div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{yavorsky2026,
   author = {Yavorsky, Dan and T. Bradlow, Eric},
   title = {SIFT: {Search} {Conjoint}},
-  date = {2026-08-25},
+  date = {2026-08-26},
   langid = {en},
   abstract = {Conjoint analysis measures what consumers prefer among
     alternatives they have been shown. It is silent on what they would
@@ -1290,7 +1293,7 @@ TODO:
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-yavorsky2026" class="csl-entry quarto-appendix-citeas" role="listitem">
 Yavorsky, Dan, and Eric T. Bradlow. 2026. <span>“SIFT: Search
-Conjoint.”</span> August 25.
+Conjoint.”</span> August 26.
 </div></div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">

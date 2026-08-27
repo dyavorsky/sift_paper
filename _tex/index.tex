@@ -411,12 +411,18 @@ yielding a panel of search spells where field data typically offers one,
 which is what supports individual-level estimates rather than population
 averages (Morozov et al. 2021).
 
-Together these let us estimate the standard deviation of the post-search
-component rather than normalizing it to one, as most of the literature
-must. That normalization is not innocuous: Yavorsky et al. (2021)
-estimates it at 8.16 against the conventional value of one, and shows
-that imposing one reverses the sign of a search-cost coefficient and
-understates a counterfactual by a factor of three to four.
+These three do separate work, and it is worth keeping them separate. The
+randomized shifter is what allows the standard deviation of the
+post-search component to be estimated rather than normalized to one, as
+most of the literature must; the panel is what supports individual-level
+parameters. That normalization is not innocuous. Yavorsky et al. (2021)
+estimate the spread at 8.16 against the conventional value of one, and
+show that imposing one reverses the sign of a search-cost coefficient
+and understates a counterfactual by a factor of three to four. In our
+own simulations the normalization does worse than bias the
+counterfactual: at spreads in the range they report, it predicts that
+halving search costs would change behaviour hardly at all, when in truth
+clicks rise by roughly a third (Section~\ref{sec-simstudy}).
 Section~\ref{sec-estimation} develops these arguments and reports the
 design checks that should accompany every SIFT study.
 
@@ -1351,20 +1357,27 @@ mechanically inflates search costs. The panel is therefore a
 \subsubsection{What neither the panel nor the shifter buys
 alone}\label{what-neither-the-panel-nor-the-shifter-buys-alone}
 
-The two ingredients are complements, and the literature illustrates this
-by having one or the other but never both. Morozov et al. (2021) have
-the panel and still normalize the post-search standard deviation,
-reporting that little variation in their data speaks to it (their
-Appendix C). Yavorsky et al. (2021) has an exogenous search-cost shifter
-and no panel, and does estimate it --- finding \(\tilde\sigma = 8.16\)
-against the conventional normalization of one, with a confidence
-interval that excludes one and consequences large enough to reverse the
-sign of one search-cost coefficient and to understate a counterfactual
-by a factor of three to four.
+The two ingredients address different problems, and the literature
+illustrates this by having one or the other but never both. Morozov et
+al. (2021) have the panel and still normalize the post-search standard
+deviation, reporting that little variation in their data speaks to it
+(their Appendix C). Yavorsky et al. (2021) have an exogenous search-cost
+shifter and no panel, and do estimate it --- finding
+\(\tilde\sigma = 8.16\) against the conventional normalization of one,
+with a confidence interval that excludes one and consequences large
+enough to reverse the sign of one search-cost coefficient and to
+understate a counterfactual by a factor of three to four.
 
-SIFT has both. It also has something neither has: because we design the
-product page, part of the post-search component is \emph{fixed by the
-design} rather than inferred.
+SIFT has both, and it is important not to conflate what each
+contributes. Simulations holding the total number of tasks fixed while
+varying tasks per respondent show that the panel does not improve
+recovery of the post-search spread; the randomized shifter does that
+work on its own. What the panel buys is individual-level parameters,
+which is a separate claim resting on separate variation.
+
+SIFT also has something neither has: because we design the product page,
+part of the post-search component is \emph{fixed by the design} rather
+than inferred.
 
 This last point is stronger than it first appears. In a field setting
 the analyst never observes what inspection revealed; the post-search

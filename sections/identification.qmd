@@ -104,19 +104,25 @@ panel is therefore a *levels* argument as much as a heterogeneity argument.
 
 #### What neither the panel nor the shifter buys alone
 
-The two ingredients are complements, and the literature illustrates this by
-having one or the other but never both. @Morozov_2021 have the panel and still
-normalize the post-search standard deviation, reporting that little variation
-in their data speaks to it (their Appendix C). @Yavorsky_2021 has an exogenous
-search-cost shifter and no panel, and does estimate it — finding
+The two ingredients address different problems, and the literature illustrates
+this by having one or the other but never both. @Morozov_2021 have the panel and
+still normalize the post-search standard deviation, reporting that little
+variation in their data speaks to it (their Appendix C). @Yavorsky_2021 have an
+exogenous search-cost shifter and no panel, and do estimate it — finding
 $\tilde\sigma = 8.16$ against the conventional normalization of one, with a
 confidence interval that excludes one and consequences large enough to reverse
 the sign of one search-cost coefficient and to understate a counterfactual by a
 factor of three to four.
 
-SIFT has both. It also has something neither has: because we design the product
-page, part of the post-search component is *fixed by the design* rather than
-inferred.
+SIFT has both, and it is important not to conflate what each contributes.
+Simulations holding the total number of tasks fixed while varying tasks per
+respondent show that the panel does not improve recovery of the post-search
+spread; the randomized shifter does that work on its own. What the panel buys is
+individual-level parameters, which is a separate claim resting on separate
+variation.
+
+SIFT also has something neither has: because we design the product page, part of
+the post-search component is *fixed by the design* rather than inferred.
 
 This last point is stronger than it first appears. In a field setting the analyst never observes what inspection
 revealed; the post-search shock is a residual, and all that can be recovered is

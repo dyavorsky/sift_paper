@@ -50,12 +50,3 @@ when porting code or reading the two papers side by side.
 
 ### Additional Appendices
 
-<!--
-TODO:
-  B. Derivation of the mixture-of-normals reservation value.
-  C. Proof of the zero-search-cost nesting result (@sec-model-nesting).
-  D. Sampler details and convergence diagnostics.
-  E. Validation against the reference implementations (see @sec-estimation).
-  F. Instrument screenshots and the full attribute list.
-  G. Additional simulation results.
--->

@@ -39,7 +39,6 @@ citation: true
 <!-- Latex -->
 {{< include latex_commands.qmd >}}
 
-
 <!-- Sections -->
 {{< include sections/intro.qmd >}}
 
@@ -64,7 +63,6 @@ citation: true
 {{< include sections/appendix.qmd >}}
 
 {{< include sections/appendix-lit.qmd >}}
-
 
 ## References {.unnumbered}
 

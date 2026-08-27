@@ -132,7 +132,8 @@ should accompany every SIFT study.
 
 ### What it costs
 
-We would rather state the costs plainly than have a referee find them.
+The method carries costs as well, and we set them out alongside the advantages
+rather than confine them to a concluding caveat.
 
 **Complexity.** SIFT is a new instrument fit with an unfamiliar model. Conjoint
 has four decades of accumulated norms — sample-size rules of thumb, design
@@ -182,14 +183,3 @@ sample sizes. @sec-analysis presents an empirical application, @sec-managerial
 draws out what the estimates support that conjoint cannot, and @sec-discussion
 takes up limitations.
 
-<!--
-TODO before circulating:
-  - the 64% attenuation figure and the sample-size claims point at @sec-simstudy,
-    which is still being written from the factorial in R/out/. Reconcile the
-    numbers once that section exists.
-  - the empirical application does not exist yet; soften or cut the roadmap
-    sentence on @sec-analysis if it is still absent at submission.
-  - the behavioural-evidence paragraph cites no one. Pull the specific
-    experimental papers from sections/litreview.qmd once their citations are
-    checked, rather than asserting the pattern.
--->

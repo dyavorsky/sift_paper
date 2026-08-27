@@ -19,8 +19,7 @@ list pages typically carry in practice. The remainder are shown only on an
 alternative's product page. A respondent who reads the listing page and clicks
 nothing therefore knows a little about every alternative; a respondent who
 opens a product page knows everything about that one alternative and still
-only a little about the rest.<!-- TODO: fix the partition for the empirical
-application in @sec-analysis, and state it explicitly there. -->
+only a little about the rest.
 
 This partition is what gives the task its structure. Listing-page attributes
 are free: the respondent acquires them by looking at the screen she is already
@@ -61,35 +60,13 @@ no-choice option records only the first distinction between them.
 Respondents complete a sequence of tasks rather than one, exactly as in
 choice-based conjoint. Each task is a fresh listing page with a fresh set of
 alternatives, and the respondent searches and chooses within it independently.
-The current design fields ten tasks per respondent.<!-- TODO: confirm ten
-against the fielding partner's length constraints; the identification
-consequences are in @sec-estimation. --> This is the feature that separates
+The current design fields ten tasks per respondent. This is the feature that separates
 the instrument most sharply from the field literature it borrows from. A
 platform dataset typically observes one search spell per consumer, so
 preferences and search costs must be told apart across consumers. Here each
 respondent supplies a panel of search spells, and the same respondent's
 behavior across tasks can be used to separate what she likes from what looking
 costs her.
-
-<!--
-TODO: making a click cost something.
-
-In a survey a click is nearly free, which is the central threat to
-interpreting estimated search-cost levels (see @sec-discussion). Design
-levers to consider, none yet chosen:
-  - a short enforced latency on each product-page load, so a click costs
-    real time rather than a mouse movement;
-  - an explicit click budget per task;
-  - incentive alignment in the sense of @Ding_2005 and @Ding_2007, so that
-    time spent searching has an opportunity cost denominated in something
-    the respondent wants;
-  - denominating the cost in time directly and modeling it against
-    observed dwell (@Ursu_2020).
-Whatever is chosen has to be described here and defended in @sec-discussion.
-Note that the enforced-latency option interacts with the timing data in
-@sec-instrument-data: an imposed delay must be separable from voluntary
-reading time.
--->
 
 ### Randomization and Experimental Design {#sec-instrument-randomization}
 
@@ -168,7 +145,7 @@ total task duration — which are informative about search effort in the sense
 of @Ursu_2020 and which will also be needed to net out any imposed latency
 from voluntary reading time.
 
-It is worth stating plainly what this means for the alternatives a respondent
+The implication for the alternatives a respondent
 never opened. They are not missing data. Under the model they are the outcome
 of a decision — the respondent judged that opening them was not worth the cost,
 given what she had already found — and they carry information about both her
@@ -176,6 +153,3 @@ preferences and her search cost. Non-inspection is the observation that
 conjoint has no way to record, and recovering it is much of the point of the
 instrument.
 
-<!-- TODO: a figure showing one task's listing page and one product page, plus
-a schematic of the event stream for a single respondent-task. Deferred until
-the instrument is built. -->

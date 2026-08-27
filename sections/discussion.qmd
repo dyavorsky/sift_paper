@@ -14,9 +14,8 @@ that a finding rather than a concession.
 
 It also converts a methodological argument into an empirical one. "Should this
 study be a conjoint or a SIFT" is answerable from SIFT data and not from
-conjoint data, which is an asymmetry worth being honest about: the richer
-instrument can diagnose whether the simpler one was adequate, but not the
-reverse. The cost of finding out is the cost of fielding SIFT.
+conjoint data. The asymmetry is a real one: the richer instrument can
+diagnose whether the simpler one was adequate, but not the reverse. The cost of finding out is the cost of fielding SIFT.
 
 What it does not settle is whether the *test* is easy. As @sec-est-nesting
 develops, the null sits at the boundary of the parameter space, so the
@@ -25,10 +24,7 @@ observable implications or a simulated reference distribution. We regard the
 sharpest of those implications as the simplest: under zero search costs, nobody
 leaves alternatives unopened. That is checkable before any model is fit.
 
-### Do Survey Clicks Measure Anything Real? {#sec-disc-clicks}
-
-This is the first question a referee will ask and we would rather ask it
-ourselves.
+### Do Survey Clicks Measure Search? {#sec-disc-clicks}
 
 Clicking in a survey is nearly free. It costs a second of attention and no money,
 whereas inspecting a product in a real category may cost a drive across town, a
@@ -47,9 +43,8 @@ the estimated search cost *means*, and a study should say which it used.
 The standing defence, and we think it is the right one, is that relative and
 comparative statements transfer even when levels do not. This is precisely the
 defence conjoint has made for four decades about utilities that are not
-interpretable in isolation, and it is defensible ground — but it should be stated
-before a reviewer states it, and it constrains the claims a SIFT study should
-make. @sec-managerial-friction accordingly recommends ratios as the headline
+interpretable in isolation. It is defensible ground, but it constrains the
+claims a SIFT study should make. @sec-managerial-friction accordingly recommends ratios as the headline
 quantity.
 
 ### Rational Expectations About the Unopened {#sec-disc-expectations}
@@ -64,9 +59,9 @@ motivates warm-up tasks in conjoint. Alternatively, learning can be modelled
 across tasks, at the cost of abandoning the independence assumption in
 @eq-resp-likelihood that makes the panel multiply.
 
-We take the first route and treat the second as a robustness check, but we note
-the tension honestly: a practice block assumes learning completes quickly, and
-whether it does is testable by looking for trends in click counts and search
+We take the first route and treat the second as a robustness check. The
+tension is that a practice block assumes learning completes quickly, and whether
+it does is testable by looking for trends in click counts and search
 costs across task order. @sec-analysis reports that diagnostic. If search costs
 decline systematically across tasks, the practice block was insufficient and the
 learning model becomes necessary rather than optional.
@@ -120,8 +115,6 @@ is how instruments improve.
 
 ### Where Conjoint Remains the Right Tool {#sec-disc-conjoint}
 
-We would rather draw this boundary ourselves than have it drawn for us.
-
 Conjoint remains the better instrument for feature-level willingness-to-pay on a
 defined bundle, where there is nothing to search over and the question is purely
 one of tradeoffs. It remains better for new-product configuration when the
@@ -133,11 +126,10 @@ share simulator is the deliverable and the client's decision process is built
 around it. And it remains better in any study where established norms,
 benchmarks, and comparability to prior waves matter more than novelty.
 
-Most honestly: conjoint is understood, defensible, cheap to estimate, and
-supported by four decades of accumulated practice. SIFT is none of those things
-yet. A method that is right in principle and unfamiliar in practice is a real
-cost to a research buyer, and we do not think it is served by pretending
-otherwise.
+Conjoint is also understood, defensible, cheap to estimate, and supported by
+four decades of accumulated practice. SIFT is none of those things yet. A method
+that is correct in principle but unfamiliar in practice imposes a real cost on
+the organization adopting it, and that cost is part of the comparison.
 
 ### Extensions {#sec-disc-extensions}
 
@@ -156,8 +148,9 @@ is exactly that setting, and it is a small change to the instrument.
 **Sequential versus fixed-sample, respondent by respondent.** As
 @sec-model-alternatives notes, the task panel makes this test available at the
 individual level, where the literature has been able to run it only at the
-population level. "What fraction of respondents search sequentially" is a
-question we can answer and nobody has.
+population level. The distribution of search protocols across respondents is
+therefore identifiable in principle and, to our knowledge, has not been
+estimated.
 
 **Attribute-level search.** Our model has respondents searching across
 *alternatives*; the Mouselab literature has subjects searching across
@@ -165,14 +158,3 @@ question we can answer and nobody has.
 that permits either would be a genuine extension rather than a variation, and the
 instrument already records enough to identify which is occurring.
 
-<!--
-TODO before circulating:
-  - @sec-disc-estimation cites Honka_2014 and Ursu_2018 as reported by Yavorsky.
-    Verify those are the papers he cites for SMLE bias rather than paraphrasing
-    from memory.
-  - @sec-disc-expectations promises a learning diagnostic in @sec-analysis, which
-    does not exist yet. Keep the promise or cut the sentence.
-  - the claim that ratios are more robust than levels to finite-sample bias is a
-    conjecture. It is cheap to test in @sec-simstudy and should be tested before
-    it is asserted here or in @sec-managerial-friction.
--->

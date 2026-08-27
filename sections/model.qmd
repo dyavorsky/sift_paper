@@ -131,34 +131,6 @@ single one-dimensional inverse serves every respondent, which is what keeps esti
 tractable at panel scale (@sec-est-estimation). We report the exact mixture as a
 generalization and use it as a robustness check.
 
-<!--
-DECIDED: carry L'kappa; estimate the variance-matched normal, report the exact
-mixture as the generalization. Show the collapse into a scalar match value (giving
-up on pricing product-page attributes altogether) as a misspecification case in
-@sec-simstudy.
-
-DECIDED: randomized attribute profiles, freshly drawn each task -- NOT a fixed set of
-named alternatives recurring across tasks. Reasons to state in @sec-instrument:
-  - independence across tasks is true by construction rather than assumed; a fresh
-    profile really is a new object, whereas a recurring alternative would carry its
-    match value forward and the model would have to absorb that as learning
-    (cf. @Morozov_2021 §6.4, who estimate an MA(1) carryover of rho = 0.3 across
-    sessions that are weeks apart -- ours are minutes apart, so carryover would be
-    much larger);
-  - heterogeneity then lives in beta_i over attributes, which is the conjoint HB
-    object clients want, rather than in alternative-specific intercepts;
-  - the nesting result needs attribute part-worths. Brand intercepts are not conjoint.
-Note the generalization: a fixed recurring alternative set is the case
-@Morozov_2021 and @Chung_2025 estimate, and their identification arguments apply to
-it directly; ours are the attribute-level analogue.
-
-Note for @sec-lit: @Ursu_2018 has exactly this list-page / product-page architecture
-and needs no mixture, because she does not observe what the product page contains
-(her §3.2.1) and so models it as an unobserved scalar match value. The difference is
-not the architecture, it is that we design the page. Say so explicitly rather than
-letting a referee find it.
--->
-
 **Parameters.** Collect the respondent-level parameters in
 $\bftheta_i = (\bfbeta_i, \bfkappa_i, \bfgamma_i)$ and the population parameters governing
 their distribution in $\bfOmega$. We reserve $\bftheta$ for the parameter vector
@@ -242,14 +214,11 @@ the region in which all of them hold. Following @Ursu_Seiler_Honka_2024 we write
 condition as a difference required to be non-negative and index them
 $\nu_1,\dots,\nu_4$ in the order selection, continuation, stopping, choice.
 
-::: {.callout-warning}
-## The $\nu$ labelling is not standard across papers
-
-@Yavorsky_2021 uses the opposite convention, with $\nu_1$ continuation and $\nu_2$
-selection. Readers moving between the two literatures should check the labelling
-before comparing smoothing parameters or reported diagnostics. The crosswalk in
-@sec-appendix-notation records both.
-:::
+This labelling is not uniform in the literature: @Yavorsky_2021 adopts the
+opposite convention, with $\nu_1$ denoting continuation and $\nu_2$ selection.
+The crosswalk in @sec-appendix-notation records both, and comparisons of
+smoothing parameters or fit diagnostics across the two literatures should be made
+with the convention in mind.
 
 The task-level probability is
 
@@ -320,16 +289,14 @@ from zero. If it is not, conjoint was correctly specified and nothing was lost b
 fielding the richer instrument. If it is, conjoint was misspecified for that category,
 and the SIFT estimates say by how much and in which direction.
 
-::: {.callout-important}
-## The test is not a Wald test
-
-Because conjoint sits at the *boundary* rather than the interior of the parameter
-space — $\cost \to 0$ corresponds to $\log \cost \to -\infty$, and to
-$g(\cost) \to \infty$ under the alternative parameterization — the null is not an
-interior point and the usual $\chi^2$ reference distribution does not apply. The
-restriction must be tested against observable implications or against a simulated
-reference distribution. @sec-est-nesting develops this.
-:::
+The restriction is not, however, testable by conventional means. Conjoint sits
+at the *boundary* of the SIFT parameter space rather than in its interior:
+$\cost \to 0$ corresponds to $\log \cost \to -\infty$, and to
+$g(\cost) \to \infty$ under the alternative parameterization. The null is
+therefore not an interior point, and the usual $\chi^2$ reference distribution
+does not apply. The restriction must instead be assessed against observable
+implications or against a simulated reference distribution, as developed in
+@sec-est-nesting.
 
 ### Alternative Search Protocols {#sec-model-alternatives}
 
@@ -360,8 +327,3 @@ the one set out in @sec-lit-lab: the model is an approximation whose predictions
 should be checked against holdout behaviour, and a satisficing benchmark is the right
 comparison to report alongside it.
 
-<!--
-TODO: Proposition 1 is stated with a sketch rather than a proof. Either write the
-formal argument into @sec-appendix and restore a pointer to it, or leave the sketch
-and drop the claim to a formal proposition.
--->

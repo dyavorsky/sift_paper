@@ -8,8 +8,6 @@ and nothing in the main text depends on it.
 
 All entries have been verified against the published record.
 
-
-
 #### Optimal Sequential Search {#sec-applit-theory}
 
 The theoretical backbone. The instrument's data-generating process is the
@@ -120,8 +118,8 @@ direct methodological precedent for running search as a designed task.
 *Net read.* Mixed, and this is the single largest scientific risk to the
 project. Behavior is directionally consistent with reservation-value logic, but
 the deviations are systematic rather than random: too little search relative to
-the optimum, order effects, and sensitivity to sunk costs. The paper should
-state this openly and early rather than let a referee find it.
+the optimum, order effects, and sensitivity to sunk costs. @sec-lit-lab and
+@sec-disc-behavioural take up what follows for the model.
 
 #### Information acquisition: Mouselab and eye-tracking
 
@@ -215,30 +213,12 @@ versus observation.
   reference, but the closest commercial product to a two-stage consideration
   instrument: a screening section (must-haves, unacceptables) followed by a
   choice tournament. Study as design precedent, and as the thing a client may
-  already have bought. <!-- TODO: cite the Sawtooth technical paper -->
+  already have bought. 
 - **Virtual-shelf and shopper-simulation vendors.** Several field shelf-set
   exercises with click data, reported descriptively (time to first click, click
   share). No known case of backing a structural search model out of one.
   **This is where prior art most likely hides; check directly.**
-  <!-- TODO: vendor scan, then decide whether this belongs in the paper at all -->
+  
 
 #### Positioning {#sec-applit-positioning}
 
-<!--
-TODO: prose. The four claims to be stated here as hypotheses the paper
-tests, not as established gaps:
-
-  1. A fieldable, productized survey instrument that yields Weitzman
-     search-cost parameters the way conjoint yields part-worths. Lab
-     analogues exist (@Gabaix_2006); a survey method with design norms
-     and reporting conventions does not.
-  2. Individual-level search costs identified from within-subject panel
-     data rather than cross-sectional heterogeneity.
-  3. Designed exogenous variation in position and information architecture
-     in every task, rather than obtained once from a platform (@Ursu_2018).
-  4. Segmentation on search behavior — how people shop — rather than on
-     preference. No prior art known.
-
-Each of these is a claim to disprove during the verification pass, not a
-result. Do not write them as results.
--->

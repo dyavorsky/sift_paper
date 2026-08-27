@@ -147,12 +147,12 @@ conjunctions, @Yee_2007 use greedoid methods for non-compensatory inference,
 @Dzyabura_2011 apply active machine learning to consideration heuristics, and
 @Hauser_2014 reviews the resulting body of work.
 
-The contrast with SIFT is clean and worth stating in one line: **these methods
-infer the consideration process as latent structure from what was chosen; SIFT
-observes it directly and prices it in units of search cost.** Inference versus
-observation. Both are legitimate, and the inference approach has the advantage
-of working on data already collected — but a latent screening rule cannot be
-manipulated, so it cannot answer what happens when the analyst changes what is
+The contrast with SIFT is a single distinction: **these methods infer the
+consideration process as latent structure from what was chosen, whereas SIFT
+observes it directly and prices it in units of search cost.** Both approaches are
+legitimate, and inference from choice outcomes has the considerable advantage of
+applying to data already collected. A latent screening rule cannot, however, be
+manipulated, and so cannot answer what happens when the analyst changes what is
 easy to see.
 
 The broader economic foundations of conjoint are set out in @Allenby_2019, and

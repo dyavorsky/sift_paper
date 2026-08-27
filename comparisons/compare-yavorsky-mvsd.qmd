@@ -3,47 +3,138 @@ title: "Yavorsky, Honka & Chen (2021) vs SIFT"
 subtitle: "What does normalizing the post-search spread to one actually cost?"
 format: html
 bibliography: ../references.bib
+execute: {echo: false, warning: false}
 ---
 
-::: {.callout-note}
-## Scoped, not yet run
-:::
+```{r}
+#| include: false
+res <- function(n) {
+  p <- file.path("out", paste0(n, ".rds"))
+  if (!file.exists(p)) p <- file.path("comparisons", "out", paste0(n, ".rds"))
+  readRDS(p)
+}
+```
 
 ## The question
 
-@Yavorsky_2021 shows that the match-value standard deviation — the post-search
-spread, $\tilde\sigma$ here — can be estimated rather than normalized to one,
-given an exogenous search-cost shifter, and that the normalization does real
-damage: he estimates 8.16, and fixing it to one reverses the sign of the urban
-search-cost coefficient and understates a counterfactual by a factor of three to
-four.
+@Yavorsky_2021 show that the match-value standard deviation — the post-search
+spread, $\tilde\sigma$ — can be estimated rather than normalized to one, given an
+exogenous search-cost shifter, and that the normalization does real damage: they
+estimate 8.16 against the conventional value of one, and imposing one reverses
+the sign of a search-cost coefficient and understates a counterfactual by a
+factor of three to four.
 
-He has the shifter (driving distance) but no panel. @Morozov_2021 has the panel
-but normalizes the spread. SIFT has both, plus a designed product page that
-fixes part of the spread rather than inferring it.
+They have the shifter but no panel. @Morozov_2021 have the panel but normalize
+the spread. SIFT has both, plus a designed product page that fixes part of the
+spread rather than inferring it.
 
-**Ask:** across a grid of true $\tilde\sigma$, what is the bias in search costs,
-in preferences, and in a friction counterfactual, when $\tilde\sigma$ is fixed to
-one instead of estimated? And how much does the panel reduce the variance of
-$\hat{\tilde\sigma}$ relative to a single spell per respondent?
+Two things to establish. **What does normalizing cost**, as the true spread moves
+away from one? And **how much of the benefit comes from the panel** as opposed to
+the shifter?
 
 ## Design
 
-1. Simulate SIFT data at $\tilde\sigma \in \{1, 2, 4, 8\}$, spanning the
-   normalized value and Yavorsky's field estimate.
-2. Fit twice: $\tilde\sigma$ free, and $\tilde\sigma \equiv 1$.
-3. Report bias in $\gamma_0$, $\gamma_p$, $\boldsymbol\beta$, $\boldsymbol\kappa$,
-   and in a counterfactual that halves search costs.
-4. Repeat with $T=1$ to isolate what the panel contributes over and above the
-   shifter.
+Sweep the true spread across $\tilde\sigma \in \{1.29, 2.58, 5.15\}$, spanning
+the conventional normalization and the neighbourhood of Yavorsky's field
+estimate. At each level fit the model twice: once with $\tilde\sigma$ free, once
+with it forced to 1.
 
-The $T=1$ arm is the interesting one, because it is the closest simulated
-analogue of @Yavorsky_2021's own design and lets us say what SIFT adds rather
-than merely that SIFT works.
+"Normalizing" is implemented the way a researcher actually does it —
+$\tilde\sigma$ is imposed in the **reservation value**, which is the search rule,
+while $\boldsymbol\kappa$ and $\sigma_\xi$ continue to govern realized utility.
 
-## Expected obstacle
+Total tasks are held fixed at 400 across the $T$ arms, so $T=1$ against $T=8$
+isolates the panel rather than confounding it with sample size. $T=1$ is the
+closest simulated analogue of Yavorsky's design.
 
-$\gamma_0$ and $\log\tilde\sigma$ lie on a ridge — @Yavorsky_2021 reports a
-correlation of 0.95 between them even with 6,511 consumers. Expect the
-$\tilde\sigma$-free arm to be imprecise, and report the ridge explicitly rather
-than hiding it in a standard error.
+The counterfactual mirrors their at-home-test-drive exercise: halve search costs
+and predict the change in clicks. Code: [`exp_mvsd.R`](exp_mvsd.R).
+
+## Result 1 — the spread is recovered when estimated
+
+```{r}
+r <- res("mvsd")$res
+knitr::kable(data.frame(
+  `true sigma`  = sprintf("%.2f", r$sig_true),
+  `T`           = r$T,
+  `sigma hat`   = sprintf("%.2f", r$sig_hat_free),
+  `gamma0 true` = sprintf("%.2f", r$gamma0_true),
+  `gamma0 free` = sprintf("%.2f", r$gamma0_free),
+  `gamma0 normalized` = sprintf("%.2f", r$gamma0_norm),
+  check.names = FALSE), align = "r")
+```
+
+With $\tilde\sigma$ free, it is recovered across the whole range — 1.24–1.61
+against a truth of 1.29, 2.30–2.59 against 2.58, and 4.87–5.82 against 5.15 —
+and the search-cost intercept $\gamma_0$ stays near its true $-1.05$.
+
+Under the normalization, $\gamma_0$ absorbs the misspecification and the damage
+scales with how wrong the imposed value is. At a true spread of 2.58 the
+estimate moves to roughly $-2.2$ to $-2.7$; at 5.15 it collapses to
+**$-20$ to $-22$**. Since costs enter as $\exp(\gamma_0)$, that is a search cost
+understated by many orders of magnitude — not a bias so much as a different
+model.
+
+## Result 2 — the counterfactual is destroyed, not merely biased
+
+```{r}
+knitr::kable(data.frame(
+  `true sigma` = sprintf("%.2f", r$sig_true),
+  `T` = r$T,
+  `baseline clicks` = sprintf("%.2f", r$clicks_base),
+  `true` = sprintf("%.2f", r$cf_true),
+  `free` = sprintf("%.2f", r$cf_free),
+  `normalized` = sprintf("%.2f", r$cf_norm),
+  `error, free` = sprintf("%+.0f%%", 100 * r$cf_err_free),
+  `error, normalized` = sprintf("%+.0f%%", 100 * r$cf_err_norm),
+  check.names = FALSE), align = "r")
+```
+
+Errors are expressed as a share of the true predicted *change* in clicks, so
+$-100\%$ means the model predicts no effect at all where a real one exists.
+
+The free specification tracks the counterfactual within roughly 13% everywhere,
+and within 5% in four of six cells. The normalized specification errs by
+$-35\%$ at the smallest spread and by $-86\%$ to $-114\%$ once the true spread
+exceeds two. At a true spread of 2.58 it is effectively predicting **that
+halving search costs would do nothing**, when in fact clicks rise from 1.82 to
+2.34.
+
+This is the same failure @Yavorsky_2021 report, reproduced in a designed
+instrument and, if anything, more severe. Their counterfactual was understated by
+a factor of three to four; here the predicted effect is close to zero or
+negative.
+
+A related casualty is the position coefficient. Its true value is 0.12
+throughout. Estimated freely it lands between 0.105 and 0.136 in every cell.
+Under the normalization at a true spread of 5.15 it is estimated at **1.77 and
+1.82** — an order of magnitude too large, because the position effect is being
+asked to carry variation the spread should have explained.
+
+## Result 3 — the panel is not what rescues the spread
+
+Holding total tasks fixed, $T=8$ does not systematically beat $T=1$: the free
+estimate of $\tilde\sigma$ is closer to the truth at $T=1$ in two of three
+sweeps.
+
+This is worth stating plainly because it sharpens the claim in
+[`sections/identification.qmd`](../sections/identification.qmd). The
+**exogenous shifter** is what identifies the post-search spread; the **panel** is
+what identifies heterogeneity. These are separate arguments doing separate work,
+and the model fitted here is homogeneous, so the panel has nothing to contribute.
+
+The correct claim is therefore not "SIFT estimates $\tilde\sigma$ because it has
+a panel" but "SIFT estimates $\tilde\sigma$ because position is randomized, and
+separately supports individual-level parameters because it has a panel." Any
+statement conflating the two should be corrected.
+
+## Caveats
+
+- One dataset per cell. The search-cost block carries substantial finite-sample
+  bias (see `R/DIAGNOSTICS.md`), so individual cells should not be over-read.
+  The pattern across cells is the result, not any single entry.
+- Homogeneous fits throughout, which is why the panel arm is uninformative here.
+  A heterogeneous version would test something different and is worth running.
+- The normalization is imposed only in the reservation value. A researcher who
+  additionally normalized $\sigma_\xi$ would produce different, probably larger,
+  distortions.

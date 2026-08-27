@@ -1,21 +1,195 @@
 ## Introduction {#sec-intro}
 
-<!--
-TODO: draft. Left intentionally blank.
+Conjoint analysis answers a question that begins after the shopping has already
+happened. A respondent is shown a handful of alternatives, described on the
+attributes the analyst chose, and asked which one they would buy. From repeated
+choices we recover preferences, and from preferences we simulate share. The
+method is forty years old, industrially standardized, and very good at what it
+does.
 
-Elements to hit when drafting (from the project brief, not yet prose):
-  - Conjoint measures preference among alternatives the respondent was shown;
-    it is silent on what she would have looked at and what looking costs.
-  - The two-stage list-then-detail architecture is how many categories are
-    actually shopped; the instrument reproduces it.
-  - The nesting claim is load-bearing: conjoint is the zero-search-cost
-    special case of SIFT. Non-adversarial, roughly true, and testable.
-  - Two technical claims: (i) within-respondent panel of search spells
-    supports individual-level preference AND search-cost estimates;
-    (ii) exogenous variation in position and information architecture is
-    designed in rather than found.
-  - One-line version: conjoint tells you what people prefer once they are
-    looking; SIFT tells you what they look at, what it costs them to look,
-    and what they never see at all.
-  - Contributions list, then roadmap paragraph pointing at each section.
+What it does not do is ask what the respondent would have *looked at*. Every
+alternative in a conjoint task is fully described and costlessly examined; the
+respondent evaluates all of them because the instrument gives them no
+alternative. Real purchases rarely work that way. A shopper faces a list of
+options carrying a few visible attributes — a name, a price, an image — clicks
+into a handful to learn the rest, and buys from among those. Most of the
+category is never opened at all. Conjoint has no representation of that
+behaviour and therefore no way to distinguish an alternative that was rejected
+from one that was never seen.
+
+### What we propose
+
+Conjoint analysis was, in essence, the discrete choice model brought into a
+survey. The econometric object already existed; the contribution was an
+instrument that manufactured the variation the model needed, by design rather
+than by luck, and a set of conventions for fielding and estimating it at
+commercial scale.
+
+**We do the same thing for the sequential search model.** SIFT — Search
+Intensity and Feature Tradeoffs — is a survey instrument in which the respondent
+faces a landing page of alternatives showing a few attributes, clicks through to
+product pages to reveal the rest, and then buys one or none. Each respondent
+completes a sequence of such tasks. Position on the landing page, the content of
+the landing page, and the content of each product page are randomized in every
+task. The resulting click-and-choose data are fit with a sequential search model
+in the tradition of @Weitzman_1979, and the estimates include both the
+preference parameters conjoint delivers and a search cost, for which conjoint
+has no analogue.
+
+The econometric object again already exists. Structural search models have been
+estimated on clickstream and platform data for two decades
+[@Kim_2010; @Chen_Yao_2017; @Ursu_2018; @Morozov_2021]. What has not existed is
+an instrument that designs the variation those models need instead of waiting
+for a platform to supply it. @Ursu_2018 obtained randomized rankings once, from
+Expedia, as a rare gift. In a survey, that randomization is free and available
+in every task.
+
+### Conjoint is the zero-search-cost special case
+
+The relationship between the two methods is nesting, not competition. Drive the
+search cost to zero in a sequential search model and every alternative is
+inspected, choice is made over fully realized utilities, and what remains is a
+standard choice-based conjoint model.
+
+This matters for three reasons. It is non-adversarial: we are generalizing the
+industry workhorse rather than attacking it, and a client who has bought conjoint
+for a decade need not concede that they were wrong. It is roughly true rather
+than a rhetorical convenience. And most usefully, it makes the choice between
+methods an *empirical question* rather than a matter of taste. Estimate the
+search cost and test whether it is distinguishable from zero. If it is not,
+conjoint was well specified for that category and nothing has been lost. If it
+is, conjoint was misspecified and the evidence is in hand.
+
+### What SIFT buys
+
+**It separates non-purchase into two diagnoses that conjoint cannot tell apart.**
+When a brand underperforms, conjoint can only report that it was not valued
+enough. SIFT distinguishes alternatives that were never opened from those that
+were opened and rejected. These have opposite remedies — distribution,
+placement, and media on one side; product and price on the other — and a method
+that cannot separate them will send a manager to the wrong lever roughly
+whenever consideration rather than preference is binding.
+
+**It recovers preferences that conjoint systematically understates.** This is
+sharper than "conjoint is silent about search." In our simulations, conjoint
+recovers preferences for attributes visible *before* a click accurately at any
+search cost, but attenuates preferences for attributes revealed *after* a click
+in proportion to how little of the choice set gets inspected. At an inspection
+rate close to what @Yavorsky_2021 observes in the field, conjoint attenuates
+post-click part-worths by **64%** (@sec-simstudy). An analyst studying a category
+with real search frictions would conclude that experience attributes barely
+matter, when in fact respondents never saw them.
+
+**It answers placement and merchandising questions that conjoint cannot pose.**
+What happens to share if we move from position six to position two? What belongs
+on the listing tile versus the detail page? These are live questions for any
+marketplace, retail media network, app store, or streaming carousel, and they
+are questions about *what gets seen*, not about what is preferred once seen.
+Because SIFT randomizes position and page content by design, they are answered
+directly rather than assumed away.
+
+**It absorbs large attribute spaces.** Conjoint degrades as attributes
+accumulate: respondent burden rises, number-of-levels effects intrude, and
+simplification heuristics contaminate the very tradeoffs the design was built to
+measure. SIFT distributes a large attribute space across two pages and lets
+respondents select what to examine. Non-attention stops being noise to be
+minimized and becomes data to be modelled.
+
+**It prices friction, and friction is a lever managers control.** The search
+cost is estimated in utility units and convertible to money. Fewer clicks to a
+decision, better filters, better defaults, and better placement are all
+interventions on search cost, and SIFT is the only preference-measurement
+instrument that quantifies what they are worth. Conjoint offers nothing here,
+because in conjoint search is free.
+
+**It looks like shopping.** The task is a listing page and some product pages.
+Respondents recognize it, which helps engagement and data quality, and clients
+recognize it, which helps adoption. A conjoint task, by contrast, is a grid that
+resembles no purchase anyone has ever made.
+
+### What makes it work
+
+Three design choices do the identification work, and each replaces an assumption
+that field studies must defend with a fact the analyst controls.
+
+Position is randomized within every task, so the exogenous search-cost shifter
+that @Yavorsky_2021 had to argue for — driving distance, defended at length —
+is true by construction. The product page is written by the analyst, so the
+attributes a click reveals are *observed* rather than treated as an unobserved
+shock; preferences over post-click attributes are therefore identified in
+exactly the way conjoint part-worths are. And each respondent completes many
+tasks, yielding a panel of search spells where field data typically offers one,
+which is what supports individual-level estimates rather than population
+averages [@Morozov_2021].
+
+Together these let us estimate the standard deviation of the post-search
+component rather than normalizing it to one, as most of the literature must.
+That normalization is not innocuous: @Yavorsky_2021 estimates it at 8.16 against
+the conventional value of one, and shows that imposing one reverses the sign of a
+search-cost coefficient and understates a counterfactual by a factor of three to
+four. @sec-estimation develops these arguments and reports the design checks that
+should accompany every SIFT study.
+
+### What it costs
+
+We would rather state the costs plainly than have a referee find them.
+
+**Complexity.** SIFT is a new instrument fit with an unfamiliar model. Conjoint
+has four decades of accumulated norms — sample-size rules of thumb, design
+efficiency criteria, validated share simulators, benchmarks by category — and
+SIFT has none of that yet. It is roughly where conjoint was in the mid-2000s:
+the statistical machinery works, but the practitioner scaffolding that makes a
+method safe in ordinary hands has not been built. Anyone adopting SIFT now is
+adopting a method, not a product.
+
+**Estimation.** Sequential search likelihoods are expensive. Where a
+hierarchical Bayes conjoint model fits in minutes, a comparably sized SIFT model
+takes hours: our implementation measures roughly eleven hours for a
+commercial-scale fit, and only when the sampler is parallelized across
+respondents — single-threaded it is eight times that. We regard this as an
+engineering problem rather than a fundamental one, and it is improving quickly:
+@Chung_2025 report speedups of one to two orders of magnitude over the
+kernel-smoothed simulators that dominated the literature. But it is a real
+constraint on iteration today.
+
+**Precision on the search cost.** Preferences are recovered cleanly at
+commercial sample sizes. The *level* of the search cost is harder, and carries a
+finite-sample bias that declines slowly in both sample size and simulation draws
+(@sec-simstudy). This is a known property of simulated maximum likelihood
+estimation of search models rather than a feature of our instrument —
+@Yavorsky_2021 reports the same of his own simulations — but it means that
+conclusions about search-cost *magnitudes* demand larger samples than conclusions
+about preferences, and we quantify how much larger.
+
+**A behavioural assumption.** The model assumes respondents search optimally in
+the sense of @Weitzman_1979. The experimental evidence on that assumption is
+mixed: laboratory subjects tend to search less than the optimum, exhibit order
+effects, and show sensitivity to sunk costs the theory says should be ignored.
+This is the most substantive scientific risk to the approach, and it applies with
+equal force to the structural search literature SIFT builds on. Our position is
+that the model should be judged as an approximation that recovers useful
+quantities, not as a claim about cognition, and that its predictions should be
+checked against holdout behaviour rather than assumed. @sec-discussion returns to
+this.
+
+### Roadmap
+
+@sec-lit positions SIFT against the search, conjoint, and consideration-set
+literatures. @sec-instrument describes the instrument. @sec-model develops the
+model, and @sec-estimation treats identification and estimation. @sec-simstudy
+reports a simulation study establishing what the design recovers and at what
+sample sizes. @sec-analysis presents an empirical application, @sec-managerial
+draws out what the estimates support that conjoint cannot, and @sec-discussion
+takes up limitations.
+
+<!--
+TODO before circulating:
+  - the 64% attenuation figure and the sample-size claims point at @sec-simstudy,
+    which is still being written from the factorial in R/out/. Reconcile the
+    numbers once that section exists.
+  - the empirical application does not exist yet; soften or cut the roadmap
+    sentence on @sec-analysis if it is still absent at submission.
+  - the behavioural-evidence paragraph cites no one. Pull the specific
+    experimental papers from sections/litreview.qmd once their citations are
+    checked, rather than asserting the pattern.
 -->

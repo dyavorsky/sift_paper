@@ -1,38 +1,178 @@
 ## Discussion {#sec-discussion}
 
+### What the Nesting Result Changes {#sec-disc-nesting}
+
+The proposition in @sec-model-nesting does more work than a technical
+observation usually does, and it is worth separating what it settles from what
+it does not.
+
+It settles the framing. SIFT does not compete with conjoint; it contains it.
+A practitioner who has bought conjoint for a decade is not being told they were
+wrong, and a category in which search costs turn out to be negligible is a
+category in which conjoint was the right tool and remains so. The nesting makes
+that a finding rather than a concession.
+
+It also converts a methodological argument into an empirical one. "Should this
+study be a conjoint or a SIFT" is answerable from SIFT data and not from
+conjoint data, which is an asymmetry worth being honest about: the richer
+instrument can diagnose whether the simpler one was adequate, but not the
+reverse. The cost of finding out is the cost of fielding SIFT.
+
+What it does not settle is whether the *test* is easy. As @sec-est-nesting
+develops, the null sits at the boundary of the parameter space, so the
+comfortable $\chi^2$ machinery does not apply and the test has to be built from
+observable implications or a simulated reference distribution. We regard the
+sharpest of those implications as the simplest: under zero search costs, nobody
+leaves alternatives unopened. That is checkable before any model is fit.
+
+### Do Survey Clicks Measure Anything Real? {#sec-disc-clicks}
+
+This is the first question a referee will ask and we would rather ask it
+ourselves.
+
+Clicking in a survey is nearly free. It costs a second of attention and no money,
+whereas inspecting a product in a real category may cost a drive across town, a
+phone call, or an hour of reading. There is therefore no reason to expect the
+estimated *level* of search cost from a SIFT study to transfer to the field, and
+we do not claim that it does.
+
+Several mitigations are available and we regard them as design parameters rather
+than fixes. Incentive alignment in the tradition of @Ding_2005 and @Ding_2007
+raises the stakes of the choice itself. Artificial latency on the product page
+makes a click cost time. An explicit click budget makes it cost an alternative
+opportunity. Denominating cost in time rather than utility makes the units
+comparable across studies even if not across contexts. Each of these changes what
+the estimated search cost *means*, and a study should say which it used.
+
+The standing defence, and we think it is the right one, is that relative and
+comparative statements transfer even when levels do not. This is precisely the
+defence conjoint has made for four decades about utilities that are not
+interpretable in isolation, and it is defensible ground — but it should be stated
+before a reviewer states it, and it constrains the claims a SIFT study should
+make. @sec-managerial-friction accordingly recommends ratios as the headline
+quantity.
+
+### Rational Expectations About the Unopened {#sec-disc-expectations}
+
+Weitzman's solution requires the respondent to know the distribution of what a
+click will reveal. At the start of a survey she does not: she has never seen this
+category rendered this way, with these attributes at these levels.
+
+Two responses are available. A practice block, unscored, lets the respondent
+learn the environment before the data collection begins — the same logic that
+motivates warm-up tasks in conjoint. Alternatively, learning can be modelled
+across tasks, at the cost of abandoning the independence assumption in
+@eq-resp-likelihood that makes the panel multiply.
+
+We take the first route and treat the second as a robustness check, but we note
+the tension honestly: a practice block assumes learning completes quickly, and
+whether it does is testable by looking for trends in click counts and search
+costs across task order. @sec-analysis reports that diagnostic. If search costs
+decline systematically across tasks, the practice block was insufficient and the
+learning model becomes necessary rather than optional.
+
+### Do Respondents Follow the Reservation Rule? {#sec-disc-behavioural}
+
+The experimental record reviewed in @sec-lit-lab is mixed and the deviations are
+systematic: too little search relative to the optimum, order effects, and
+sensitivity to sunk costs the theory says should be ignored. @Caplin_2011 in
+particular show people stopping before they have found the best available
+option, which a reservation-value model will absorb as an inflated search cost
+rather than recognize as a different rule.
+
+This is the deepest scientific risk in the approach, and it is worth being clear
+that it is not *our* risk alone: it applies with equal force to the entire
+structural search literature SIFT builds on, which has estimated Weitzman models
+on field data for two decades without resolving it.
+
+Our position has three parts. First, the model should be judged as an
+approximation that recovers useful quantities, not as a claim about cognition.
+Second, its predictions should be checked against holdout behaviour rather than
+assumed — a SIFT study can hold out tasks and ask whether the fitted model
+predicts click counts, click order, and purchase in data it did not see. Third,
+a satisficing benchmark should be reported alongside, so a reader can see how
+much of the fit is doing work the simpler rule would have done anyway. Where the
+model loses to satisficing, the honest conclusion is that search costs are not
+identified in that category rather than that they are small.
+
+### Precision, Runtime, and What They Constrain {#sec-disc-estimation}
+
+Two practical constraints shape what a SIFT study can currently claim.
+
+**Precision on search-cost levels.** Preference parameters recover cleanly at
+commercial sample sizes. Search-cost levels carry a finite-sample bias that
+declines slowly in both sample size and simulation draws (@sec-simstudy). This
+is a known property of simulated maximum likelihood estimation of search models
+rather than a feature of our instrument — @Yavorsky_2021 reports the same of his
+own simulations, citing @Honka_2014 and @Ursu_2018 — but it means conclusions
+about search-cost *magnitude* demand more data than conclusions about
+preference, and a study should size itself against whichever claim it intends to
+make.
+
+**Runtime.** A hierarchical Bayes conjoint model fits in minutes. A comparably
+sized SIFT model takes hours: our implementation measures roughly eleven hours
+for a commercial-scale fit, and only when the sampler is parallelized across
+respondents. We regard this as an engineering constraint rather than a
+fundamental one, and the trajectory is favourable — @Chung_2025 report speedups
+of one to two orders of magnitude over the kernel-smoothed simulators that
+dominated the previous decade. But it constrains iteration today, and iteration
+is how instruments improve.
+
+### Where Conjoint Remains the Right Tool {#sec-disc-conjoint}
+
+We would rather draw this boundary ourselves than have it drawn for us.
+
+Conjoint remains the better instrument for feature-level willingness-to-pay on a
+defined bundle, where there is nothing to search over and the question is purely
+one of tradeoffs. It remains better for new-product configuration when the
+alternative does not yet exist in any market and no listing page could be
+constructed for it. It remains better when an orthogonal design is needed for
+clean, low-variance part-worths, since SIFT deliberately lets respondents choose
+what to examine and therefore gives up balance. It remains better where a mature
+share simulator is the deliverable and the client's decision process is built
+around it. And it remains better in any study where established norms,
+benchmarks, and comparability to prior waves matter more than novelty.
+
+Most honestly: conjoint is understood, defensible, cheap to estimate, and
+supported by four decades of accumulated practice. SIFT is none of those things
+yet. A method that is right in principle and unfamiliar in practice is a real
+cost to a research buyer, and we do not think it is served by pretending
+otherwise.
+
+### Extensions {#sec-disc-extensions}
+
+Several extensions follow directly from the model and are, we think, more
+tractable than they appear.
+
+**Filters and sorts as search actions.** @Chen_Yao_2017 treat refinement as part
+of the search process rather than as a given. In a SIFT instrument the filter and
+sort controls are ours to design, so refinement could be observed and priced
+alongside inspection.
+
+**Discovery of alternatives.** @Greminger_2022 relaxes the assumption that the
+choice set is known at the outset. A listing page that paginates or lazily loads
+is exactly that setting, and it is a small change to the instrument.
+
+**Sequential versus fixed-sample, respondent by respondent.** As
+@sec-model-alternatives notes, the task panel makes this test available at the
+individual level, where the literature has been able to run it only at the
+population level. "What fraction of respondents search sequentially" is a
+question we can answer and nobody has.
+
+**Attribute-level search.** Our model has respondents searching across
+*alternatives*; the Mouselab literature has subjects searching across
+*attributes* of displayed alternatives. Both happen in real shopping. A model
+that permits either would be a genuine extension rather than a variation, and the
+instrument already records enough to identify which is occurring.
+
 <!--
-TODO: awaiting guidance. Includes the limitations that should be stated
-before a referee states them.
-
-Proposed scope:
-
-  - Do survey clicks measure anything real? Clicking is nearly free, so
-    estimated search-cost LEVELS will not transfer to the field. Mitigations
-    to weigh: incentive alignment, artificial latency, an explicit click
-    budget, a time-denominated cost. Fallback: relative and comparative
-    statements transfer even when levels do not — which is the standing
-    defense of conjoint utilities, so it is defensible ground. Say it before
-    a reviewer does.
-  - Rational expectations about the unopened alternative. Weitzman requires
-    the respondent to know the distribution behind each click, which she does
-    not at the start of a survey. Implies a practice block, and possibly
-    modeling learning across tasks.
-  - Do respondents follow the reservation rule? The lab literature says
-    partially (@sec-lit-lab). Report fit against a satisficing alternative.
-  - Thin identification at commercial task counts.
-  - Where conjoint remains the right tool: feature-level willingness-to-pay
-    for a defined bundle, new-product configuration with nothing to search,
-    orthogonal designs for clean part-worths, mature share simulators,
-    categories with no list-screen, and any study where established norms and
-    benchmarks matter more than a new method.
-  - Extensions: filters and sorts as search actions [@Chen_Yao_2017],
-    discovery of alternatives [@Greminger_2022], search across sessions.
+TODO before circulating:
+  - @sec-disc-estimation cites Honka_2014 and Ursu_2018 as reported by Yavorsky.
+    Verify those are the papers he cites for SMLE bias rather than paraphrasing
+    from memory.
+  - @sec-disc-expectations promises a learning diagnostic in @sec-analysis, which
+    does not exist yet. Keep the promise or cut the sentence.
+  - the claim that ratios are more robust than levels to finite-sample bias is a
+    conjecture. It is cheap to test in @sec-simstudy and should be tested before
+    it is asserted here or in @sec-managerial-friction.
 -->
-
-### What the Nesting Result Changes
-
-### Implications for Practice
-
-### Limitations
-
-### Where Conjoint Remains the Right Tool

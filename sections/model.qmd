@@ -166,55 +166,202 @@ throughout and write $\log \sigma_\varepsilon$ explicitly where the log scale is
 
 ### Optimal Search Policy {#sec-model-policy}
 
-<!--
-TODO. Weitzman's three rules, stated in the notation above and with the task
-subscript carried:
+@Weitzman_1979 solves the problem posed by @eq-utility and @eq-cost. What makes it
+tractable is that $\resv_{itj}$ depends only on alternative $j$'s own parameters: it
+is computed once, before any searching, and never revised in light of what other
+alternatives turn out to be worth. Optimal behaviour is then characterized by four
+conditions, which we state in the notation of @sec-model-setup with the task
+subscript carried throughout.
 
-  Selection:    z_{ith} >= max over not-yet-searched of z_{itk}
-  Continuation: z_{ith} >= max over already-searched (incl. j=0) of u_{itk}
-  Stopping:     max over searched (incl. j=0) u_{ith} >= max over unsearched z_{itl}
-  Choice:       u_{it y_it} >= max over searched (incl. j=0) of u_{ith}
+Write $h = 1,\dots,H_{it}$ for the order in which product pages were opened, so that
+$h=1$ denotes the first page opened, and recall that the no-purchase option $j=0$ is
+available from the outset and never requires a click.
 
-Note explicitly: the first click is COSTLY. Because we observe respondents who exit
-without clicking, we do not need the free-first-search assumption that the
-conditional-on-search literature relies on, and the effective-value and welfare
-expressions of @Ursu_Seiler_Honka_2024 §3 remain available to us.
--->
+**Selection.** Product pages are opened in decreasing order of reservation value, so
+that every alternative inspected has a reservation value at least as high as every
+alternative left unopened,
+
+$$
+\resv_{ith} \;\ge\; \max_{l \in \Sbar_{it}} \resv_{itl}
+\qquad \text{for } h = 1,\dots,H_{it}.
+$$ {#eq-selection}
+
+**Continuation.** The respondent opens the $h$-th page only if its reservation value
+exceeds the best utility realized so far, the no-purchase option included,
+
+$$
+\resv_{ith} \;>\; \max\left\{u_{it0},\; \max_{k<h} u_{itk}\right\}
+\qquad \text{for } h = 1,\dots,H_{it}.
+$$ {#eq-continuation}
+
+**Stopping.** Search ends when the best realized utility exceeds every remaining
+reservation value,
+
+$$
+\max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\} \;\ge\; \max_{l \in \Sbar_{it}} \resv_{itl}.
+$$ {#eq-stopping}
+
+**Choice.** The respondent buys the best alternative among those inspected, with the
+no-purchase option always in contention,
+
+$$
+u_{it y_{it}} \;\ge\; \max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\}.
+$$ {#eq-choice}
+
+Two features of this system are specific to SIFT and worth drawing out.
+
+**The first click is costly.** Much empirical work conditions on consumers who
+searched at least once, which forces the assumption that the first search is free —
+otherwise the sample is selected on an outcome the model is trying to explain.
+Because a SIFT respondent may leave a task without opening anything, and we record
+that, $H_{it} = 0$ is an observed outcome rather than a truncation. @eq-continuation
+at $h=1$ then carries real content: it says the best reservation value on the listing
+page beat the no-purchase option. This is not a technicality. It means the
+effective-value and welfare expressions of @Ursu_Seiler_Honka_2024 §3 remain
+available without the free-first-search patch, and it is one of the places where
+designing the instrument buys something a field study cannot easily obtain.
+
+**Continuation collapses to a single binding constraint.** @eq-continuation appears
+to impose $H_{it}$ separate restrictions, but reservation values decrease along the
+search order by @eq-selection, so the tightest is the last. Continuation is therefore
+equivalent to
+
+$$
+\max\left\{u_{it0},\; u_{it1},\; \dots,\; u_{it,H_{it}-1}\right\} \;<\; \resv_{it H_{it}},
+$$
+
+a single inequality involving the reservation value at the final click only. This is
+not merely tidy — it is what keeps the likelihood in @sec-model-likelihood tractable,
+and overlooking it is an easy and silent implementation error.
 
 ### Likelihood {#sec-model-likelihood}
 
-<!--
-TODO. Differenced conditions, following the ordering of @Ursu_Seiler_Honka_2024
-(nu_1 selection, nu_2 continuation, nu_3 stopping, nu_4 choice) -- note this is
-the OPPOSITE labelling from @Yavorsky_2021, where nu_1 is continuation and nu_2 is
-selection. Do not mix them.
+The four conditions are inequalities in the unobserved shocks $\mu_{itj}$ and
+$\varepsilon_{itj}$, so the probability of an observed task outcome is the measure of
+the region in which all of them hold. Following @Ursu_Seiler_Honka_2024 we write each
+condition as a difference required to be non-negative and index them
+$\nu_1,\dots,\nu_4$ in the order selection, continuation, stopping, choice.
 
-The task panel multiplies: L_i = prod over t of L_it. State the independence
-assumption across tasks and point forward to the learning/fatigue diagnostics.
--->
+::: {.callout-warning}
+## The $\nu$ labelling is not standard across papers
+
+@Yavorsky_2021 uses the opposite convention, with $\nu_1$ continuation and $\nu_2$
+selection. Readers moving between the two literatures should check the labelling
+before comparing smoothing parameters or reported diagnostics. The crosswalk in
+@sec-appendix-notation records both.
+:::
+
+The task-level probability is
+
+$$
+\Pr\left(\Sset_{it}, y_{it} \mid \bftheta_i\right)
+= \int \mathbb{1}\left\{\nu_1 \ge 0,\ \nu_2 > 0,\ \nu_3 \ge 0,\ \nu_4 \ge 0\right\}
+  \, dF(\boldsymbol\mu_{it}, \boldsymbol\varepsilon_{it}),
+$$ {#eq-task-likelihood}
+
+which has no closed form. @sec-estimation takes up how it is computed. Here we record
+only the structural fact that determines what is computationally possible.
+
+Conditional on the observed purchase $y_{it}$, all four conditions are a *conjunction*
+of linear inequalities. @eq-stopping as written is a statement about a maximum and so
+in general a union of events, which is not an orthant and not directly amenable to the
+standard simulators. But @eq-choice names which alternative attains that maximum, and
+once it is named, stopping becomes $u_{it y_{it}} \ge \resv_{itl}$ for each
+$l \in \Sbar_{it}$ separately. Conditioning on the choice converts the one genuinely
+awkward condition into an orthant, which is what makes a GHK-type simulator available
+at all.
+
+**The panel multiplies.** Respondent $i$'s contribution is
+
+$$
+\mathcal{L}_i(\bftheta_i) \;=\; \prod_{t=1}^{T} \Pr\left(\Sset_{it}, y_{it} \mid \bftheta_i\right),
+$$ {#eq-resp-likelihood}
+
+and the sample likelihood integrates $\mathcal{L}_i$ over the heterogeneity
+distribution governed by $\bfOmega$. Independence across tasks is an assumption rather
+than a consequence, and it does real work: it is what turns $T$ tasks into $T$ times
+the information rather than one long correlated spell.
+
+The design earns that assumption instead of asserting it. Because attribute profiles
+are drawn fresh in every task rather than being a fixed set of named alternatives
+recurring throughout (@sec-instrument-randomization), a profile in task $t+1$ genuinely
+is a new object, with no match value carried forward from task $t$ to be rationalized
+as learning. The contrast is instructive: @Morozov_2021 estimate an MA(1) carryover of
+roughly $0.3$ across sessions separated by weeks, and SIFT tasks are separated by
+minutes, so a design with recurring alternatives would face a substantially larger
+carryover and would have to model it. What remains is respondent-level learning and
+fatigue *across* tasks, which we test for directly rather than assume away.
 
 ### Conjoint as the Zero-Search-Cost Special Case {#sec-model-nesting}
 
-<!--
-TODO. The load-bearing proposition. As c -> 0, g(c) -> infinity, every reservation
-value exceeds every realized utility, the search set is the full choice set, and the
-choice rule reduces to argmax over fully realized utilities -- a standard
-choice-based conjoint model over (X, L) jointly. State as a proposition with proof
-in @sec-appendix.
+::: {.callout-note}
+## Proposition 1
 
-Note the corollary that makes it testable rather than rhetorical: conjoint is the
-boundary of the SIFT parameter space, so "is the search cost distinguishable from
-zero" is a testable restriction. Flag the boundary-testing subtlety -- the null sits
-at the edge of the parameter space, so the usual chi-squared reference distribution
-does not apply.
--->
+As $\cost_{itj} \to 0$ for all $j$, the model of @sec-model-setup converges to a
+standard choice-based conjoint model over the joint attribute vector
+$(\bfX_{itj}, \bfL_{itj})$: the search set becomes the full choice set,
+$\Sset_{it} \to \Jset_{it}$, and the choice rule reduces to
+$y_{it} = \arg\max_{j \in \Jset_{it} \cup \{0\}} u_{itj}$ over fully realized
+utilities.
+:::
+
+The argument follows from the structure of the reservation value. As
+$\cost_{itj} \to 0$ the argument of $g^{-1}$ goes to zero and $\resv_{itj} \to \infty$,
+so every reservation value eventually exceeds every realized utility.
+@eq-continuation then holds at every $h$, search never stops before the listing page
+is exhausted, and @eq-choice becomes an unrestricted argmax over all alternatives with
+their post-search components resolved.
+
+What matters is the corollary. Conjoint is not merely *similar* to SIFT at low search
+costs; it is the **boundary of the SIFT parameter space**. Whether a category should
+be studied with conjoint or with SIFT therefore has an empirical answer rather than a
+methodological one: estimate the search cost and test whether it is distinguishable
+from zero. If it is not, conjoint was correctly specified and nothing was lost by
+fielding the richer instrument. If it is, conjoint was misspecified for that category,
+and the SIFT estimates say by how much and in which direction.
+
+::: {.callout-important}
+## The test is not a Wald test
+
+Because conjoint sits at the *boundary* rather than the interior of the parameter
+space — $\cost \to 0$ corresponds to $\log \cost \to -\infty$, and to
+$g(\cost) \to \infty$ under the alternative parameterization — the null is not an
+interior point and the usual $\chi^2$ reference distribution does not apply. The
+restriction must be tested against observable implications or against a simulated
+reference distribution. @sec-est-nesting develops this.
+:::
 
 ### Alternative Search Protocols {#sec-model-alternatives}
 
+Sequential search is a modelling choice rather than a fact, and two alternatives
+deserve explicit treatment because each would change what the estimates mean.
+
+**Fixed-sample search.** In the Stigler tradition the consumer commits in advance to
+inspecting $n$ alternatives and then chooses the best, rather than deciding after each
+inspection whether to continue. The two protocols suit different environments —
+sequential fits click-through-and-inspect, fixed-sample fits "get three quotes" — and
+they are empirically distinguishable. @DeLosSantos_2012 and @Honka_Chintagunta_2017
+both test one against the other, and both must do so at the population level, because
+a single search spell per consumer carries too little information to discriminate
+individually.
+
+A task panel changes that arithmetic. With $T$ observations of the same respondent
+searching, the test can in principle be run respondent by respondent, and the answer
+may differ across people. We regard "what fraction of respondents search sequentially"
+as a question SIFT is unusually well placed to answer, and take it up in
+@sec-discussion rather than claim it here.
+
+**Satisficing.** @Caplin_2011 use choice-process data to show that people frequently
+stop before finding the best available option — behaviour a reservation-value model
+will absorb into an inflated search cost rather than recognize as a different stopping
+rule. This is the sharpest behavioural alternative to @eq-stopping, and it is
+observationally close enough that we do not claim to adjudicate it. Our position is
+the one set out in @sec-lit-lab: the model is an approximation whose predictions
+should be checked against holdout behaviour, and a satisficing benchmark is the right
+comparison to report alongside it.
+
 <!--
-TODO. Fixed-sample (Stigler) as the competing protocol, satisficing (@Caplin_2011)
-as the competing behavioral rule. What the task panel buys: @DeLosSantos_2012 and
-@Honka_Chintagunta_2017 test sequential against fixed-sample at the population
-level; with T tasks per respondent the test can in principle be run respondent by
-respondent.
+TODO: Proposition 1 is stated with a sketch rather than a proof. Either write the
+formal argument into @sec-appendix and restore a pointer to it, or leave the sketch
+and drop the claim to a formal proposition.
 -->

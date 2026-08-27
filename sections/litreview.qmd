@@ -1,252 +1,161 @@
 ## Related Literature {#sec-lit}
 
-::: {.callout-warning title="Citation verification status — remove before circulation"}
-Every reference in this section was reconstructed from memory without database
-access and is **unverified**. Confidence flags follow each entry:
-**[H]** confident the paper exists and the details are roughly right;
-**[M]** confident the paper exists, unsure of journal, year, or coauthors;
-**[L]** believe something like this exists, may be conflating sources.
-Treat **[L]** items as search leads, not references. Nothing here should reach a
-referee, a proposal, or a client before it is checked against the record.
-The three entries marked **novelty gate** determine whether the paper's central
-claim survives; read those first.
-:::
+SIFT sits between two literatures that have not had much to say to each other.
+Structural search models are estimated on data that platforms happen to
+generate; preference measurement designs data deliberately but assumes away
+search entirely. This section covers the work SIFT actually builds on, organized
+around four questions: what the sequential search model is and how it is
+estimated, what field data can and cannot identify, whether people search the
+way the model says, and how marketing has handled limited consideration until
+now.
 
-<!--
-Structure of this section: five literatures plus a positioning subsection.
-Currently bulleted notes, not prose. Convert to prose after the citation
-verification pass and after the novelty ruling on @sec-lit-preference.
--->
+A fuller annotated map of the surrounding literatures — including work SIFT
+touches but does not depend on — is in @sec-appendix-lit.
 
-### Optimal Sequential Search {#sec-lit-theory}
+### The Sequential Search Model and Its Estimation {#sec-lit-model}
 
-The theoretical backbone. The instrument's data-generating process is the
-Weitzman protocol run inside a survey.
+The theoretical foundation is @Weitzman_1979, which solves the problem of
+inspecting alternatives one at a time when inspection is costly and the
+distribution of what inspection will reveal is known. The solution is a
+reservation value for each alternative, computed independently of every other
+alternative, together with three rules: inspect in decreasing order of
+reservation value, stop when the best realized utility exceeds the highest
+remaining reservation value, and choose the best alternative inspected. The
+independence of the reservation values is what makes the model tractable, and it
+is why the sequential search model rather than a general dynamic program is the
+workhorse of this literature.
 
-- **@Weitzman_1979, "Optimal Search for the Best Alternative," *Econometrica*. [H]**
-  The Pandora's box problem, and the model the instrument is built to estimate.
-  Each box has a known prize distribution and a known opening cost. The optimal
-  policy factors into three parts: a *reservation value* computed for each box
-  independently of every other box; a *selection rule* (open boxes in descending
-  reservation value); and a *stopping rule* (stop when the best realized prize
-  exceeds the highest remaining reservation value). The independence of the
-  reservation values is what makes the model estimable at survey scale.
-- **@Stigler_1961, "The Economics of Information," *Journal of Political Economy*. [H]**
-  The fixed-sample-size alternative: the consumer commits to $n$ searches up
-  front rather than deciding adaptively. The competing protocol, and the one
-  SIFT's panel structure may be able to test against sequential search
-  respondent by respondent.
-- **@McCall_1970, *Quarterly Journal of Economics*. [M]**
-  Reservation-wage formulation of sequential search with recall; the
-  labor-search ancestor of the marketing applications below.
+@Ursu_Seiler_Honka_2024 is the consolidation of two decades of empirical work
+with that model and the best single entry point to its current state. They set
+out the specification choices that matter — what the consumer knows before
+searching, whether search is sequential or simultaneous, how the outside option
+enters — and, importantly for us, they treat identification and estimation as
+first-class problems rather than implementation details. Their comparison of
+simulators is the reference point for @sec-estimation, and their discussion of
+what is normalized rather than estimated frames the central methodological claim
+of this paper.
 
-*Simultaneous versus sequential.* These are two competing protocols, not two
-descriptions of one thing. Sequential search fits click-through-and-inspect;
-fixed-sample search fits "get three quotes." @Honka_Chintagunta_2017 is the
-reference on distinguishing them empirically, and is directly relevant here
-because SIFT's within-respondent panel could run that test at the individual
-level rather than the population level.
+Estimation is genuinely hard, and the difficulty shapes what the literature has
+been able to do. The search and purchase probabilities have no closed form, so
+the likelihood must be simulated, and the model's inequality restrictions make
+naive frequency simulators both noisy and discontinuous in the parameters.
+@Kim_2010 supplies the closed-form reservation value under normally distributed
+match values that nearly every subsequent paper uses. Practice has since moved
+through kernel-smoothed accept–reject simulation, which is general but requires
+tuning constants that must themselves be calibrated, toward smoother and faster
+alternatives: @Ackerberg_2009 for importance sampling, and @Chung_2025 for a
+reformulation that makes the search cost rather than a pre-search taste shock
+the stochastic component of the reservation value, yielding a GHK-style
+recursive simulator that reports speedups of one to two orders of magnitude. We
+port and validate that estimator and compare it against our own in
+@sec-estimation.
 
-### Structural Search with Field and Clickstream Data {#sec-lit-field}
+### What Field Data Can and Cannot Identify {#sec-lit-field}
 
-Context rather than precedent: all of this work is observational or platform
-data with no designed instrument. SIFT's credibility with an economics audience
-depends on connecting to it cleanly.
+Empirical work with this model has relied on data that platforms produce for
+other reasons — clickstreams, booking logs, view-rank data — and the resulting
+identification arguments are constrained by what those data happen to contain.
 
-- **@Hong_Shum_2006, *RAND Journal of Economics*. [H]**
-  Recovers search costs from price distributions alone, without search data.
-  The extreme case of how little the field has typically had to work with.
-- **@Hortacsu_Syverson_2004, *Quarterly Journal of Economics*. [H]**
-  S&P 500 index funds. Search frictions with differentiated products, in a
-  setting where the products are nearly identical and the frictions are not.
-- **@Kim_2010, *Marketing Science*. [H]**
-  Amazon view-rank data for camcorders. One of the first structural search
-  models fit to online browsing data in marketing.
-- **@DeLosSantos_2012, "Testing Models of Consumer Search Using Data on Web
-  Browsing," *American Economic Review*. [H]**
-  Comscore browsing data; tests sequential search against fixed-sample search
-  and finds fixed-sample fits better in their setting. The empirical warning
-  shot for assuming the Weitzman protocol rather than testing it.
-- **@Koulayev_2014, *RAND Journal of Economics*. [M]**
-  Hotel search with click data; identification and estimation for
-  differentiated products.
-- **@Honka_2014, *RAND Journal of Economics*. [H]**
-  Auto insurance; separates search costs from switching costs. The template for
-  arguing that an estimated friction is the friction you claim it is.
-- **@Honka_Chintagunta_2017, *Marketing Science*. [M]**
-  Simultaneous or sequential; see above.
-- **@Chen_Yao_2017, *Management Science*. [M]**
-  Sequential search with refinement — filters and sorts modeled as search
-  actions — on Expedia clickstream data. Closest existing work in spirit to a
-  list-screen interface, and the natural precedent if the instrument later adds
-  filtering.
-- **@Ursu_2018, "The Power of Rankings," *Marketing Science*. [H]**
-  Expedia's randomized-position experiment. The cleanest source of exogenous
-  variation in the field literature, obtained once, as a rare gift from a
-  platform. The contrast with SIFT is direct: here the same variation is free,
-  designed in, and present in every task.
-- **@Ursu_2020, *Marketing Science*. [M]**
-  Search duration and time spent, rather than search incidence alone.
-- **@Yavorsky_2021, *Quantitative Marketing and Economics*. [H]**
-  Dealership visits in the U.S. auto market; identification of search costs
-  from observed search sets. (Author's own; the estimation code is an
-  implementation asset, see @sec-estimation.)
-- **@Bronnenberg_2016, "Zooming In on Choice," *Journal of Marketing Research*. [M]**
-  Descriptive clickstream evidence on how consumers actually move through
-  product pages. Face-validity evidence for the interface design in
-  @sec-instrument.
-- **@Ursu_Seiler_Honka_2024, *Quantitative Marketing and Economics*. [M] — novelty gate**
-  Framework and consolidation review of the sequential search model. Best
-  single entry point to the current state of model specification,
-  identification, and estimation practice; read first to establish what is
-  already settled.
-- **@Greminger_2022, *Management Science*. [M]**
-  Search with discovery of alternatives — the consumer does not know the full
-  choice set at the outset. Relevant to how much of the list-screen the
-  instrument reveals up front.
+Two papers define the frontier, and between them they show that the two things
+SIFT needs have never been available together.
 
-### Lab and Experimental Evidence on Search {#sec-lit-lab}
+@Morozov_2021 is the panel argument. Using multiple search sessions per
+consumer, they establish nonparametric identification of individual-level
+preferences *and* search costs, which cross-sectional search data cannot
+deliver. Their result is the closest existing warrant for SIFT's central claim,
+and it is also the source of an important caution: the argument takes the number
+of sessions per consumer to infinity, and with a mean of five sessions in their
+data they report hyperparameters rather than individual parameters. They also
+supply the cleanest available statement of *why* preferences and search costs
+separate at all — stopping decisions respond to the realized utilities of
+alternatives already inspected but not to their search costs, which are sunk —
+and turn it into an observable moment we can compute directly from a click
+sequence.
 
-Two experimental literatures that have barely spoken to each other, and the
-direct methodological precedent for running search as a designed task.
+@Yavorsky_2021 is the shifter argument. Estimating a search model on dealership
+visits in the U.S. auto market, they show that an *exogenous* and
+alternative-specific search-cost shifter — driving distance — allows the
+standard deviation of the match-value distribution to be estimated rather than
+normalized to one, as the literature had generally been forced to do. The
+consequences are large: they estimate it at 8.16, and fixing it to one reverses
+the sign of a search-cost coefficient and understates a counterfactual by a
+factor of three to four. Their setting has no panel, so heterogeneity is
+identified cross-sectionally or by parametric assumption.
 
-#### Does anyone follow the optimal rule?
+@Ursu_2018 illustrates the third constraint, which is that exogenous variation
+in this literature arrives as a gift rather than a design. She obtains randomized
+hotel rankings from a platform experiment and uses them to argue that position
+enters search costs rather than utility — an argument she has to construct from
+observational tests precisely because she cannot manipulate position herself.
+@Ursu_Zhang_Honka_2023 and @Morozov_2023 extend the model in directions that
+matter for what search costs mean, and @Greminger_2022 relaxes the assumption
+that the choice set is known at the outset.
 
-- **@Schotter_Braunstein_1981, *Economic Inquiry*. [M]**
-  Early sequential-search experiments with real incentives.
-- **@Hey_1987, "Still Searching," *Journal of Economic Behavior and
-  Organization*. [M]**
-  Subjects use rules of thumb rather than optimal reservation strategies.
-- **@Cox_Oaxaca_1989. [M]**
-  Finite-horizon search; broadly supportive of reservation-rule behavior with
-  noise. The more favorable read.
-- **@Sonnemans_1998. [M]**
-  Verbal-protocol evidence and classification of search strategies.
-- **@Brown_2011. [L]**
-  Real-time search in the laboratory and in the market.
+The pattern across all of this is that each study has one of the ingredients.
+SIFT's contribution is not a new estimator but an instrument in which the panel,
+the exogenous shifter, and control over what inspection reveals are all present
+simultaneously and by construction.
 
-*Net read.* Mixed, and this is the single largest scientific risk to the
-project. Behavior is directionally consistent with reservation-value logic, but
-the deviations are systematic rather than random: too little search relative to
-the optimum, order effects, and sensitivity to sunk costs. The paper should
-state this openly and early rather than let a referee find it.
+### Do People Search the Way the Model Says? {#sec-lit-lab}
 
-#### Information acquisition: Mouselab and eye-tracking
+This is the most substantive scientific risk to the approach, and it applies
+with equal force to every paper cited above. We state it here rather than in a
+limitations paragraph at the end.
 
-Mechanically, the SIFT task is a Mouselab information board wearing a
-commercial skin.
+Experimental tests of optimal sequential search go back to
+@Schotter_Braunstein_1981 and have accumulated steadily since. The verdict is
+mixed rather than negative. @Hey_1987 finds subjects using rules of thumb in
+place of optimal reservation strategies. @Cox_Oaxaca_1989, studying
+finite-horizon search, offer the more favourable reading: behaviour broadly
+consistent with reservation rules, plus noise. @Sonnemans_1998 uses verbal
+protocols to classify the strategies people actually report using, and
+@Brown_2011 compares search in the laboratory against search in a real market.
+The deviations that recur are systematic rather than random — too little search
+relative to the optimum, order effects, and sensitivity to sunk costs the theory
+says should be ignored.
 
-- **@Payne_1988; @Payne_1993, *The Adaptive Decision Maker*. [H]**
-  The Mouselab paradigm: information boards in which subjects click cells to
-  reveal attribute values, with the acquisition sequence recorded. Descriptive
-  and process-focused rather than structural.
-- **@Gabaix_2006, "Costly Information Acquisition," *American Economic
-  Review*. [H] — novelty gate**
-  A Mouselab-style experiment paired with a *structural* boundedly-rational
-  model (directed cognition) estimated on the acquisition data. The closest
-  existing template for the core maneuver — run an information-acquisition
-  experiment, fit a structural search-type model to the acquisition record.
-  Not Weitzman, but the same move.
-- **@Caplin_2011, "Search and Satisficing," *American Economic Review*. [H]**
-  Choice-process data showing that people stop before finding the best
-  available option. The satisficing alternative against which model fit should
-  be reported.
-- **@Reutskaja_2011, *American Economic Review*. [H]**
-  Eye-tracking evidence on search under time pressure with supermarket-style
-  displays.
+A second experimental literature has, for decades, run something mechanically
+very close to the SIFT task. The Mouselab paradigm of @Payne_1988 and
+@Payne_1993 presents subjects with an information board whose cells must be
+clicked to reveal attribute values, recording the acquisition sequence. That is,
+structurally, a listing page and a set of product pages. @Reutskaja_2011 adds
+eye-tracking evidence under time pressure with supermarket-style displays, and
+@Caplin_2011 uses choice-process data to show that people frequently stop before
+finding the best available option — the satisficing alternative against which
+any Weitzman-based model should be asked to justify itself.
 
-*Net read.* The experimental apparatus is well validated and has been for
-decades. What has largely not been done is fitting a Weitzman model to
-acquisition data and reporting search costs in interpretable units.
+@Gabaix_2006 is the closest existing precedent for what we do: a Mouselab-style
+acquisition experiment paired with a *structural* boundedly-rational model of
+directed cognition, estimated on the acquisition record. The model is not
+Weitzman's, but the maneuver is the same one — design an information-acquisition
+task, then fit a structural search model to what people acquire.
 
-### Information Search inside Preference Measurement {#sec-lit-preference}
+Our position is that the experimental apparatus has been well validated for
+decades, and what has largely not been done is fitting a Weitzman model to
+designed acquisition data and reporting search costs in interpretable units. We
+treat the model as an approximation to be checked against holdout behaviour
+rather than as a claim about cognition, and @sec-discussion returns to what
+follows if the approximation fails.
 
-The closest existing work in marketing, and the location of the sharpest threat
-to novelty.
+### Limited Consideration in Preference Measurement {#sec-lit-consideration}
 
-- **@Yang_2015, "A Bounded Rationality Model of Information Search and Choice
-  in Preference Measurement," *Journal of Marketing Research*. [M] — novelty gate**
-  Models within-task information search during a conjoint-style task using
-  eye-tracking data, with an optimal-stopping flavor. If one paper threatens
-  the contribution, it is this one. Read it first and read it carefully.
-- **@Yang_2018, *Marketing Science*. [M]**
-  Attention and information processing in incentive-aligned choice experiments.
-- **@Meissner_2016, *Journal of Marketing Research*. [M]**
-  Eye-tracking in conjoint; processing becomes measurably more efficient with
-  practice. Directly relevant because a multi-task panel will exhibit learning
-  across tasks, which appears in the model as drift in the search-cost
-  parameter (@sec-lit-lab, @sec-discussion).
+Marketing has long recognized that respondents do not evaluate everything, and
+has answered with models that *infer* screening from choice outcomes.
+@Gilbride_Allenby_2004 estimate conjunctive, disjunctive, and compensatory
+screening rules within a choice model. @Hauser_2010 model disjunctions of
+conjunctions, @Yee_2007 use greedoid methods for non-compensatory inference,
+@Dzyabura_2011 apply active machine learning to consideration heuristics, and
+@Hauser_2014 reviews the resulting body of work.
 
-*Distinction to preserve — and to verify before relying on it.* These papers
-study search *within* a task, over the attributes of profiles already displayed,
-mostly in service of better preference estimates. SIFT studies search *across
-alternatives*, in a two-stage list-then-detail architecture, where the search
-cost is itself a deliverable rather than a nuisance parameter. Related, but not
-the same object. Confirm this holds before building on it.
+The contrast with SIFT is clean and worth stating in one line: **these methods
+infer the consideration process as latent structure from what was chosen; SIFT
+observes it directly and prices it in units of search cost.** Inference versus
+observation. Both are legitimate, and the inference approach has the advantage
+of working on data already collected — but a latent screening rule cannot be
+manipulated, so it cannot answer what happens when the analyst changes what is
+easy to see.
 
-### Consideration Sets and Screening Rules in Conjoint {#sec-lit-consideration}
-
-The existing marketing answer to "people do not evaluate everything," and the
-comparison a conjoint-literate reader will reach for first.
-
-- **@Gilbride_Allenby_2004, *Marketing Science*. [H]**
-  A choice model with conjunctive, disjunctive, and compensatory screening
-  rules. The incumbent formulation.
-- **@Hauser_2010, *Journal of Marketing Research*. [H]**
-  Disjunctions of conjunctions; cognitive simplicity in consideration rules.
-- **@Yee_2007, *Marketing Science*. [M]**
-  Greedoid-based noncompensatory inference.
-- **@Dzyabura_2011, *Marketing Science*. [M]**
-  Active machine learning for consideration heuristics.
-- **@Hauser_2014, *Journal of Business Research*. [M]**
-  Review of consideration-set heuristics.
-
-*Sharpest one-line contrast.* This literature *infers* screening rules from
-choice outcomes, treating consideration as latent structure. SIFT *observes* the
-consideration process directly and prices it in units of search cost. Inference
-versus observation.
-
-### Conjoint Practice, Incentive Alignment, and Commercial Precedent {#sec-lit-practice}
-
-- **@Allenby_2019, *Handbook of the Economics of Marketing*. [H]**
-  Economic foundations of conjoint analysis; the statement of the workhorse
-  model that SIFT nests.
-- **@Marshall_Bradlow_2002, *JASA*. [H]**
-  A unified approach to conjoint analysis models; precedent for treating
-  distinct response formats as one likelihood family.
-- **@Ding_2005, *Journal of Marketing Research*; @Ding_2007, *Journal of
-  Marketing Research*. [H]**
-  Incentive alignment in conjoint. If estimated search costs are to carry
-  units that mean anything, the task needs real stakes; this is the precedent
-  for how to supply them.
-- **Sawtooth ACBC (adaptive choice-based conjoint).** Not an academic
-  reference, but the closest commercial product to a two-stage consideration
-  instrument: a screening section (must-haves, unacceptables) followed by a
-  choice tournament. Study as design precedent, and as the thing a client may
-  already have bought. <!-- TODO: cite the Sawtooth technical paper -->
-- **Virtual-shelf and shopper-simulation vendors.** Several field shelf-set
-  exercises with click data, reported descriptively (time to first click, click
-  share). No known case of backing a structural search model out of one.
-  **This is where prior art most likely hides; check directly.**
-  <!-- TODO: vendor scan, then decide whether this belongs in the paper at all -->
-
-### Positioning {#sec-lit-positioning}
-
-<!--
-TODO: prose. The four claims to be stated here as hypotheses the paper
-tests, not as established gaps:
-
-  1. A fieldable, productized survey instrument that yields Weitzman
-     search-cost parameters the way conjoint yields part-worths. Lab
-     analogues exist (@Gabaix_2006); a survey method with design norms
-     and reporting conventions does not.
-  2. Individual-level search costs identified from within-subject panel
-     data rather than cross-sectional heterogeneity.
-  3. Designed exogenous variation in position and information architecture
-     in every task, rather than obtained once from a platform (@Ursu_2018).
-  4. Segmentation on search behavior — how people shop — rather than on
-     preference. No prior art known.
-
-Each of these is a claim to disprove during the verification pass, not a
-result. Do not write them as results.
--->
+The broader economic foundations of conjoint are set out in @Allenby_2019, and
+@Ding_2005 and @Ding_2007 established incentive alignment as a way to make
+stated preference behave more like revealed preference — a concern SIFT inherits
+and does not solve.

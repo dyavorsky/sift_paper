@@ -1,28 +1,137 @@
 ## What the Model Delivers {#sec-managerial}
 
-<!--
-TODO: awaiting guidance. This section is what makes the method useful rather
-than merely estimable. It is also the most speculative of the placeholders,
-and may end up merged into @sec-analysis or @sec-discussion.
+A method earns its cost in what it lets a decision-maker do differently. This
+section sets out the quantities SIFT produces that conjoint cannot, and what
+each supports. The quantities themselves follow from the model of @sec-model and
+are computable from any fitted SIFT study; the *magnitudes* await the empirical
+application in @sec-analysis, and we are explicit throughout about which is
+which.
 
-Proposed scope:
+### Decomposing Non-Purchase {#sec-managerial-decomposition}
 
-  - Decomposing non-purchase into never-inspected and inspected-and-rejected.
-    The same observed outcome with opposite remedies — distribution,
-    placement, and media versus product and price.
-  - Position and merchandising counterfactuals: what happens to share when an
-    alternative moves from position 6 to position 2.
-  - Information-architecture counterfactuals: what belongs on the list-screen
-    versus the detail page.
-  - Friction counterfactuals: fewer clicks, better filters, better defaults.
-  - Segmentation on search behavior rather than on preference.
-  - Large attribute spaces: non-attention becomes data rather than noise.
--->
+The single most useful thing SIFT produces is a decomposition that conjoint
+cannot represent. When an alternative fails to sell, the model separates two
+outcomes that look identical in choice data:
 
-### Decomposing Non-Purchase
+- **Never inspected.** The alternative's reservation value never rose above the
+  best realized utility, so the respondent never opened it. Whatever its
+  merits, they were never evaluated.
+- **Inspected and rejected.** The respondent opened it, learned
+  $\bfL_{itj}'\bfkappa_i + \varepsilon_{itj}$, and preferred something else.
 
-### Position and Merchandising Counterfactuals
+Both appear in a conjoint study as "low share." They call for opposite
+responses. A never-inspected problem is a problem of placement, distribution,
+salience, and media — the alternative needs to be *seen*. An
+inspected-and-rejected problem is a problem of product, price, or positioning —
+the alternative was seen and found wanting. Spending on media to fix an
+inspected-and-rejected problem buys more inspections of something people are
+already declining; reformulating the product to fix a never-inspected problem
+improves something nobody looked at.
 
-### Information Architecture
+For each alternative the fitted model returns the probability of inspection,
+the probability of purchase conditional on inspection, and their product. The
+first is a consideration measure derived from behaviour rather than from a
+survey question about consideration, and the second is a preference measure
+purged of the consideration stage. Reporting them separately, by respondent
+segment, is what we mean by the decomposition.
 
-### Search-Based Segmentation
+We expect — and this is a hypothesis the empirical application will test, not a
+result — that categories differ substantially in which margin binds, and that
+the categories where consideration binds hardest are the ones where conjoint
+has been quietly misleading for longest.
+
+### Position and Merchandising Counterfactuals {#sec-managerial-position}
+
+Because position enters the search cost (@eq-cost) and is randomized by design,
+the model supports counterfactuals that reposition alternatives on the listing
+page. Moving an alternative from position six to position two lowers its search
+cost, raises its reservation value, moves it earlier in the search order, and
+raises the probability it is inspected at all. The model propagates that through
+to share.
+
+Conjoint cannot pose this question. In a conjoint task every alternative is
+equally and costlessly visible, so position either does not exist or is a
+attribute like any other — and treating it as an attribute prices it as a
+*preference* for being listed higher, which is not what is happening.
+
+This is the class of question live for marketplaces, retail media networks, app
+stores, streaming carousels, and category managers setting shelf sequence. It is
+also the class where the value of a paid placement can be quantified against the
+value of the product change that would achieve the same share.
+
+One caution belongs here rather than in the limitations. The counterfactual is
+credible only over the range of positions the design actually varied. Our
+simulations show that a listing page with too steep a position penalty stops
+being informative about the bottom of the page, because the bottom is never
+opened (@sec-simstudy). Designing enough friction to identify the effect, but
+not so much that the tail goes dark, is a design decision with a measurable
+optimum.
+
+### Information Architecture {#sec-managerial-architecture}
+
+SIFT distinguishes attributes shown before a click ($\bfX$, priced by
+$\bfbeta_i$) from attributes revealed after one ($\bfL$, priced by
+$\bfkappa_i$). Both are recovered. That makes the placement of information
+itself a decision variable: what belongs on the listing tile, and what belongs
+on the product page?
+
+The tension is that listing-page attributes influence *whether* an alternative
+is inspected, while product-page attributes influence *whether it is bought once
+inspected*. An attribute with a large $\bfkappa$ but no presence on the listing
+page is doing no work in the consideration stage — it is a strength nobody
+learns about until they have already decided to look. Promoting it to the
+listing page should raise inspection; demoting a weak attribute should do the
+same by removing a reason not to look.
+
+We can compute these reallocations. What we cannot yet do is validate them
+against a held-out design in which the architecture was actually changed, and
+we regard that as the natural second study rather than something to assert from
+the first.
+
+### Pricing Friction {#sec-managerial-friction}
+
+The search cost is estimated in utility units and, given a price coefficient,
+convertible to money. That makes a family of interventions comparable on a
+single scale for the first time: reducing the number of clicks to a decision,
+improving filters and sorts, setting better defaults, and shortening a product
+page are all interventions on $\cost_{itj}$.
+
+The managerially useful form is a ratio rather than a level. "Moving from
+position six to position two is worth as much as a 4% price reduction" is a
+statement a category manager can act on, and — importantly for us — ratios are
+considerably more robust than levels to the finite-sample bias documented in
+@sec-simstudy, because the bias affects the search-cost scale rather than
+relative comparisons within it. We say more about this in @sec-discussion, and
+we recommend that SIFT studies report ratios as the headline and levels with
+appropriate caution.
+
+### Search-Based Segmentation {#sec-managerial-segmentation}
+
+Because $\bfgamma_i$ is estimated at the respondent level alongside
+$\bfbeta_i$, SIFT segments on *how people shop* as well as on what they prefer.
+A high-search-cost segment and a low-search-cost segment with identical
+preferences will behave very differently in the same environment: the first buys
+from a short consideration set assembled cheaply, the second explores and is
+more responsive to what is discoverable deeper in the page.
+
+This is a different segmentation basis from the one conjoint supplies, and it
+maps onto different interventions — the low-search-cost segment is reachable
+through depth and discovery, the high-search-cost segment through prominence and
+defaults. Whether these segments are stable, and whether they correlate with the
+demographics clients already target on, is an empirical question we cannot
+answer from simulation.
+
+### Large Attribute Spaces {#sec-managerial-attributes}
+
+Conjoint degrades as attributes accumulate. Respondent burden rises,
+number-of-levels effects intrude, and simplification heuristics contaminate the
+tradeoffs the design exists to measure — with the result that practitioners cap
+attribute counts well below what many categories actually involve.
+
+SIFT distributes the attribute space across two pages and lets the respondent
+choose what to examine. Crucially, a respondent who never opens an alternative
+is not a respondent who failed the task: non-attention is an outcome the model
+explains rather than noise the design must suppress. Whether this genuinely
+extends the workable attribute count, and by how much, is among the most
+practically valuable questions the method raises and among the least settled. We
+flag it as a claim to be tested rather than one we make.

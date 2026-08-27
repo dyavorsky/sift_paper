@@ -78,15 +78,15 @@ sign pattern above to her.
 #### Separating preferences from search costs
 
 The sharper problem is not whether position shifts costs but whether a high
-search cost can be distinguished from a low taste. @Morozov_2021 gives the
-cleanest statement of the separation (his §4.3.2): stopping decisions depend on
+search cost can be distinguished from a low taste. @Morozov_2021 give the
+cleanest statement of the separation (their §4.3.2): stopping decisions depend on
 the *realized* utilities of alternatives already searched, but not on their
 search costs, which are sunk by the time the stopping decision is made. Trade
 the utility intercept against the search cost so as to hold the mean reservation
 value fixed, and the search *order* is unchanged — but the higher intercept
 raises realized utility and so makes stopping more likely.
 
-His Appendix D sharpens this into an observable moment: the **recall rate**, the
+Their Appendix D sharpens this into an observable moment: the **recall rate**, the
 probability of purchasing an alternative encountered earlier in the sequence
 rather than the most recent one, responds to the utility intercept but not to
 the search cost. SIFT observes recall directly, because respondents have free
@@ -95,12 +95,12 @@ moment, and it is available in the raw data without any modelling.
 
 #### What the panel buys, and what it does not
 
-@Morozov_2021 proves nonparametric identification of individual-level
+@Morozov_2021 prove nonparametric identification of individual-level
 preferences *and* search costs from panel search data. It is worth being precise
 about the strength of that result, because it is easy to overclaim. The argument
 assumes the number of sessions per consumer grows without bound; with between 2
-and 35 sessions per consumer and a mean of 5, @Morozov_2021 estimates
-hyperparameters rather than individual parameters (his §5.1).
+and 35 sessions per consumer and a mean of 5, @Morozov_2021 estimate
+hyperparameters rather than individual parameters (their §5.1).
 
 At the task counts SIFT can realistically field — call it $T=10$ — we are in the
 same position, and we say so plainly: what the panel delivers is *hierarchical
@@ -118,9 +118,9 @@ panel is therefore a *levels* argument as much as a heterogeneity argument.
 #### What neither the panel nor the shifter buys alone
 
 The two ingredients are complements, and the literature illustrates this by
-having one or the other but never both. @Morozov_2021 has the panel and still
-normalizes the post-search standard deviation, reporting that little variation
-in his data speaks to it (his Appendix C). @Yavorsky_2021 has an exogenous
+having one or the other but never both. @Morozov_2021 have the panel and still
+normalize the post-search standard deviation, reporting that little variation
+in their data speaks to it (their Appendix C). @Yavorsky_2021 has an exogenous
 search-cost shifter and no panel, and does estimate it — finding
 $\tilde\sigma = 8.16$ against the conventional normalization of one, with a
 confidence interval that excludes one and consequences large enough to reverse
@@ -215,8 +215,8 @@ individual part-worths and individual search costs directly reportable.
 
 **Two-stage empirical Bayes** estimates the hyperparameters by simulated maximum
 likelihood and then draws individual posteriors by Metropolis–Hastings
-conditional on those estimates. This is what @Morozov_2021 does to compute
-personalized prices (his §7.2 and Appendix H), and it is considerably cheaper.
+conditional on those estimates. This is what @Morozov_2021 do to compute
+personalized prices (their §7.2 and Appendix H), and it is considerably cheaper.
 
 Our runtime work reverses the ordering we originally expected. Because HB never
 integrates over the heterogeneity distribution — each respondent sits at their

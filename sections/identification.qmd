@@ -30,24 +30,21 @@ Two statistics suffice, and neither requires fitting a model.
 **T1. Among clicked alternatives, does position predict purchase?**
 **T2. Is the first click near the top of the page?**
 
-::: {.callout-important}
-## The sign of T1 is the opposite of the natural intuition
+The sign of T1 warrants care, because it runs opposite to the natural
+intuition. One might reason that if position acts only on costs, it should bear
+on whether an alternative is opened but not on what is bought once it has been;
+a flat T1 would then indicate position-in-cost. Simulation shows the reverse,
+and the mechanism is selection. When position raises the search cost, an
+alternative in a poor position must have unusually high pre-search utility to be
+worth opening at all. Conditional on having been opened, poorly placed
+alternatives are therefore *better* on average than well-placed ones, and T1 is
+strongly **positive**. When position instead enters pre-search utility, the
+direct and selection effects approximately cancel and T1 is **flat**.
 
-It is tempting to reason that if position acts only on costs then it should
-have no bearing on what gets bought once someone has looked, so a flat T1
-indicates position-in-cost. Simulation says otherwise, and the reason is
-selection. When position raises the search cost, an alternative in a *bad*
-position must have unusually high pre-search utility to be worth opening at all.
-Conditional on having been clicked, bad-position alternatives are therefore
-*better* than good-position ones, and T1 comes out strongly **positive**. When
-position instead enters pre-search utility, the direct effect and the selection
-effect roughly cancel and T1 is approximately **flat**.
-
-In our simulations (400 respondents × 8 tasks) T1 has slope $+0.39$
+In simulations of 400 respondents completing 8 tasks each, T1 has slope $+0.39$
 ($p \approx 5\times10^{-15}$) when position acts on costs, and $-0.05$
-($p = 0.06$) when it acts on utility. Reading a flat T1 as evidence for
-position-in-cost would get the answer exactly backwards.
-:::
+($p = 0.06$) when it acts on pre-search utility. Interpreting a flat T1 as
+evidence for position-in-cost would invert the conclusion.
 
 T2 separates the remaining case. If position widens the post-search spread, the
 reservation value *rises* with position, so the worst-placed alternatives would
@@ -65,15 +62,6 @@ The two tests together form a decision rule:
 We regard this as a design check to be run and reported in every SIFT study
 rather than assumed. Details, code, and the full three-arm simulation are in
 [the position comparison](../comparisons/compare-ursu-position.qmd).
-
-<!--
-TODO: verify against Ursu (2018) §4.3 directly before asserting what SHE
-concludes from conversion-on-rank. Our simulation establishes what the tests do
-in OUR model; her data-generating environment differs (platform-assigned rather
-than randomized position, one click per impression), and the selection channel
-that drives our T1 result may operate differently there. Do not attribute the
-sign pattern above to her.
--->
 
 #### Separating preferences from search costs
 
@@ -103,9 +91,8 @@ and 35 sessions per consumer and a mean of 5, @Morozov_2021 estimate
 hyperparameters rather than individual parameters (their §5.1).
 
 At the task counts SIFT can realistically field — call it $T=10$ — we are in the
-same position, and we say so plainly: what the panel delivers is *hierarchical
-posteriors in the conjoint tradition*, not nonparametric individual
-identification. That is the standard the conjoint audience already applies to
+same position. What the panel delivers is *hierarchical posteriors in the
+conjoint tradition* rather than nonparametric individual identification. That is the standard the conjoint audience already applies to
 part-worths, and it is the right standard here.
 
 The panel also does something less obvious. @Ursu_2018 reports baseline search
@@ -131,8 +118,7 @@ SIFT has both. It also has something neither has: because we design the product
 page, part of the post-search component is *fixed by the design* rather than
 inferred.
 
-This last point is stronger than it first appears, and it is worth stating
-carefully. In a field setting the analyst never observes what inspection
+This last point is stronger than it first appears. In a field setting the analyst never observes what inspection
 revealed; the post-search shock is a residual, and all that can be recovered is
 its variance. In SIFT the analyst *wrote* the product page. So for every clicked
 alternative the revealed attributes $\bfL_{ijt}$ are known, and they enter
@@ -181,15 +167,11 @@ to a standard choice-based conjoint model. Whether search costs are
 distinguishable from zero is therefore a testable question rather than a
 maintained assumption — but the test requires care.
 
-::: {.callout-warning}
-## The obvious test is invalid
-
-The natural move is a Wald test on the estimated search cost. It does not work.
-Zero is a limit rather than an interior point of the parameter space:
-$\cost \to 0$ corresponds to $g(\cost) \to +\infty$ and $\log \cost \to
--\infty$. The null sits at a boundary under every parameterization, so the
-standard asymptotics do not apply.
-:::
+The natural test — a Wald test on the estimated search cost — is not valid
+here. Zero is a limit rather than an interior point of the parameter space:
+$\cost \to 0$ corresponds to $g(\cost) \to +\infty$ and to
+$\log \cost \to -\infty$. The null therefore sits at a boundary under every
+parameterization, and the standard asymptotics do not apply.
 
 We construct the test from observable implications instead, in three ways. The
 first is holdout fit: SIFT against the nested conjoint model on tasks withheld
@@ -224,25 +206,24 @@ own $\bftheta_i$ — the mixing-draw multiplier that makes random-coefficients
 SMLE expensive simply does not arise. We therefore treat HB as the primary
 estimator and empirical Bayes as the robustness check.
 
-The runtime claim is worth stating precisely, because our first estimate of it
-was wrong. Extrapolating from per-evaluation costs we expected roughly 11 hours
-for a commercial-scale fit. The implemented sampler measures at **1.8 ms per
-task per iteration** — linear in tasks, and only weakly increasing in the number
-of simulation draws, because per-task overhead rather than draw count dominates.
-For 800 respondents × 10 tasks and 20,000 iterations that is **about 80 hours
-single-threaded**, not 11. The earlier figure assumed one pass over the data per
-iteration; the sampler makes two, and carries per-respondent overhead besides.
+Runtime should be stated precisely, since the sampler's cost is easy to
+underestimate from per-evaluation timings alone. The implemented sampler measures
+**1.8 ms per task per iteration** — linear in the number of tasks, and only
+weakly increasing in the number of simulation draws, because per-task overhead
+rather than draw count dominates. Each iteration makes two passes over the data
+and carries per-respondent overhead in addition. For 800 respondents completing
+10 tasks each, at 20,000 iterations, this amounts to approximately **80 hours
+single-threaded**.
 
-What rescues the budget is that the $\bftheta_i$ step is embarrassingly
-parallel: each respondent's Metropolis update touches only that respondent's
-tasks. Parallelised across 12 cores we measure a 7.5× speedup — conservative,
-since at that problem size communication is a material share of each iteration —
-bringing a commercial fit to roughly **11 hours**, inside an overnight budget.
+The $\bftheta_i$ step is, however, embarrassingly parallel: each respondent's
+Metropolis update touches only that respondent's tasks. Parallelised across 12
+cores we measure a 7.5-fold speedup, which is conservative in the sense that
+communication accounts for a material share of each iteration at that problem
+size. A commercial-scale fit then completes in approximately **11 hours**.
 
-The honest form of the claim is therefore conditional. HB is the cheaper route
-to heterogeneity *and* it fits in the budget, **but only in parallel**. A
-single-threaded implementation does not, and any replication attempt should be
-told so.
+The claim is therefore conditional. Hierarchical Bayes is the cheaper route to
+heterogeneity and completes within an overnight budget, but only when the
+respondent step is parallelised; a single-threaded implementation does not.
 
 ### Estimation {#sec-est-estimation}
 
@@ -280,16 +261,6 @@ either margin. The kernel-smoothed simulator also shows the upward bias in the
 negative log-likelihood that @Yavorsky_2021 notes is intrinsic to it. The
 construction and its validation are in
 [`notebooks/sift_likelihood.qmd`](../notebooks/sift_likelihood.qmd).
-
-<!--
-TODO once the simulation study exists (@sec-simstudy):
-  - timings at commercial task counts with random coefficients, replacing the
-    extrapolations in R/README.md with measured HB fits;
-  - RMSE of the hybrid estimator against the kernel-smoothed one on identical
-    data, which is the apples-to-apples number reviewers will want;
-  - the recall-rate separation moment (Morozov Appendix D) computed on simulated
-    data, to show it moves with the intercept and not with search cost.
--->
 
 ### Software {#sec-est-software}
 

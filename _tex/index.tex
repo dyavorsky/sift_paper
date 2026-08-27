@@ -422,7 +422,8 @@ design checks that should accompany every SIFT study.
 
 \subsection{What it costs}\label{what-it-costs}
 
-We would rather state the costs plainly than have a referee find them.
+The method carries costs as well, and we set them out alongside the
+advantages rather than confine them to a concluding caveat.
 
 \textbf{Complexity.} SIFT is a new instrument fit with an unfamiliar
 model. Conjoint has four decades of accumulated norms --- sample-size
@@ -645,14 +646,14 @@ Hauser et al. (2010) model disjunctions of conjunctions, Yee et al.
 Hauser (2011) apply active machine learning to consideration heuristics,
 and Hauser (2014) reviews the resulting body of work.
 
-The contrast with SIFT is clean and worth stating in one line:
-\textbf{these methods infer the consideration process as latent
-structure from what was chosen; SIFT observes it directly and prices it
-in units of search cost.} Inference versus observation. Both are
-legitimate, and the inference approach has the advantage of working on
-data already collected --- but a latent screening rule cannot be
-manipulated, so it cannot answer what happens when the analyst changes
-what is easy to see.
+The contrast with SIFT is a single distinction: \textbf{these methods
+infer the consideration process as latent structure from what was
+chosen, whereas SIFT observes it directly and prices it in units of
+search cost.} Both approaches are legitimate, and inference from choice
+outcomes has the considerable advantage of applying to data already
+collected. A latent screening rule cannot, however, be manipulated, and
+so cannot answer what happens when the analyst changes what is easy to
+see.
 
 The broader economic foundations of conjoint are set out in Allenby et
 al. (2019), and Ding et al. (2005) and Ding (2007) established incentive
@@ -818,13 +819,13 @@ per product page, total task duration --- which are informative about
 search effort in the sense of Ursu et al. (2020) and which will also be
 needed to net out any imposed latency from voluntary reading time.
 
-It is worth stating plainly what this means for the alternatives a
-respondent never opened. They are not missing data. Under the model they
-are the outcome of a decision --- the respondent judged that opening
-them was not worth the cost, given what she had already found --- and
-they carry information about both her preferences and her search cost.
-Non-inspection is the observation that conjoint has no way to record,
-and recovering it is much of the point of the instrument.
+The implication for the alternatives a respondent never opened. They are
+not missing data. Under the model they are the outcome of a decision ---
+the respondent judged that opening them was not worth the cost, given
+what she had already found --- and they carry information about both her
+preferences and her search cost. Non-inspection is the observation that
+conjoint has no way to record, and recovering it is much of the point of
+the instrument.
 
 \section{Model}\label{sec-model}
 
@@ -1086,15 +1087,12 @@ hold. Following 1 we write each condition as a difference required to be
 non-negative and index them \(\nu_1,\dots,\nu_4\) in the order
 selection, continuation, stopping, choice.
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{The \(\nu\) labelling is not standard across papers}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Yavorsky et al. (2021) uses the opposite convention, with \(\nu_1\)
-continuation and \(\nu_2\) selection. Readers moving between the two
-literatures should check the labelling before comparing smoothing
-parameters or reported diagnostics. The crosswalk in
-Section~\ref{sec-appendix-notation} records both.
-
-\end{tcolorbox}
+This labelling is not uniform in the literature: Yavorsky et al. (2021)
+adopts the opposite convention, with \(\nu_1\) denoting continuation and
+\(\nu_2\) selection. The crosswalk in
+Section~\ref{sec-appendix-notation} records both, and comparisons of
+smoothing parameters or fit diagnostics across the two literatures
+should be made with the convention in mind.
 
 The task-level probability is
 
@@ -1177,18 +1175,15 @@ was lost by fielding the richer instrument. If it is, conjoint was
 misspecified for that category, and the SIFT estimates say by how much
 and in which direction.
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-important-color!10!white, colframe=quarto-callout-important-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{The test is not a Wald test}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Because conjoint sits at the \emph{boundary} rather than the interior of
-the parameter space --- \(\cost \to 0\) corresponds to
+The restriction is not, however, testable by conventional means.
+Conjoint sits at the \emph{boundary} of the SIFT parameter space rather
+than in its interior: \(\cost \to 0\) corresponds to
 \(\log \cost \to -\infty\), and to \(g(\cost) \to \infty\) under the
-alternative parameterization --- the null is not an interior point and
-the usual \(\chi^2\) reference distribution does not apply. The
-restriction must be tested against observable implications or against a
-simulated reference distribution. Section~\ref{sec-est-nesting} develops
-this.
-
-\end{tcolorbox}
+alternative parameterization. The null is therefore not an interior
+point, and the usual \(\chi^2\) reference distribution does not apply.
+The restriction must instead be assessed against observable implications
+or against a simulated reference distribution, as developed in
+Section~\ref{sec-est-nesting}.
 
 \subsection{Alternative Search Protocols}\label{sec-model-alternatives}
 
@@ -1260,25 +1255,24 @@ Two statistics suffice, and neither requires fitting a model.
 \textbf{T1. Among clicked alternatives, does position predict purchase?}
 \textbf{T2. Is the first click near the top of the page?}
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-important-color!10!white, colframe=quarto-callout-important-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{The sign of T1 is the opposite of the natural intuition}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+The sign of T1 warrants care, because it runs opposite to the natural
+intuition. One might reason that if position acts only on costs, it
+should bear on whether an alternative is opened but not on what is
+bought once it has been; a flat T1 would then indicate position-in-cost.
+Simulation shows the reverse, and the mechanism is selection. When
+position raises the search cost, an alternative in a poor position must
+have unusually high pre-search utility to be worth opening at all.
+Conditional on having been opened, poorly placed alternatives are
+therefore \emph{better} on average than well-placed ones, and T1 is
+strongly \textbf{positive}. When position instead enters pre-search
+utility, the direct and selection effects approximately cancel and T1 is
+\textbf{flat}.
 
-It is tempting to reason that if position acts only on costs then it
-should have no bearing on what gets bought once someone has looked, so a
-flat T1 indicates position-in-cost. Simulation says otherwise, and the
-reason is selection. When position raises the search cost, an
-alternative in a \emph{bad} position must have unusually high pre-search
-utility to be worth opening at all. Conditional on having been clicked,
-bad-position alternatives are therefore \emph{better} than good-position
-ones, and T1 comes out strongly \textbf{positive}. When position instead
-enters pre-search utility, the direct effect and the selection effect
-roughly cancel and T1 is approximately \textbf{flat}.
-
-In our simulations (400 respondents × 8 tasks) T1 has slope \(+0.39\)
-(\(p \approx 5\times10^{-15}\)) when position acts on costs, and
-\(-0.05\) (\(p = 0.06\)) when it acts on utility. Reading a flat T1 as
-evidence for position-in-cost would get the answer exactly backwards.
-
-\end{tcolorbox}
+In simulations of 400 respondents completing 8 tasks each, T1 has slope
+\(+0.39\) (\(p \approx 5\times10^{-15}\)) when position acts on costs,
+and \(-0.05\) (\(p = 0.06\)) when it acts on pre-search utility.
+Interpreting a flat T1 as evidence for position-in-cost would invert the
+conclusion.
 
 T2 separates the remaining case. If position widens the post-search
 spread, the reservation value \emph{rises} with position, so the
@@ -1340,9 +1334,9 @@ sessions per consumer and a mean of 5, Morozov et al. (2021) estimate
 hyperparameters rather than individual parameters (their §5.1).
 
 At the task counts SIFT can realistically field --- call it \(T=10\) ---
-we are in the same position, and we say so plainly: what the panel
-delivers is \emph{hierarchical posteriors in the conjoint tradition},
-not nonparametric individual identification. That is the standard the
+we are in the same position. What the panel delivers is
+\emph{hierarchical posteriors in the conjoint tradition} rather than
+nonparametric individual identification. That is the standard the
 conjoint audience already applies to part-worths, and it is the right
 standard here.
 
@@ -1372,16 +1366,16 @@ SIFT has both. It also has something neither has: because we design the
 product page, part of the post-search component is \emph{fixed by the
 design} rather than inferred.
 
-This last point is stronger than it first appears, and it is worth
-stating carefully. In a field setting the analyst never observes what
-inspection revealed; the post-search shock is a residual, and all that
-can be recovered is its variance. In SIFT the analyst \emph{wrote} the
-product page. So for every clicked alternative the revealed attributes
-\(\bfL_{ijt}\) are known, and they enter realized utility as
-\(\bfL_{ijt}'\bfkappa\) --- a mean shift, not a variance. Preferences
-over attributes that are only visible \emph{after} a click are therefore
-identified in exactly the way conjoint part-worths are: from which
-alternative gets bought given what was shown.
+This last point is stronger than it first appears. In a field setting
+the analyst never observes what inspection revealed; the post-search
+shock is a residual, and all that can be recovered is its variance. In
+SIFT the analyst \emph{wrote} the product page. So for every clicked
+alternative the revealed attributes \(\bfL_{ijt}\) are known, and they
+enter realized utility as \(\bfL_{ijt}'\bfkappa\) --- a mean shift, not
+a variance. Preferences over attributes that are only visible
+\emph{after} a click are therefore identified in exactly the way
+conjoint part-worths are: from which alternative gets bought given what
+was shown.
 
 The distinction is easy to lose in implementation, with consequences
 that are silent. The ex ante spread \(\tilde\sigma\) belongs in the
@@ -1427,16 +1421,11 @@ search costs are distinguishable from zero is therefore a testable
 question rather than a maintained assumption --- but the test requires
 care.
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{The obvious test is invalid}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-The natural move is a Wald test on the estimated search cost. It does
-not work. Zero is a limit rather than an interior point of the parameter
-space: \(\cost \to 0\) corresponds to \(g(\cost) \to +\infty\) and
-\(\log \cost \to
--\infty\). The null sits at a boundary under every parameterization, so
-the standard asymptotics do not apply.
-
-\end{tcolorbox}
+The natural test --- a Wald test on the estimated search cost --- is not
+valid here. Zero is a limit rather than an interior point of the
+parameter space: \(\cost \to 0\) corresponds to \(g(\cost) \to +\infty\)
+and to \(\log \cost \to -\infty\). The null therefore sits at a boundary
+under every parameterization, and the standard asymptotics do not apply.
 
 We construct the test from observable implications instead, in three
 ways. The first is holdout fit: SIFT against the nested conjoint model
@@ -1477,28 +1466,27 @@ multiplier that makes random-coefficients SMLE expensive simply does not
 arise. We therefore treat HB as the primary estimator and empirical
 Bayes as the robustness check.
 
-The runtime claim is worth stating precisely, because our first estimate
-of it was wrong. Extrapolating from per-evaluation costs we expected
-roughly 11 hours for a commercial-scale fit. The implemented sampler
-measures at \textbf{1.8 ms per task per iteration} --- linear in tasks,
-and only weakly increasing in the number of simulation draws, because
-per-task overhead rather than draw count dominates. For 800 respondents
-× 10 tasks and 20,000 iterations that is \textbf{about 80 hours
-single-threaded}, not 11. The earlier figure assumed one pass over the
-data per iteration; the sampler makes two, and carries per-respondent
-overhead besides.
+Runtime should be stated precisely, since the sampler's cost is easy to
+underestimate from per-evaluation timings alone. The implemented sampler
+measures \textbf{1.8 ms per task per iteration} --- linear in the number
+of tasks, and only weakly increasing in the number of simulation draws,
+because per-task overhead rather than draw count dominates. Each
+iteration makes two passes over the data and carries per-respondent
+overhead in addition. For 800 respondents completing 10 tasks each, at
+20,000 iterations, this amounts to approximately \textbf{80 hours
+single-threaded}.
 
-What rescues the budget is that the \(\bftheta_i\) step is
-embarrassingly parallel: each respondent's Metropolis update touches
-only that respondent's tasks. Parallelised across 12 cores we measure a
-7.5× speedup --- conservative, since at that problem size communication
-is a material share of each iteration --- bringing a commercial fit to
-roughly \textbf{11 hours}, inside an overnight budget.
+The \(\bftheta_i\) step is, however, embarrassingly parallel: each
+respondent's Metropolis update touches only that respondent's tasks.
+Parallelised across 12 cores we measure a 7.5-fold speedup, which is
+conservative in the sense that communication accounts for a material
+share of each iteration at that problem size. A commercial-scale fit
+then completes in approximately \textbf{11 hours}.
 
-The honest form of the claim is therefore conditional. HB is the cheaper
-route to heterogeneity \emph{and} it fits in the budget, \textbf{but
-only in parallel}. A single-threaded implementation does not, and any
-replication attempt should be told so.
+The claim is therefore conditional. Hierarchical Bayes is the cheaper
+route to heterogeneity and completes within an overnight budget, but
+only when the respondent step is parallelised; a single-threaded
+implementation does not.
 
 \subsection{Estimation}\label{sec-est-estimation}
 
@@ -1750,10 +1738,9 @@ remains so. The nesting makes that a finding rather than a concession.
 
 It also converts a methodological argument into an empirical one.
 ``Should this study be a conjoint or a SIFT'' is answerable from SIFT
-data and not from conjoint data, which is an asymmetry worth being
-honest about: the richer instrument can diagnose whether the simpler one
-was adequate, but not the reverse. The cost of finding out is the cost
-of fielding SIFT.
+data and not from conjoint data. The asymmetry is a real one: the richer
+instrument can diagnose whether the simpler one was adequate, but not
+the reverse. The cost of finding out is the cost of fielding SIFT.
 
 What it does not settle is whether the \emph{test} is easy. As
 Section~\ref{sec-est-nesting} develops, the null sits at the boundary of
@@ -1763,11 +1750,7 @@ simulated reference distribution. We regard the sharpest of those
 implications as the simplest: under zero search costs, nobody leaves
 alternatives unopened. That is checkable before any model is fit.
 
-\subsection{Do Survey Clicks Measure Anything
-Real?}\label{sec-disc-clicks}
-
-This is the first question a referee will ask and we would rather ask it
-ourselves.
+\subsection{Do Survey Clicks Measure Search?}\label{sec-disc-clicks}
 
 Clicking in a survey is nearly free. It costs a second of attention and
 no money, whereas inspecting a product in a real category may cost a
@@ -1789,9 +1772,8 @@ used.
 The standing defence, and we think it is the right one, is that relative
 and comparative statements transfer even when levels do not. This is
 precisely the defence conjoint has made for four decades about utilities
-that are not interpretable in isolation, and it is defensible ground ---
-but it should be stated before a reviewer states it, and it constrains
-the claims a SIFT study should make.
+that are not interpretable in isolation. It is defensible ground, but it
+constrains the claims a SIFT study should make.
 Section~\ref{sec-managerial-friction} accordingly recommends ratios as
 the headline quantity.
 
@@ -1810,13 +1792,13 @@ learning can be modelled across tasks, at the cost of abandoning the
 independence assumption in Equation~\ref{eq-resp-likelihood} that makes
 the panel multiply.
 
-We take the first route and treat the second as a robustness check, but
-we note the tension honestly: a practice block assumes learning
-completes quickly, and whether it does is testable by looking for trends
-in click counts and search costs across task order.
-Section~\ref{sec-analysis} reports that diagnostic. If search costs
-decline systematically across tasks, the practice block was insufficient
-and the learning model becomes necessary rather than optional.
+We take the first route and treat the second as a robustness check. The
+tension is that a practice block assumes learning completes quickly, and
+whether it does is testable by looking for trends in click counts and
+search costs across task order. Section~\ref{sec-analysis} reports that
+diagnostic. If search costs decline systematically across tasks, the
+practice block was insufficient and the learning model becomes necessary
+rather than optional.
 
 \subsection{Do Respondents Follow the Reservation
 Rule?}\label{sec-disc-behavioural}
@@ -1875,8 +1857,6 @@ how instruments improve.
 \subsection{Where Conjoint Remains the Right
 Tool}\label{sec-disc-conjoint}
 
-We would rather draw this boundary ourselves than have it drawn for us.
-
 Conjoint remains the better instrument for feature-level
 willingness-to-pay on a defined bundle, where there is nothing to search
 over and the question is purely one of tradeoffs. It remains better for
@@ -1890,11 +1870,11 @@ built around it. And it remains better in any study where established
 norms, benchmarks, and comparability to prior waves matter more than
 novelty.
 
-Most honestly: conjoint is understood, defensible, cheap to estimate,
-and supported by four decades of accumulated practice. SIFT is none of
-those things yet. A method that is right in principle and unfamiliar in
-practice is a real cost to a research buyer, and we do not think it is
-served by pretending otherwise.
+Conjoint is also understood, defensible, cheap to estimate, and
+supported by four decades of accumulated practice. SIFT is none of those
+things yet. A method that is correct in principle but unfamiliar in
+practice imposes a real cost on the organization adopting it, and that
+cost is part of the comparison.
 
 \subsection{Extensions}\label{sec-disc-extensions}
 
@@ -1914,9 +1894,9 @@ small change to the instrument.
 \textbf{Sequential versus fixed-sample, respondent by respondent.} As
 Section~\ref{sec-model-alternatives} notes, the task panel makes this
 test available at the individual level, where the literature has been
-able to run it only at the population level. ``What fraction of
-respondents search sequentially'' is a question we can answer and nobody
-has.
+able to run it only at the population level. The distribution of search
+protocols across respondents is therefore identifiable in principle and,
+to our knowledge, has not been estimated.
 
 \textbf{Attribute-level search.} Our model has respondents searching
 across \emph{alternatives}; the Mouselab literature has subjects
@@ -2207,8 +2187,8 @@ rule?}\label{does-anyone-follow-the-optimal-rule}
 to the project. Behavior is directionally consistent with
 reservation-value logic, but the deviations are systematic rather than
 random: too little search relative to the optimum, order effects, and
-sensitivity to sunk costs. The paper should state this openly and early
-rather than let a referee find it.
+sensitivity to sunk costs. Section~\ref{sec-lit-lab} and
+Section~\ref{sec-disc-behavioural} take up what follows for the model.
 
 \subsubsection{Information acquisition: Mouselab and
 eye-tracking}\label{information-acquisition-mouselab-and-eye-tracking}

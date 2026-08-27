@@ -299,7 +299,7 @@ window.Quarto = {
   <li><a href="#sec-discussion" id="toc-sec-discussion" class="nav-link" data-scroll-target="#sec-discussion"><span class="header-section-number">9</span> Discussion</a>
   <ul class="collapse">
   <li><a href="#sec-disc-nesting" id="toc-sec-disc-nesting" class="nav-link" data-scroll-target="#sec-disc-nesting"><span class="header-section-number">9.1</span> What the Nesting Result Changes</a></li>
-  <li><a href="#sec-disc-clicks" id="toc-sec-disc-clicks" class="nav-link" data-scroll-target="#sec-disc-clicks"><span class="header-section-number">9.2</span> Do Survey Clicks Measure Anything Real?</a></li>
+  <li><a href="#sec-disc-clicks" id="toc-sec-disc-clicks" class="nav-link" data-scroll-target="#sec-disc-clicks"><span class="header-section-number">9.2</span> Do Survey Clicks Measure Search?</a></li>
   <li><a href="#sec-disc-expectations" id="toc-sec-disc-expectations" class="nav-link" data-scroll-target="#sec-disc-expectations"><span class="header-section-number">9.3</span> Rational Expectations About the Unopened</a></li>
   <li><a href="#sec-disc-behavioural" id="toc-sec-disc-behavioural" class="nav-link" data-scroll-target="#sec-disc-behavioural"><span class="header-section-number">9.4</span> Do Respondents Follow the Reservation Rule?</a></li>
   <li><a href="#sec-disc-estimation" id="toc-sec-disc-estimation" class="nav-link" data-scroll-target="#sec-disc-estimation"><span class="header-section-number">9.5</span> Precision, Runtime, and What They Constrain</a></li>
@@ -372,7 +372,7 @@ window.Quarto = {
 </section>
 <section id="what-it-costs" class="level3" data-number="1.5">
 <h3 data-number="1.5" class="anchored" data-anchor-id="what-it-costs"><span class="header-section-number">1.5</span> What it costs</h3>
-<p>We would rather state the costs plainly than have a referee find them.</p>
+<p>The method carries costs as well, and we set them out alongside the advantages rather than confine them to a concluding caveat.</p>
 <p><strong>Complexity.</strong> SIFT is a new instrument fit with an unfamiliar model. Conjoint has four decades of accumulated norms — sample-size rules of thumb, design efficiency criteria, validated share simulators, benchmarks by category — and SIFT has none of that yet. It is roughly where conjoint was in the mid-2000s: the statistical machinery works, but the practitioner scaffolding that makes a method safe in ordinary hands has not been built. Anyone adopting SIFT now is adopting a method, not a product.</p>
 <p><strong>Estimation.</strong> Sequential search likelihoods are expensive. Where a hierarchical Bayes conjoint model fits in minutes, a comparably sized SIFT model takes hours: our implementation measures roughly eleven hours for a commercial-scale fit, and only when the sampler is parallelized across respondents — single-threaded it is eight times that. We regard this as an engineering problem rather than a fundamental one, and it is improving quickly: <span class="citation" data-cites="Chung_2025">Chung et al. (<a href="#ref-Chung_2025" role="doc-biblioref">2024</a>)</span> report speedups of one to two orders of magnitude over the kernel-smoothed simulators that dominated the literature. But it is a real constraint on iteration today.</p>
 <p><strong>Precision on the search cost.</strong> Preferences are recovered cleanly at commercial sample sizes. The <em>level</em> of the search cost is harder, and carries a finite-sample bias that declines slowly in both sample size and simulation draws (<a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a>). This is a known property of simulated maximum likelihood estimation of search models rather than a feature of our instrument — <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> reports the same of his own simulations — but it means that conclusions about search-cost <em>magnitudes</em> demand larger samples than conclusions about preferences, and we quantify how much larger.</p>
@@ -381,17 +381,6 @@ window.Quarto = {
 <section id="roadmap" class="level3" data-number="1.6">
 <h3 data-number="1.6" class="anchored" data-anchor-id="roadmap"><span class="header-section-number">1.6</span> Roadmap</h3>
 <p><a href="#sec-lit" class="quarto-xref">Section&nbsp;2</a> positions SIFT against the search, conjoint, and consideration-set literatures. 2 describes the instrument. <a href="#sec-model" class="quarto-xref">Section&nbsp;4</a> develops the model, and <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a> treats identification and estimation. <a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a> reports a simulation study establishing what the design recovers and at what sample sizes. <a href="#sec-analysis" class="quarto-xref">Section&nbsp;7</a> presents an empirical application, <a href="#sec-managerial" class="quarto-xref">Section&nbsp;8</a> draws out what the estimates support that conjoint cannot, and <a href="#sec-discussion" class="quarto-xref">Section&nbsp;9</a> takes up limitations.</p>
-<!--
-TODO before circulating:
-  - the 64% attenuation figure and the sample-size claims point at @sec-simstudy,
-    which is still being written from the factorial in R/out/. Reconcile the
-    numbers once that section exists.
-  - the empirical application does not exist yet; soften or cut the roadmap
-    sentence on @sec-analysis if it is still absent at submission.
-  - the behavioural-evidence paragraph cites no one. Pull the specific
-    experimental papers from sections/litreview.qmd once their citations are
-    checked, rather than asserting the pattern.
--->
 </section>
 </section>
 <section id="sec-lit" class="level2" data-number="2">
@@ -424,7 +413,7 @@ TODO before circulating:
 <section id="sec-lit-consideration" class="level3" data-number="2.4">
 <h3 data-number="2.4" class="anchored" data-anchor-id="sec-lit-consideration"><span class="header-section-number">2.4</span> Limited Consideration in Preference Measurement</h3>
 <p>Marketing has long recognized that respondents do not evaluate everything, and has answered with models that <em>infer</em> screening from choice outcomes. <span class="citation" data-cites="Gilbride_Allenby_2004">Gilbride and Allenby (<a href="#ref-Gilbride_Allenby_2004" role="doc-biblioref">2004</a>)</span> estimate conjunctive, disjunctive, and compensatory screening rules within a choice model. <span class="citation" data-cites="Hauser_2010">Hauser et al. (<a href="#ref-Hauser_2010" role="doc-biblioref">2010</a>)</span> model disjunctions of conjunctions, <span class="citation" data-cites="Yee_2007">Yee et al. (<a href="#ref-Yee_2007" role="doc-biblioref">2007</a>)</span> use greedoid methods for non-compensatory inference, <span class="citation" data-cites="Dzyabura_2011">Dzyabura and Hauser (<a href="#ref-Dzyabura_2011" role="doc-biblioref">2011</a>)</span> apply active machine learning to consideration heuristics, and <span class="citation" data-cites="Hauser_2014">Hauser (<a href="#ref-Hauser_2014" role="doc-biblioref">2014</a>)</span> reviews the resulting body of work.</p>
-<p>The contrast with SIFT is clean and worth stating in one line: <strong>these methods infer the consideration process as latent structure from what was chosen; SIFT observes it directly and prices it in units of search cost.</strong> Inference versus observation. Both are legitimate, and the inference approach has the advantage of working on data already collected — but a latent screening rule cannot be manipulated, so it cannot answer what happens when the analyst changes what is easy to see.</p>
+<p>The contrast with SIFT is a single distinction: <strong>these methods infer the consideration process as latent structure from what was chosen, whereas SIFT observes it directly and prices it in units of search cost.</strong> Both approaches are legitimate, and inference from choice outcomes has the considerable advantage of applying to data already collected. A latent screening rule cannot, however, be manipulated, and so cannot answer what happens when the analyst changes what is easy to see.</p>
 <p>The broader economic foundations of conjoint are set out in <span class="citation" data-cites="Allenby_2019">Allenby et al. (<a href="#ref-Allenby_2019" role="doc-biblioref">2019</a>)</span>, and <span class="citation" data-cites="Ding_2005">Ding et al. (<a href="#ref-Ding_2005" role="doc-biblioref">2005</a>)</span> and <span class="citation" data-cites="Ding_2007">Ding (<a href="#ref-Ding_2007" role="doc-biblioref">2007</a>)</span> established incentive alignment as a way to make stated preference behave more like revealed preference — a concern SIFT inherits and does not solve.</p>
 </section>
 </section>
@@ -433,34 +422,12 @@ TODO before circulating:
 <section id="sec-instrument-architecture" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="sec-instrument-architecture"><span class="header-section-number">3.1</span> Task Architecture</h3>
 <p>A SIFT task presents the respondent with two kinds of screen, arranged the way online retail arranges them. The first is a <strong>listing page</strong>: a set of <span class="math inline">\(J\)</span> alternatives displayed as an ordered vertical list, each occupying one row. The second is a <strong>product page</strong>, one per alternative, reached by clicking its row. The pair corresponds to what commercial practice calls the product listing page and the product detail page, and the correspondence is deliberate — the instrument is meant to look to the respondent like the environments in which the category is actually shopped.</p>
-<p>The two screens differ in what they show. Every alternative is described by the same set of attributes, but the attributes are partitioned. A small number are displayed on the listing page for all <span class="math inline">\(J\)</span> alternatives at once — position in the list, brand, and price are the natural candidates, and are the ones that list pages typically carry in practice. The remainder are shown only on an alternative’s product page. A respondent who reads the listing page and clicks nothing therefore knows a little about every alternative; a respondent who opens a product page knows everything about that one alternative and still only a little about the rest.<!-- TODO: fix the partition for the empirical
-application in @sec-analysis, and state it explicitly there. --></p>
+<p>The two screens differ in what they show. Every alternative is described by the same set of attributes, but the attributes are partitioned. A small number are displayed on the listing page for all <span class="math inline">\(J\)</span> alternatives at once — position in the list, brand, and price are the natural candidates, and are the ones that list pages typically carry in practice. The remainder are shown only on an alternative’s product page. A respondent who reads the listing page and clicks nothing therefore knows a little about every alternative; a respondent who opens a product page knows everything about that one alternative and still only a little about the rest.</p>
 <p>This partition is what gives the task its structure. Listing-page attributes are free: the respondent acquires them by looking at the screen she is already on. Product-page attributes are costly: acquiring them requires a click, a page load, and the time to read what the page contains. The respondent chooses how many of those costs to pay and in what order.</p>
 <p>The protocol within a task is as follows. The respondent begins on the listing page. She may open any alternative’s product page, return to the listing page, and open another, as many times as she likes and in any order she likes. Every alternative she has already opened remains available to her — she may return to a previously viewed product page at no further cost, and she may select an alternative she viewed several clicks ago. The task ends in one of two ways. She selects an alternative to purchase, which she may do only from a product page she has opened, so that no alternative can be purchased sight-unseen. Or she declines to purchase anything and exits the task, which she may do at any point, including immediately, without opening a single product page.</p>
 <p>Two features of this protocol deserve emphasis because the model in <a href="#sec-model" class="quarto-xref">Section&nbsp;4</a> rests on them. First, selection requires prior inspection, which is both realistic — one buys from the product page, not from the list — and what allows the observed choice to be read as a choice over resolved rather than expected utilities. Second, recall is free and unlimited, so a respondent is never punished for having looked at something and moved on. Together these place the task squarely in the Weitzman (1979) protocol: the listing page is a set of closed boxes whose contents are unknown but whose distributions are not, a click is the act of opening one at a cost, and the decision to stop and select is the decision to take the best prize already in hand rather than pay to open another. The no-purchase exit is the outside option, which the respondent may take whether or not she has searched.</p>
 <p>The exit option matters for what the instrument can measure. A respondent who searches nothing and leaves, a respondent who searches half the list and leaves, and a respondent who searches half the list and buys are producing three different pieces of evidence about the same two parameters. Conjoint’s no-choice option records only the first distinction between them.</p>
-<p>Respondents complete a sequence of tasks rather than one, exactly as in choice-based conjoint. Each task is a fresh listing page with a fresh set of alternatives, and the respondent searches and chooses within it independently. The current design fields ten tasks per respondent.<!-- TODO: confirm ten
-against the fielding partner's length constraints; the identification
-consequences are in @sec-estimation. --> This is the feature that separates the instrument most sharply from the field literature it borrows from. A platform dataset typically observes one search spell per consumer, so preferences and search costs must be told apart across consumers. Here each respondent supplies a panel of search spells, and the same respondent’s behavior across tasks can be used to separate what she likes from what looking costs her.</p>
-<!--
-TODO: making a click cost something.
-
-In a survey a click is nearly free, which is the central threat to
-interpreting estimated search-cost levels (see @sec-discussion). Design
-levers to consider, none yet chosen:
-  - a short enforced latency on each product-page load, so a click costs
-    real time rather than a mouse movement;
-  - an explicit click budget per task;
-  - incentive alignment in the sense of @Ding_2005 and @Ding_2007, so that
-    time spent searching has an opportunity cost denominated in something
-    the respondent wants;
-  - denominating the cost in time directly and modeling it against
-    observed dwell (@Ursu_2020).
-Whatever is chosen has to be described here and defended in @sec-discussion.
-Note that the enforced-latency option interacts with the timing data in
-@sec-instrument-data: an imposed delay must be separable from voluntary
-reading time.
--->
+<p>Respondents complete a sequence of tasks rather than one, exactly as in choice-based conjoint. Each task is a fresh listing page with a fresh set of alternatives, and the respondent searches and chooses within it independently. The current design fields ten tasks per respondent. This is the feature that separates the instrument most sharply from the field literature it borrows from. A platform dataset typically observes one search spell per consumer, so preferences and search costs must be told apart across consumers. Here each respondent supplies a panel of search spells, and the same respondent’s behavior across tasks can be used to separate what she likes from what looking costs her.</p>
 </section>
 <section id="sec-instrument-randomization" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="sec-instrument-randomization"><span class="header-section-number">3.2</span> Randomization and Experimental Design</h3>
@@ -477,10 +444,7 @@ reading time.
 <p><strong>The design.</strong> The complete attribute matrix for all <span class="math inline">\(J\)</span> alternatives shown, whether or not the respondent ever saw them; the position each alternative occupied on the listing page; and the partition of attributes into listing-page and product-page sets. The design is known without error because it was generated, which is a meaningful advantage over field data, where the analyst typically knows what was clicked but must reconstruct what was displayed.</p>
 <p><strong>The event stream.</strong> Every action the respondent takes, in order, with a timestamp: each product-page opening (which alternative, at which position, at what time), each return to the listing page, each re-opening of a previously viewed product page, and the terminal event — a purchase of a named alternative or an exit without purchase. The event stream is the raw object; everything below is derived from it.</p>
 <p><strong>Derived search quantities.</strong> From the event stream we construct the objects the model in <a href="#sec-model" class="quarto-xref">Section&nbsp;4</a> takes as data: the <em>search set</em>, meaning which alternatives were opened; the <em>search order</em>, meaning the sequence in which they were opened; the <em>stopping point</em>, meaning how many alternatives were opened before the respondent stopped; and the <em>choice</em>, meaning which member of the search set was purchased, or that none was. Timing data yield a parallel set of duration measures — time to first click, dwell time per product page, total task duration — which are informative about search effort in the sense of <span class="citation" data-cites="Ursu_2020">Ursu et al. (<a href="#ref-Ursu_2020" role="doc-biblioref">2020</a>)</span> and which will also be needed to net out any imposed latency from voluntary reading time.</p>
-<p>It is worth stating plainly what this means for the alternatives a respondent never opened. They are not missing data. Under the model they are the outcome of a decision — the respondent judged that opening them was not worth the cost, given what she had already found — and they carry information about both her preferences and her search cost. Non-inspection is the observation that conjoint has no way to record, and recovering it is much of the point of the instrument.</p>
-<!-- TODO: a figure showing one task's listing page and one product page, plus
-a schematic of the event stream for a single respondent-task. Deferred until
-the instrument is built. -->
+<p>The implication for the alternatives a respondent never opened. They are not missing data. Under the model they are the outcome of a decision — the respondent judged that opening them was not worth the cost, given what she had already found — and they carry information about both her preferences and her search cost. Non-inspection is the observation that conjoint has no way to record, and recovering it is much of the point of the instrument.</p>
 </section>
 </section>
 <section id="sec-model" class="level2" data-number="4">
@@ -511,33 +475,6 @@ u_{itj} \;=\; \underbrace{\bfX_{itj}'\bfbeta_i + \mu_{itj}}_{\displaystyle \delt
 <p>Here <a href="#eq-utility" class="quarto-xref">Equation&nbsp;1</a> exacts a price, though a smaller one than it first appears. When the post-search component is a single normal shock, <span class="math inline">\(g\)</span> has the familiar closed form <span class="math inline">\(g(\cost) = m(\cost/\sigma_\varepsilon)\,\sigma_\varepsilon\)</span> with <span class="math inline">\(m\)</span> solving <span class="math inline">\(\cost/\sigma_\varepsilon = \phi(m) + m[\Phi(m)-1]\)</span> <span class="citation" data-cites="Kim_2010">(<a href="#ref-Kim_2010" role="doc-biblioref">Kim et al. 2010</a>)</span>, and this is what every existing implementation computes. With designed product-page attributes the pre-click belief about <span class="math inline">\(\bfL_{itj}'\bfkappa_i + \varepsilon_{itj}\)</span> is instead a <em>mixture</em> of normals — one component per attribute-level combination the design can produce, with weights fixed by the design — and <span class="math inline">\(g\)</span> has no scalar closed form.</p>
 <p>Two properties of a designed instrument keep this cheap. First, the mixture is <em>common across alternatives</em>: a balanced design draws <span class="math inline">\(\bfL_{itj}\)</span> from the same distribution at every position, so the respondent’s pre-click belief is identical for every alternative she has not yet opened, and the mixture enters the model only through <span class="math inline">\(g\)</span> rather than alternative by alternative. The same balance delivers the independence across <span class="math inline">\(j\)</span> that Weitzman’s rules require. Second, the left side of <a href="#eq-reservation" class="quarto-xref">Equation&nbsp;3</a> is then a probability-weighted sum of normal partial expectations, strictly decreasing in <span class="math inline">\(\resv_{itj}\)</span>, so one root-find recovers <span class="math inline">\(g\)</span> for each distinct search cost — and because position is categorical, the number of distinct search costs per respondent is the number of positions, not the number of alternative-task pairs. The scalar-normal case is the one-component special case, and nothing in Weitzman’s rules requires normality, so the decision rules of <a href="#sec-model-policy" class="quarto-xref">Section&nbsp;4.2</a> carry over unchanged.</p>
 <p>A variance-matched normal approximation is also available, and it is the specification we estimate. Absorbing the design mean of <span class="math inline">\(\bfL'\bfkappa_i\)</span> into <span class="math inline">\(\delta_{itj}\)</span> and replacing the mixture with a normal of variance <span class="math inline">\(\tilde\sigma_i^2 = \bfkappa_i'\mathrm{Var}(\bfL)\bfkappa_i + \sigma_\varepsilon^2\)</span> returns the model exactly to the Kim closed form with an inflated post-search standard deviation. This is more than a computational convenience. The benefit of search — the object the literature normalizes away for want of variation to estimate it <span class="citation" data-cites="Ursu_2018 Morozov_2021">(<a href="#ref-Ursu_2018" role="doc-biblioref">Ursu 2018</a>; <a href="#ref-Morozov_2021" role="doc-biblioref">Morozov et al. 2021</a>)</span> — is here <em>partly known</em>, because <span class="math inline">\(\mathrm{Var}(\bfL)\)</span> is fixed by the design rather than assumed. Because <span class="math inline">\(g\)</span> then depends on its arguments only through <span class="math inline">\(\cost/\tilde\sigma_i\)</span>, a single one-dimensional inverse serves every respondent, which is what keeps estimation tractable at panel scale (<a href="#sec-est-estimation" class="quarto-xref">Section&nbsp;5.5</a>). We report the exact mixture as a generalization and use it as a robustness check.</p>
-<!--
-DECIDED: carry L'kappa; estimate the variance-matched normal, report the exact
-mixture as the generalization. Show the collapse into a scalar match value (giving
-up on pricing product-page attributes altogether) as a misspecification case in
-@sec-simstudy.
-
-DECIDED: randomized attribute profiles, freshly drawn each task -- NOT a fixed set of
-named alternatives recurring across tasks. Reasons to state in @sec-instrument:
-  - independence across tasks is true by construction rather than assumed; a fresh
-    profile really is a new object, whereas a recurring alternative would carry its
-    match value forward and the model would have to absorb that as learning
-    (cf. @Morozov_2021 §6.4, who estimate an MA(1) carryover of rho = 0.3 across
-    sessions that are weeks apart -- ours are minutes apart, so carryover would be
-    much larger);
-  - heterogeneity then lives in beta_i over attributes, which is the conjoint HB
-    object clients want, rather than in alternative-specific intercepts;
-  - the nesting result needs attribute part-worths. Brand intercepts are not conjoint.
-Note the generalization: a fixed recurring alternative set is the case
-@Morozov_2021 and @Chung_2025 estimate, and their identification arguments apply to
-it directly; ours are the attribute-level analogue.
-
-Note for @sec-lit: @Ursu_2018 has exactly this list-page / product-page architecture
-and needs no mixture, because she does not observe what the product page contains
-(her §3.2.1) and so models it as an unobserved scalar match value. The difference is
-not the architecture, it is that we design the page. Say so explicitly rather than
-letting a referee find it.
--->
 <p><strong>Parameters.</strong> Collect the respondent-level parameters in <span class="math inline">\(\bftheta_i = (\bfbeta_i, \bfkappa_i, \bfgamma_i)\)</span> and the population parameters governing their distribution in <span class="math inline">\(\bfOmega\)</span>. We reserve <span class="math inline">\(\bftheta\)</span> for the parameter vector throughout and write <span class="math inline">\(\log \sigma_\varepsilon\)</span> explicitly where the log scale is meant.</p>
 </section>
 <section id="sec-model-policy" class="level3" data-number="4.2">
@@ -573,19 +510,7 @@ u_{it y_{it}} \;\ge\; \max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\}.
 <section id="sec-model-likelihood" class="level3" data-number="4.3">
 <h3 data-number="4.3" class="anchored" data-anchor-id="sec-model-likelihood"><span class="header-section-number">4.3</span> Likelihood</h3>
 <p>The four conditions are inequalities in the unobserved shocks <span class="math inline">\(\mu_{itj}\)</span> and <span class="math inline">\(\varepsilon_{itj}\)</span>, so the probability of an observed task outcome is the measure of the region in which all of them hold. Following 1 we write each condition as a difference required to be non-negative and index them <span class="math inline">\(\nu_1,\dots,\nu_4\)</span> in the order selection, continuation, stopping, choice.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>The <span class="math inline">\(\nu\)</span> labelling is not standard across papers
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> uses the opposite convention, with <span class="math inline">\(\nu_1\)</span> continuation and <span class="math inline">\(\nu_2\)</span> selection. Readers moving between the two literatures should check the labelling before comparing smoothing parameters or reported diagnostics. The crosswalk in <a href="#sec-appendix-notation" class="quarto-xref">Section&nbsp;11.1</a> records both.</p>
-</div>
-</div>
+<p>This labelling is not uniform in the literature: <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> adopts the opposite convention, with <span class="math inline">\(\nu_1\)</span> denoting continuation and <span class="math inline">\(\nu_2\)</span> selection. The crosswalk in <a href="#sec-appendix-notation" class="quarto-xref">Section&nbsp;11.1</a> records both, and comparisons of smoothing parameters or fit diagnostics across the two literatures should be made with the convention in mind.</p>
 <p>The task-level probability is</p>
 <p><span id="eq-task-likelihood"><span class="math display">\[
 \Pr\left(\Sset_{it}, y_{it} \mid \bftheta_i\right)
@@ -618,19 +543,7 @@ u_{it y_{it}} \;\ge\; \max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\}.
 </div>
 <p>The argument follows from the structure of the reservation value. As <span class="math inline">\(\cost_{itj} \to 0\)</span> the argument of <span class="math inline">\(g^{-1}\)</span> goes to zero and <span class="math inline">\(\resv_{itj} \to \infty\)</span>, so every reservation value eventually exceeds every realized utility. <a href="#eq-continuation" class="quarto-xref">Equation&nbsp;5</a> then holds at every <span class="math inline">\(h\)</span>, search never stops before the listing page is exhausted, and <a href="#eq-choice" class="quarto-xref">Equation&nbsp;7</a> becomes an unrestricted argmax over all alternatives with their post-search components resolved.</p>
 <p>What matters is the corollary. Conjoint is not merely <em>similar</em> to SIFT at low search costs; it is the <strong>boundary of the SIFT parameter space</strong>. Whether a category should be studied with conjoint or with SIFT therefore has an empirical answer rather than a methodological one: estimate the search cost and test whether it is distinguishable from zero. If it is not, conjoint was correctly specified and nothing was lost by fielding the richer instrument. If it is, conjoint was misspecified for that category, and the SIFT estimates say by how much and in which direction.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>The test is not a Wald test
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Because conjoint sits at the <em>boundary</em> rather than the interior of the parameter space — <span class="math inline">\(\cost \to 0\)</span> corresponds to <span class="math inline">\(\log \cost \to -\infty\)</span>, and to <span class="math inline">\(g(\cost) \to \infty\)</span> under the alternative parameterization — the null is not an interior point and the usual <span class="math inline">\(\chi^2\)</span> reference distribution does not apply. The restriction must be tested against observable implications or against a simulated reference distribution. <a href="#sec-est-nesting" class="quarto-xref">Section&nbsp;5.3</a> develops this.</p>
-</div>
-</div>
+<p>The restriction is not, however, testable by conventional means. Conjoint sits at the <em>boundary</em> of the SIFT parameter space rather than in its interior: <span class="math inline">\(\cost \to 0\)</span> corresponds to <span class="math inline">\(\log \cost \to -\infty\)</span>, and to <span class="math inline">\(g(\cost) \to \infty\)</span> under the alternative parameterization. The null is therefore not an interior point, and the usual <span class="math inline">\(\chi^2\)</span> reference distribution does not apply. The restriction must instead be assessed against observable implications or against a simulated reference distribution, as developed in <a href="#sec-est-nesting" class="quarto-xref">Section&nbsp;5.3</a>.</p>
 </section>
 <section id="sec-model-alternatives" class="level3" data-number="4.5">
 <h3 data-number="4.5" class="anchored" data-anchor-id="sec-model-alternatives"><span class="header-section-number">4.5</span> Alternative Search Protocols</h3>
@@ -638,11 +551,6 @@ u_{it y_{it}} \;\ge\; \max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\}.
 <p><strong>Fixed-sample search.</strong> In the Stigler tradition the consumer commits in advance to inspecting <span class="math inline">\(n\)</span> alternatives and then chooses the best, rather than deciding after each inspection whether to continue. The two protocols suit different environments — sequential fits click-through-and-inspect, fixed-sample fits “get three quotes” — and they are empirically distinguishable. <span class="citation" data-cites="DeLosSantos_2012">De los Santos et al. (<a href="#ref-DeLosSantos_2012" role="doc-biblioref">2012</a>)</span> and <span class="citation" data-cites="Honka_Chintagunta_2017">Honka and Chintagunta (<a href="#ref-Honka_Chintagunta_2017" role="doc-biblioref">2017</a>)</span> both test one against the other, and both must do so at the population level, because a single search spell per consumer carries too little information to discriminate individually.</p>
 <p>A task panel changes that arithmetic. With <span class="math inline">\(T\)</span> observations of the same respondent searching, the test can in principle be run respondent by respondent, and the answer may differ across people. We regard “what fraction of respondents search sequentially” as a question SIFT is unusually well placed to answer, and take it up in <a href="#sec-discussion" class="quarto-xref">Section&nbsp;9</a> rather than claim it here.</p>
 <p><strong>Satisficing.</strong> <span class="citation" data-cites="Caplin_2011">Caplin et al. (<a href="#ref-Caplin_2011" role="doc-biblioref">2011</a>)</span> use choice-process data to show that people frequently stop before finding the best available option — behaviour a reservation-value model will absorb into an inflated search cost rather than recognize as a different stopping rule. This is the sharpest behavioural alternative to <a href="#eq-stopping" class="quarto-xref">Equation&nbsp;6</a>, and it is observationally close enough that we do not claim to adjudicate it. Our position is the one set out in <a href="#sec-lit-lab" class="quarto-xref">Section&nbsp;2.3</a>: the model is an approximation whose predictions should be checked against holdout behaviour, and a satisficing benchmark is the right comparison to report alongside it.</p>
-<!--
-TODO: Proposition 1 is stated with a sketch rather than a proof. Either write the
-formal argument into @sec-appendix and restore a pointer to it, or leave the sketch
-and drop the claim to a formal proposition.
--->
 </section>
 </section>
 <section id="sec-estimation" class="level2" data-number="5">
@@ -656,20 +564,8 @@ and drop the claim to a formal proposition.
 <p>The identifying assumption underlying every position-based search-cost shifter is that a listing’s position affects what it costs to inspect an alternative, and nothing else. <span class="citation" data-cites="Ursu_2018">Ursu (<a href="#ref-Ursu_2018" role="doc-biblioref">2018</a>)</span> §4.3 takes this seriously rather than asserting it, enumerating the ways position could instead enter the model — through pre-search utility, through the post-search spread, or through combinations — and ruling them out with observational tests. Because SIFT randomizes position within every task and records the full click sequence, we can run those tests as experimental contrasts rather than conditional comparisons.</p>
 <p>Two statistics suffice, and neither requires fitting a model.</p>
 <p><strong>T1. Among clicked alternatives, does position predict purchase?</strong> <strong>T2. Is the first click near the top of the page?</strong></p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>The sign of T1 is the opposite of the natural intuition
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>It is tempting to reason that if position acts only on costs then it should have no bearing on what gets bought once someone has looked, so a flat T1 indicates position-in-cost. Simulation says otherwise, and the reason is selection. When position raises the search cost, an alternative in a <em>bad</em> position must have unusually high pre-search utility to be worth opening at all. Conditional on having been clicked, bad-position alternatives are therefore <em>better</em> than good-position ones, and T1 comes out strongly <strong>positive</strong>. When position instead enters pre-search utility, the direct effect and the selection effect roughly cancel and T1 is approximately <strong>flat</strong>.</p>
-<p>In our simulations (400 respondents × 8 tasks) T1 has slope <span class="math inline">\(+0.39\)</span> (<span class="math inline">\(p \approx 5\times10^{-15}\)</span>) when position acts on costs, and <span class="math inline">\(-0.05\)</span> (<span class="math inline">\(p = 0.06\)</span>) when it acts on utility. Reading a flat T1 as evidence for position-in-cost would get the answer exactly backwards.</p>
-</div>
-</div>
+<p>The sign of T1 warrants care, because it runs opposite to the natural intuition. One might reason that if position acts only on costs, it should bear on whether an alternative is opened but not on what is bought once it has been; a flat T1 would then indicate position-in-cost. Simulation shows the reverse, and the mechanism is selection. When position raises the search cost, an alternative in a poor position must have unusually high pre-search utility to be worth opening at all. Conditional on having been opened, poorly placed alternatives are therefore <em>better</em> on average than well-placed ones, and T1 is strongly <strong>positive</strong>. When position instead enters pre-search utility, the direct and selection effects approximately cancel and T1 is <strong>flat</strong>.</p>
+<p>In simulations of 400 respondents completing 8 tasks each, T1 has slope <span class="math inline">\(+0.39\)</span> (<span class="math inline">\(p \approx 5\times10^{-15}\)</span>) when position acts on costs, and <span class="math inline">\(-0.05\)</span> (<span class="math inline">\(p = 0.06\)</span>) when it acts on pre-search utility. Interpreting a flat T1 as evidence for position-in-cost would invert the conclusion.</p>
 <p>T2 separates the remaining case. If position widens the post-search spread, the reservation value <em>rises</em> with position, so the worst-placed alternatives would be opened first. That is what we see: mean first-click position 4.96 against a uniform benchmark of 3.5, versus 2.21 and 2.57 in the cost and utility arms.</p>
 <p>The two tests together form a decision rule:</p>
 <table class="caption-top table">
@@ -699,14 +595,6 @@ and drop the claim to a formal proposition.
 </tbody>
 </table>
 <p>We regard this as a design check to be run and reported in every SIFT study rather than assumed. Details, code, and the full three-arm simulation are in <a href="../comparisons/compare-ursu-position.qmd">the position comparison</a>.</p>
-<!--
-TODO: verify against Ursu (2018) §4.3 directly before asserting what SHE
-concludes from conversion-on-rank. Our simulation establishes what the tests do
-in OUR model; her data-generating environment differs (platform-assigned rather
-than randomized position, one click per impression), and the selection channel
-that drives our T1 result may operate differently there. Do not attribute the
-sign pattern above to her.
--->
 </section>
 <section id="separating-preferences-from-search-costs" class="level4" data-number="5.1.2">
 <h4 data-number="5.1.2" class="anchored" data-anchor-id="separating-preferences-from-search-costs"><span class="header-section-number">5.1.2</span> Separating preferences from search costs</h4>
@@ -716,14 +604,14 @@ sign pattern above to her.
 <section id="what-the-panel-buys-and-what-it-does-not" class="level4" data-number="5.1.3">
 <h4 data-number="5.1.3" class="anchored" data-anchor-id="what-the-panel-buys-and-what-it-does-not"><span class="header-section-number">5.1.3</span> What the panel buys, and what it does not</h4>
 <p><span class="citation" data-cites="Morozov_2021">Morozov et al. (<a href="#ref-Morozov_2021" role="doc-biblioref">2021</a>)</span> prove nonparametric identification of individual-level preferences <em>and</em> search costs from panel search data. It is worth being precise about the strength of that result, because it is easy to overclaim. The argument assumes the number of sessions per consumer grows without bound; with between 2 and 35 sessions per consumer and a mean of 5, <span class="citation" data-cites="Morozov_2021">Morozov et al. (<a href="#ref-Morozov_2021" role="doc-biblioref">2021</a>)</span> estimate hyperparameters rather than individual parameters (their §5.1).</p>
-<p>At the task counts SIFT can realistically field — call it <span class="math inline">\(T=10\)</span> — we are in the same position, and we say so plainly: what the panel delivers is <em>hierarchical posteriors in the conjoint tradition</em>, not nonparametric individual identification. That is the standard the conjoint audience already applies to part-worths, and it is the right standard here.</p>
+<p>At the task counts SIFT can realistically field — call it <span class="math inline">\(T=10\)</span> — we are in the same position. What the panel delivers is <em>hierarchical posteriors in the conjoint tradition</em> rather than nonparametric individual identification. That is the standard the conjoint audience already applies to part-worths, and it is the right standard here.</p>
 <p>The panel also does something less obvious. <span class="citation" data-cites="Ursu_2018">Ursu (<a href="#ref-Ursu_2018" role="doc-biblioref">2018</a>)</span> reports baseline search costs above $102 and attributes the magnitude to observing a single click per search impression with no way to link a consumer’s impressions; restricting attention to impressions with two or more clicks cuts mean estimated search costs by up to 83%. Single-spell data mechanically inflates search costs. The panel is therefore a <em>levels</em> argument as much as a heterogeneity argument.</p>
 </section>
 <section id="what-neither-the-panel-nor-the-shifter-buys-alone" class="level4" data-number="5.1.4">
 <h4 data-number="5.1.4" class="anchored" data-anchor-id="what-neither-the-panel-nor-the-shifter-buys-alone"><span class="header-section-number">5.1.4</span> What neither the panel nor the shifter buys alone</h4>
 <p>The two ingredients are complements, and the literature illustrates this by having one or the other but never both. <span class="citation" data-cites="Morozov_2021">Morozov et al. (<a href="#ref-Morozov_2021" role="doc-biblioref">2021</a>)</span> have the panel and still normalize the post-search standard deviation, reporting that little variation in their data speaks to it (their Appendix C). <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> has an exogenous search-cost shifter and no panel, and does estimate it — finding <span class="math inline">\(\tilde\sigma = 8.16\)</span> against the conventional normalization of one, with a confidence interval that excludes one and consequences large enough to reverse the sign of one search-cost coefficient and to understate a counterfactual by a factor of three to four.</p>
 <p>SIFT has both. It also has something neither has: because we design the product page, part of the post-search component is <em>fixed by the design</em> rather than inferred.</p>
-<p>This last point is stronger than it first appears, and it is worth stating carefully. In a field setting the analyst never observes what inspection revealed; the post-search shock is a residual, and all that can be recovered is its variance. In SIFT the analyst <em>wrote</em> the product page. So for every clicked alternative the revealed attributes <span class="math inline">\(\bfL_{ijt}\)</span> are known, and they enter realized utility as <span class="math inline">\(\bfL_{ijt}'\bfkappa\)</span> — a mean shift, not a variance. Preferences over attributes that are only visible <em>after</em> a click are therefore identified in exactly the way conjoint part-worths are: from which alternative gets bought given what was shown.</p>
+<p>This last point is stronger than it first appears. In a field setting the analyst never observes what inspection revealed; the post-search shock is a residual, and all that can be recovered is its variance. In SIFT the analyst <em>wrote</em> the product page. So for every clicked alternative the revealed attributes <span class="math inline">\(\bfL_{ijt}\)</span> are known, and they enter realized utility as <span class="math inline">\(\bfL_{ijt}'\bfkappa\)</span> — a mean shift, not a variance. Preferences over attributes that are only visible <em>after</em> a click are therefore identified in exactly the way conjoint part-worths are: from which alternative gets bought given what was shown.</p>
 <p>The distinction is easy to lose in implementation, with consequences that are silent. The ex ante spread <span class="math inline">\(\tilde\sigma\)</span> belongs in the reservation value, because that is computed before the click; the realized <span class="math inline">\(\bfL\)</span> belongs in the utility, because that is evaluated after it. Use <span class="math inline">\(\tilde\sigma\)</span> for both and <span class="math inline">\(\bfkappa\)</span> enters the likelihood only through <span class="math inline">\(\tilde\sigma^2 = \bfkappa'\mathrm{Var}(\bfL)\bfkappa + \sigma_\xi^2\)</span>, where it trades off exactly against <span class="math inline">\(\sigma_\xi\)</span> and is not identified at all — while every other parameter continues to recover normally, so nothing looks wrong. This is the sharpest version of the identification claim in the paper and it belongs in the introduction.</p>
 </section>
 </section>
@@ -736,20 +624,7 @@ sign pattern above to her.
 <section id="sec-est-nesting" class="level3" data-number="5.3">
 <h3 data-number="5.3" class="anchored" data-anchor-id="sec-est-nesting"><span class="header-section-number">5.3</span> Testing the Zero-Search-Cost Restriction</h3>
 <p>SIFT nests conjoint: as the search cost goes to zero every alternative is inspected, choice is made over fully realized utilities, and the model collapses to a standard choice-based conjoint model. Whether search costs are distinguishable from zero is therefore a testable question rather than a maintained assumption — but the test requires care.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>The obvious test is invalid
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The natural move is a Wald test on the estimated search cost. It does not work. Zero is a limit rather than an interior point of the parameter space: <span class="math inline">\(\cost \to 0\)</span> corresponds to <span class="math inline">\(g(\cost) \to +\infty\)</span> and <span class="math inline">\(\log \cost \to
--\infty\)</span>. The null sits at a boundary under every parameterization, so the standard asymptotics do not apply.</p>
-</div>
-</div>
+<p>The natural test — a Wald test on the estimated search cost — is not valid here. Zero is a limit rather than an interior point of the parameter space: <span class="math inline">\(\cost \to 0\)</span> corresponds to <span class="math inline">\(g(\cost) \to +\infty\)</span> and to <span class="math inline">\(\log \cost \to -\infty\)</span>. The null therefore sits at a boundary under every parameterization, and the standard asymptotics do not apply.</p>
 <p>We construct the test from observable implications instead, in three ways. The first is holdout fit: SIFT against the nested conjoint model on tasks withheld from estimation. The second is the observable implication itself — whether any respondent leaves alternatives unopened, which under zero search costs no one would. The third is a likelihood-ratio comparison against a <em>simulated</em> rather than <span class="math inline">\(\chi^2\)</span> reference distribution.</p>
 <p>This also bears on a parameterization choice. 1 §5.2 notes that estimating <span class="math inline">\(g\)</span> directly avoids a root-find inside the optimization loop. Convenient — but it puts the quantity we most want to test on a scale where the null is at infinity. We estimate <span class="math inline">\(\log \cost\)</span> and pay the root-find, which in our implementation is a spline evaluation rather than an iterative solve (see <a href="../R/README.md"><code>R/README.md</code></a>).</p>
 </section>
@@ -759,9 +634,9 @@ sign pattern above to her.
 <p><strong>Full hierarchical Bayes</strong> is what the conjoint audience expects and what makes individual part-worths and individual search costs directly reportable.</p>
 <p><strong>Two-stage empirical Bayes</strong> estimates the hyperparameters by simulated maximum likelihood and then draws individual posteriors by Metropolis–Hastings conditional on those estimates. This is what <span class="citation" data-cites="Morozov_2021">Morozov et al. (<a href="#ref-Morozov_2021" role="doc-biblioref">2021</a>)</span> do to compute personalized prices (their §7.2 and Appendix H), and it is considerably cheaper.</p>
 <p>Our runtime work reverses the ordering we originally expected. Because HB never integrates over the heterogeneity distribution — each respondent sits at their own <span class="math inline">\(\bftheta_i\)</span> — the mixing-draw multiplier that makes random-coefficients SMLE expensive simply does not arise. We therefore treat HB as the primary estimator and empirical Bayes as the robustness check.</p>
-<p>The runtime claim is worth stating precisely, because our first estimate of it was wrong. Extrapolating from per-evaluation costs we expected roughly 11 hours for a commercial-scale fit. The implemented sampler measures at <strong>1.8 ms per task per iteration</strong> — linear in tasks, and only weakly increasing in the number of simulation draws, because per-task overhead rather than draw count dominates. For 800 respondents × 10 tasks and 20,000 iterations that is <strong>about 80 hours single-threaded</strong>, not 11. The earlier figure assumed one pass over the data per iteration; the sampler makes two, and carries per-respondent overhead besides.</p>
-<p>What rescues the budget is that the <span class="math inline">\(\bftheta_i\)</span> step is embarrassingly parallel: each respondent’s Metropolis update touches only that respondent’s tasks. Parallelised across 12 cores we measure a 7.5× speedup — conservative, since at that problem size communication is a material share of each iteration — bringing a commercial fit to roughly <strong>11 hours</strong>, inside an overnight budget.</p>
-<p>The honest form of the claim is therefore conditional. HB is the cheaper route to heterogeneity <em>and</em> it fits in the budget, <strong>but only in parallel</strong>. A single-threaded implementation does not, and any replication attempt should be told so.</p>
+<p>Runtime should be stated precisely, since the sampler’s cost is easy to underestimate from per-evaluation timings alone. The implemented sampler measures <strong>1.8 ms per task per iteration</strong> — linear in the number of tasks, and only weakly increasing in the number of simulation draws, because per-task overhead rather than draw count dominates. Each iteration makes two passes over the data and carries per-respondent overhead in addition. For 800 respondents completing 10 tasks each, at 20,000 iterations, this amounts to approximately <strong>80 hours single-threaded</strong>.</p>
+<p>The <span class="math inline">\(\bftheta_i\)</span> step is, however, embarrassingly parallel: each respondent’s Metropolis update touches only that respondent’s tasks. Parallelised across 12 cores we measure a 7.5-fold speedup, which is conservative in the sense that communication accounts for a material share of each iteration at that problem size. A commercial-scale fit then completes in approximately <strong>11 hours</strong>.</p>
+<p>The claim is therefore conditional. Hierarchical Bayes is the cheaper route to heterogeneity and completes within an overnight budget, but only when the respondent step is parallelised; a single-threaded implementation does not.</p>
 </section>
 <section id="sec-est-estimation" class="level3" data-number="5.5">
 <h3 data-number="5.5" class="anchored" data-anchor-id="sec-est-estimation"><span class="header-section-number">5.5</span> Estimation</h3>
@@ -769,15 +644,6 @@ sign pattern above to her.
 <p>We have ported and validated the <span class="citation" data-cites="Chung_2025">Chung et al. (<a href="#ref-Chung_2025" role="doc-biblioref">2024</a>)</span> estimator and reproduced their Table 1; the port, its five validation checks, and two bugs we found in their shipped code are documented in <a href="../R/README.md"><code>R/README.md</code></a>.</p>
 <p>For SIFT itself we exploit a structural feature of the design. Conditional on the observed purchase, every Weitzman condition is a conjunction of linear inequalities — the stopping rule is a statement about a maximum and therefore a union in general, but the choice rule names which alternative attains that maximum. Continuation then collapses to the single binding constraint <span class="math inline">\(\resv_{s_K}\)</span>, because reservation values decrease along the search order. And conditional on <span class="math inline">\(\bfeta\)</span> and on the post-search shock to the chosen alternative, the remaining shocks are independent one-sided constraints that integrate out in closed form, leaving a one-dimensional integral.</p>
 <p>This yields a hybrid estimator: GHK on the pre-search block, quadrature on the post-search block. Measured against the kernel-smoothed accept–reject simulator of <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> at equal draw counts, its simulation variance is lower by a factor of 21 to 100 depending on the design. Because runtime is exactly linear in the number of draws, the relevant summary is time to a given precision, on which the hybrid is 3 to 21 times cheaper; crude frequency is not competitive on either margin. The kernel-smoothed simulator also shows the upward bias in the negative log-likelihood that <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> notes is intrinsic to it. The construction and its validation are in <a href="../notebooks/sift_likelihood.qmd"><code>notebooks/sift_likelihood.qmd</code></a>.</p>
-<!--
-TODO once the simulation study exists (@sec-simstudy):
-  - timings at commercial task counts with random coefficients, replacing the
-    extrapolations in R/README.md with measured HB fits;
-  - RMSE of the hybrid estimator against the kernel-smoothed one on identical
-    data, which is the apples-to-apples number reviewers will want;
-  - the recall-rate separation moment (Morozov Appendix D) computed on simulated
-    data, to show it moves with the intercept and not with search cost.
--->
 </section>
 <section id="sec-est-software" class="level3" data-number="5.6">
 <h3 data-number="5.6" class="anchored" data-anchor-id="sec-est-software"><span class="header-section-number">5.6</span> Software</h3>
@@ -786,24 +652,6 @@ TODO once the simulation study exists (@sec-simstudy):
 </section>
 <section id="sec-simstudy" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="sec-simstudy"><span class="header-section-number">6</span> Simulation Study</h2>
-<!--
-TODO: awaiting guidance. Run this before any client sees the instrument.
-
-Proposed scope:
-
-  - Parameter recovery at commercial scale: how many tasks per respondent,
-    how many alternatives per list-screen, how many respondents.
-  - Recovery of individual-level search costs specifically — the most
-    optimistic claim in the paper, and the one most likely to fail.
-  - Sensitivity to search-cost heterogeneity and to the strength of the
-    randomization.
-  - Cost of misspecification in both directions: fitting SIFT data with a
-    conjoint model (search costs forced to zero), and fitting conjoint-like
-    data with the search model.
-  - Power to reject a zero search cost.
-  - Behavioral robustness: data generated by satisficing or by rules of
-    thumb, then fit with the Weitzman likelihood.
--->
 <section id="design" class="level3" data-number="6.1">
 <h3 data-number="6.1" class="anchored" data-anchor-id="design"><span class="header-section-number">6.1</span> Design</h3>
 </section>
@@ -819,25 +667,6 @@ Proposed scope:
 </section>
 <section id="sec-analysis" class="level2" data-number="7">
 <h2 data-number="7" class="anchored" data-anchor-id="sec-analysis"><span class="header-section-number">7</span> Empirical Application</h2>
-<!--
-TODO: awaiting guidance and data.
-
-Proposed scope — the split-sample pilot described in the project brief:
-
-  - Category, sample, and fielding partner.
-  - The design: a SIFT block fielded alongside a conventional conjoint in a
-    split sample, in a category with a genuine list-screen.
-  - Descriptive evidence first: how much do respondents actually search,
-    where do they click, does position move clicks.
-  - Convergent validity — do the preference parameters from the search block
-    agree with the conjoint part-worths. The most persuasive result
-    available, and the one to lead with.
-  - Is the estimated search cost distinguishable from zero.
-  - Holdout choice prediction, search model versus conjoint.
-  - Does position randomization move consideration in a way conjoint cannot
-    capture.
-  - Task-order effects: learning and fatigue as drift in the search cost.
--->
 <section id="data-and-design" class="level3" data-number="7.1">
 <h3 data-number="7.1" class="anchored" data-anchor-id="data-and-design"><span class="header-section-number">7.1</span> Data and Design</h3>
 </section>
@@ -906,21 +735,20 @@ Proposed scope — the split-sample pilot described in the project brief:
 <h3 data-number="9.1" class="anchored" data-anchor-id="sec-disc-nesting"><span class="header-section-number">9.1</span> What the Nesting Result Changes</h3>
 <p>The proposition in <a href="#sec-model-nesting" class="quarto-xref">Section&nbsp;4.4</a> does more work than a technical observation usually does, and it is worth separating what it settles from what it does not.</p>
 <p>It settles the framing. SIFT does not compete with conjoint; it contains it. A practitioner who has bought conjoint for a decade is not being told they were wrong, and a category in which search costs turn out to be negligible is a category in which conjoint was the right tool and remains so. The nesting makes that a finding rather than a concession.</p>
-<p>It also converts a methodological argument into an empirical one. “Should this study be a conjoint or a SIFT” is answerable from SIFT data and not from conjoint data, which is an asymmetry worth being honest about: the richer instrument can diagnose whether the simpler one was adequate, but not the reverse. The cost of finding out is the cost of fielding SIFT.</p>
+<p>It also converts a methodological argument into an empirical one. “Should this study be a conjoint or a SIFT” is answerable from SIFT data and not from conjoint data. The asymmetry is a real one: the richer instrument can diagnose whether the simpler one was adequate, but not the reverse. The cost of finding out is the cost of fielding SIFT.</p>
 <p>What it does not settle is whether the <em>test</em> is easy. As <a href="#sec-est-nesting" class="quarto-xref">Section&nbsp;5.3</a> develops, the null sits at the boundary of the parameter space, so the comfortable <span class="math inline">\(\chi^2\)</span> machinery does not apply and the test has to be built from observable implications or a simulated reference distribution. We regard the sharpest of those implications as the simplest: under zero search costs, nobody leaves alternatives unopened. That is checkable before any model is fit.</p>
 </section>
 <section id="sec-disc-clicks" class="level3" data-number="9.2">
-<h3 data-number="9.2" class="anchored" data-anchor-id="sec-disc-clicks"><span class="header-section-number">9.2</span> Do Survey Clicks Measure Anything Real?</h3>
-<p>This is the first question a referee will ask and we would rather ask it ourselves.</p>
+<h3 data-number="9.2" class="anchored" data-anchor-id="sec-disc-clicks"><span class="header-section-number">9.2</span> Do Survey Clicks Measure Search?</h3>
 <p>Clicking in a survey is nearly free. It costs a second of attention and no money, whereas inspecting a product in a real category may cost a drive across town, a phone call, or an hour of reading. There is therefore no reason to expect the estimated <em>level</em> of search cost from a SIFT study to transfer to the field, and we do not claim that it does.</p>
 <p>Several mitigations are available and we regard them as design parameters rather than fixes. Incentive alignment in the tradition of <span class="citation" data-cites="Ding_2005">Ding et al. (<a href="#ref-Ding_2005" role="doc-biblioref">2005</a>)</span> and <span class="citation" data-cites="Ding_2007">Ding (<a href="#ref-Ding_2007" role="doc-biblioref">2007</a>)</span> raises the stakes of the choice itself. Artificial latency on the product page makes a click cost time. An explicit click budget makes it cost an alternative opportunity. Denominating cost in time rather than utility makes the units comparable across studies even if not across contexts. Each of these changes what the estimated search cost <em>means</em>, and a study should say which it used.</p>
-<p>The standing defence, and we think it is the right one, is that relative and comparative statements transfer even when levels do not. This is precisely the defence conjoint has made for four decades about utilities that are not interpretable in isolation, and it is defensible ground — but it should be stated before a reviewer states it, and it constrains the claims a SIFT study should make. <a href="#sec-managerial-friction" class="quarto-xref">Section&nbsp;8.4</a> accordingly recommends ratios as the headline quantity.</p>
+<p>The standing defence, and we think it is the right one, is that relative and comparative statements transfer even when levels do not. This is precisely the defence conjoint has made for four decades about utilities that are not interpretable in isolation. It is defensible ground, but it constrains the claims a SIFT study should make. <a href="#sec-managerial-friction" class="quarto-xref">Section&nbsp;8.4</a> accordingly recommends ratios as the headline quantity.</p>
 </section>
 <section id="sec-disc-expectations" class="level3" data-number="9.3">
 <h3 data-number="9.3" class="anchored" data-anchor-id="sec-disc-expectations"><span class="header-section-number">9.3</span> Rational Expectations About the Unopened</h3>
 <p>Weitzman’s solution requires the respondent to know the distribution of what a click will reveal. At the start of a survey she does not: she has never seen this category rendered this way, with these attributes at these levels.</p>
 <p>Two responses are available. A practice block, unscored, lets the respondent learn the environment before the data collection begins — the same logic that motivates warm-up tasks in conjoint. Alternatively, learning can be modelled across tasks, at the cost of abandoning the independence assumption in <a href="#eq-resp-likelihood" class="quarto-xref">Equation&nbsp;9</a> that makes the panel multiply.</p>
-<p>We take the first route and treat the second as a robustness check, but we note the tension honestly: a practice block assumes learning completes quickly, and whether it does is testable by looking for trends in click counts and search costs across task order. <a href="#sec-analysis" class="quarto-xref">Section&nbsp;7</a> reports that diagnostic. If search costs decline systematically across tasks, the practice block was insufficient and the learning model becomes necessary rather than optional.</p>
+<p>We take the first route and treat the second as a robustness check. The tension is that a practice block assumes learning completes quickly, and whether it does is testable by looking for trends in click counts and search costs across task order. <a href="#sec-analysis" class="quarto-xref">Section&nbsp;7</a> reports that diagnostic. If search costs decline systematically across tasks, the practice block was insufficient and the learning model becomes necessary rather than optional.</p>
 </section>
 <section id="sec-disc-behavioural" class="level3" data-number="9.4">
 <h3 data-number="9.4" class="anchored" data-anchor-id="sec-disc-behavioural"><span class="header-section-number">9.4</span> Do Respondents Follow the Reservation Rule?</h3>
@@ -936,41 +764,20 @@ Proposed scope — the split-sample pilot described in the project brief:
 </section>
 <section id="sec-disc-conjoint" class="level3" data-number="9.6">
 <h3 data-number="9.6" class="anchored" data-anchor-id="sec-disc-conjoint"><span class="header-section-number">9.6</span> Where Conjoint Remains the Right Tool</h3>
-<p>We would rather draw this boundary ourselves than have it drawn for us.</p>
 <p>Conjoint remains the better instrument for feature-level willingness-to-pay on a defined bundle, where there is nothing to search over and the question is purely one of tradeoffs. It remains better for new-product configuration when the alternative does not yet exist in any market and no listing page could be constructed for it. It remains better when an orthogonal design is needed for clean, low-variance part-worths, since SIFT deliberately lets respondents choose what to examine and therefore gives up balance. It remains better where a mature share simulator is the deliverable and the client’s decision process is built around it. And it remains better in any study where established norms, benchmarks, and comparability to prior waves matter more than novelty.</p>
-<p>Most honestly: conjoint is understood, defensible, cheap to estimate, and supported by four decades of accumulated practice. SIFT is none of those things yet. A method that is right in principle and unfamiliar in practice is a real cost to a research buyer, and we do not think it is served by pretending otherwise.</p>
+<p>Conjoint is also understood, defensible, cheap to estimate, and supported by four decades of accumulated practice. SIFT is none of those things yet. A method that is correct in principle but unfamiliar in practice imposes a real cost on the organization adopting it, and that cost is part of the comparison.</p>
 </section>
 <section id="sec-disc-extensions" class="level3" data-number="9.7">
 <h3 data-number="9.7" class="anchored" data-anchor-id="sec-disc-extensions"><span class="header-section-number">9.7</span> Extensions</h3>
 <p>Several extensions follow directly from the model and are, we think, more tractable than they appear.</p>
 <p><strong>Filters and sorts as search actions.</strong> <span class="citation" data-cites="Chen_Yao_2017">Chen and Yao (<a href="#ref-Chen_Yao_2017" role="doc-biblioref">2017</a>)</span> treat refinement as part of the search process rather than as a given. In a SIFT instrument the filter and sort controls are ours to design, so refinement could be observed and priced alongside inspection.</p>
 <p><strong>Discovery of alternatives.</strong> <span class="citation" data-cites="Greminger_2022">Greminger (<a href="#ref-Greminger_2022" role="doc-biblioref">2022</a>)</span> relaxes the assumption that the choice set is known at the outset. A listing page that paginates or lazily loads is exactly that setting, and it is a small change to the instrument.</p>
-<p><strong>Sequential versus fixed-sample, respondent by respondent.</strong> As <a href="#sec-model-alternatives" class="quarto-xref">Section&nbsp;4.5</a> notes, the task panel makes this test available at the individual level, where the literature has been able to run it only at the population level. “What fraction of respondents search sequentially” is a question we can answer and nobody has.</p>
+<p><strong>Sequential versus fixed-sample, respondent by respondent.</strong> As <a href="#sec-model-alternatives" class="quarto-xref">Section&nbsp;4.5</a> notes, the task panel makes this test available at the individual level, where the literature has been able to run it only at the population level. The distribution of search protocols across respondents is therefore identifiable in principle and, to our knowledge, has not been estimated.</p>
 <p><strong>Attribute-level search.</strong> Our model has respondents searching across <em>alternatives</em>; the Mouselab literature has subjects searching across <em>attributes</em> of displayed alternatives. Both happen in real shopping. A model that permits either would be a genuine extension rather than a variation, and the instrument already records enough to identify which is occurring.</p>
-<!--
-TODO before circulating:
-  - @sec-disc-estimation cites Honka_2014 and Ursu_2018 as reported by Yavorsky.
-    Verify those are the papers he cites for SMLE bias rather than paraphrasing
-    from memory.
-  - @sec-disc-expectations promises a learning diagnostic in @sec-analysis, which
-    does not exist yet. Keep the promise or cut the sentence.
-  - the claim that ratios are more robust than levels to finite-sample bias is a
-    conjecture. It is cheap to test in @sec-simstudy and should be tested before
-    it is asserted here or in @sec-managerial-friction.
--->
 </section>
 </section>
 <section id="sec-conclusion" class="level2" data-number="10">
 <h2 data-number="10" class="anchored" data-anchor-id="sec-conclusion"><span class="header-section-number">10</span> Conclusion</h2>
-<!--
-TODO: awaiting guidance. Draft last.
-
-The closing argument, in one line: conjoint tells you what people prefer once
-they are looking; SIFT tells you what they look at, what it costs them to
-look, and what they never see at all. Because conjoint is the zero-search-cost
-special case, adopting the instrument costs nothing when search frictions are
-absent and buys a second set of parameters when they are not.
--->
 </section>
 
 <section id="references" class="level2 unnumbered">
@@ -1264,15 +1071,6 @@ Table&nbsp;1: Notation crosswalk
 </section>
 <section id="additional-appendices" class="level3" data-number="11.2">
 <h3 data-number="11.2" class="anchored" data-anchor-id="additional-appendices"><span class="header-section-number">11.2</span> Additional Appendices</h3>
-<!--
-TODO:
-  B. Derivation of the mixture-of-normals reservation value.
-  C. Proof of the zero-search-cost nesting result (@sec-model-nesting).
-  D. Sampler details and convergence diagnostics.
-  E. Validation against the reference implementations (see @sec-estimation).
-  F. Instrument screenshots and the full attribute list.
-  G. Additional simulation results.
--->
 </section>
 <section id="sec-appendix-lit" class="level3" data-number="11.3">
 <h3 data-number="11.3" class="anchored" data-anchor-id="sec-appendix-lit"><span class="header-section-number">11.3</span> Annotated Bibliography</h3>
@@ -1324,7 +1122,7 @@ TODO:
 <li><strong><span class="citation" data-cites="Sonnemans_1998">Sonnemans (<a href="#ref-Sonnemans_1998" role="doc-biblioref">1998</a>)</span>. [M]</strong> Verbal-protocol evidence and classification of search strategies.</li>
 <li><strong><span class="citation" data-cites="Brown_2011">Brown et al. (<a href="#ref-Brown_2011" role="doc-biblioref">2011</a>)</span>. [L]</strong> Real-time search in the laboratory and in the market.</li>
 </ul>
-<p><em>Net read.</em> Mixed, and this is the single largest scientific risk to the project. Behavior is directionally consistent with reservation-value logic, but the deviations are systematic rather than random: too little search relative to the optimum, order effects, and sensitivity to sunk costs. The paper should state this openly and early rather than let a referee find it.</p>
+<p><em>Net read.</em> Mixed, and this is the single largest scientific risk to the project. Behavior is directionally consistent with reservation-value logic, but the deviations are systematic rather than random: too little search relative to the optimum, order effects, and sensitivity to sunk costs. <a href="#sec-lit-lab" class="quarto-xref">Section&nbsp;2.3</a> and <a href="#sec-disc-behavioural" class="quarto-xref">Section&nbsp;9.4</a> take up what follows for the model.</p>
 </section>
 <section id="information-acquisition-mouselab-and-eye-tracking" class="level4" data-number="11.3.5">
 <h4 data-number="11.3.5" class="anchored" data-anchor-id="information-acquisition-mouselab-and-eye-tracking"><span class="header-section-number">11.3.5</span> Information acquisition: Mouselab and eye-tracking</h4>
@@ -1365,30 +1163,12 @@ TODO:
 <li><strong><span class="citation" data-cites="Allenby_2019">Allenby et al. (<a href="#ref-Allenby_2019" role="doc-biblioref">2019</a>)</span>, <em>Handbook of the Economics of Marketing</em>. [H]</strong> Economic foundations of conjoint analysis; the statement of the workhorse model that SIFT nests.</li>
 <li><strong><span class="citation" data-cites="Marshall_Bradlow_2002">Marshall and Bradlow (<a href="#ref-Marshall_Bradlow_2002" role="doc-biblioref">2002</a>)</span>, <em>JASA</em>. [H]</strong> A unified approach to conjoint analysis models; precedent for treating distinct response formats as one likelihood family.</li>
 <li><strong><span class="citation" data-cites="Ding_2005">Ding et al. (<a href="#ref-Ding_2005" role="doc-biblioref">2005</a>)</span>, <em>Journal of Marketing Research</em>; <span class="citation" data-cites="Ding_2007">Ding (<a href="#ref-Ding_2007" role="doc-biblioref">2007</a>)</span>, <em>Journal of Marketing Research</em>. [H]</strong> Incentive alignment in conjoint. If estimated search costs are to carry units that mean anything, the task needs real stakes; this is the precedent for how to supply them.</li>
-<li><strong>Sawtooth ACBC (adaptive choice-based conjoint).</strong> Not an academic reference, but the closest commercial product to a two-stage consideration instrument: a screening section (must-haves, unacceptables) followed by a choice tournament. Study as design precedent, and as the thing a client may already have bought. <!-- TODO: cite the Sawtooth technical paper --></li>
-<li><strong>Virtual-shelf and shopper-simulation vendors.</strong> Several field shelf-set exercises with click data, reported descriptively (time to first click, click share). No known case of backing a structural search model out of one. <strong>This is where prior art most likely hides; check directly.</strong> <!-- TODO: vendor scan, then decide whether this belongs in the paper at all --></li>
+<li><strong>Sawtooth ACBC (adaptive choice-based conjoint).</strong> Not an academic reference, but the closest commercial product to a two-stage consideration instrument: a screening section (must-haves, unacceptables) followed by a choice tournament. Study as design precedent, and as the thing a client may already have bought.</li>
+<li><strong>Virtual-shelf and shopper-simulation vendors.</strong> Several field shelf-set exercises with click data, reported descriptively (time to first click, click share). No known case of backing a structural search model out of one. <strong>This is where prior art most likely hides; check directly.</strong></li>
 </ul>
 </section>
 <section id="sec-applit-positioning" class="level4" data-number="11.3.9">
 <h4 data-number="11.3.9" class="anchored" data-anchor-id="sec-applit-positioning"><span class="header-section-number">11.3.9</span> Positioning</h4>
-<!--
-TODO: prose. The four claims to be stated here as hypotheses the paper
-tests, not as established gaps:
-
-  1. A fieldable, productized survey instrument that yields Weitzman
-     search-cost parameters the way conjoint yields part-worths. Lab
-     analogues exist (@Gabaix_2006); a survey method with design norms
-     and reporting conventions does not.
-  2. Individual-level search costs identified from within-subject panel
-     data rather than cross-sectional heterogeneity.
-  3. Designed exogenous variation in position and information architecture
-     in every task, rather than obtained once from a platform (@Ursu_2018).
-  4. Segmentation on search behavior — how people shop — rather than on
-     preference. No prior art known.
-
-Each of these is a claim to disprove during the verification pass, not a
-result. Do not write them as results.
--->
 </section>
 </section>
 </div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{yavorsky2026,

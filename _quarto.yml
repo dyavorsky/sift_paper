@@ -7,11 +7,20 @@ execute:
 format:
   html:
     toc: true
-  pdf:
-    pdf-engine: pdflatex
-    include-in-header:
-      - text: |
-          \usepackage{mathtools}
+    toc-location: right
+    # a light/dark pair puts a theme toggle in the page header
+    theme:
+      light: cosmo
+      dark: darkly
+
+  # PDF is shelved while drafting. To restore it, uncomment this block AND
+  # re-add `tinytex: true` to .github/workflows/publish.yml -- the PDF format is
+  # the only reason CI needs a LaTeX installation.
+  # pdf:
+  #   pdf-engine: pdflatex
+  #   include-in-header:
+  #     - text: |
+  #         \usepackage{mathtools}
 
 manuscript:
   notebooks:

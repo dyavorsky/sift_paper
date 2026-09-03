@@ -1,0 +1,7 @@
+# Applies to every .qmd rendered in this directory.
+format:
+  html:
+    toc: true
+    theme:
+      light: cosmo
+      dark: darkly

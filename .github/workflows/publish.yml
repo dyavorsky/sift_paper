@@ -18,7 +18,10 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: pre-release
-          tinytex: true
+          # TinyTeX is needed only for the PDF format, which is shelved in
+          # _quarto.yml while drafting. Its installer queries the GitHub API for
+          # the latest tinytex release and is rate-limited unpredictably, which
+          # is what broke the build on 2026-09-03.
 
       # The manuscript includes notebooks/sift_likelihood.qmd, which has {r}
       # chunks. Their code is not executed (eval: false) but knitr still needs

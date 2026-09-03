@@ -70,15 +70,23 @@ placement, and media on one side; product and price on the other — and a metho
 that cannot separate them will send a manager to the wrong lever roughly
 whenever consideration rather than preference is binding.
 
-**It recovers preferences that conjoint systematically understates.** This is
-sharper than "conjoint is silent about search." In our simulations, conjoint
-recovers preferences for attributes visible *before* a click accurately at any
-search cost, but attenuates preferences for attributes revealed *after* a click
-in proportion to how little of the choice set gets inspected. At an inspection
-rate close to what @Yavorsky_2021 observes in the field, conjoint attenuates
-post-click part-worths by **64%** (@sec-simstudy). An analyst studying a category
-with real search frictions would conclude that experience attributes barely
-matter, when in fact respondents never saw them.
+**It represents consideration, which conjoint structurally cannot.** The claim
+here is narrower than it is sometimes made, and the narrower version is the
+defensible one. A conjoint task shows every attribute of every alternative, so it
+measures preference under full information, and in simulation it does so
+accurately — recovering preference ratios to within 0.03, including for
+attributes that a shopper would only discover by inspection (@sec-simstudy).
+Conjoint does not mismeasure preference.
+
+The difficulty is downstream. Share is the product of the probability that an
+alternative is considered and the probability that it is chosen once considered.
+Conjoint estimates the second term well and sets the first to one, so every
+question about *what gets seen* falls outside what the instrument can express. In
+the same simulation, purchase share falls by half again from the top of the
+listing page to the bottom; conjoint predicts a ratio of exactly one, because a
+conjoint task has no position and the fitted model has no parameter that could
+carry one. This is not a bias that a larger sample would reduce. The model cannot
+state the proposition that promoting a product changes its share.
 
 **It answers placement and merchandising questions that conjoint cannot pose.**
 What happens to share if we move from position six to position two? What belongs
@@ -158,7 +166,16 @@ engineering problem rather than a fundamental one, and it is improving quickly:
 kernel-smoothed simulators that dominated the literature. But it is a real
 constraint on iteration today.
 
-**Precision on the search cost.** Preferences are recovered cleanly at
+**Less precise preference estimates.** A conjoint task reveals every attribute
+of every alternative; a SIFT task reveals post-click attributes only for the
+alternatives a respondent chose to open, which at realistic inspection rates is a
+small minority. Conjoint therefore carries more information per task about
+preferences for attributes that require inspection, and in simulation it recovers
+them more accurately than SIFT does (@sec-simstudy). SIFT buys a consideration
+stage at some cost in preference precision, and a study whose only object is
+preference measurement should use conjoint.
+
+**Precision on the search cost.** Preferences are recovered adequately at
 commercial sample sizes. The *level* of the search cost is harder, and carries a
 finite-sample bias that declines slowly in both sample size and simulation draws
 (@sec-simstudy). This is a known property of simulated maximum likelihood

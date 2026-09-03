@@ -102,5 +102,5 @@ her data. Her environment differs in ways that plausibly matter — position is
 platform-assigned rather than randomized, and she observes one click per
 impression — so the selection channel driving our T1 result may operate
 differently there. The characterization of her argument in
-[`sections/identification.qmd`](../sections/identification.qmd) carries a TODO
+[`sections/05_identification.qmd`](../sections/05_identification.qmd) carries a TODO
 to check §4.3 directly before we attribute any sign pattern to her.

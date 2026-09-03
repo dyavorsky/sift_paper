@@ -30,7 +30,7 @@ author:
 keywords: consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation
 
 abstract: |
-  Conjoint analysis measures what consumers prefer among alternatives they have been shown. It is silent on what they would have looked at, what looking costs them, and what they never see at all. We introduce SIFT, a survey instrument in which the respondent faces a list-screen of alternatives, clicks through to inspect individual listings at will, and then chooses — a task that reproduces the two-stage list-then-detail architecture of the environments in which many category purchases are actually made. Each respondent completes a sequence of such tasks, and position, list-screen content, and detail-page content are randomized by design in every one. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters and search costs. We derive the likelihood, characterize what the designed variation buys for identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery at commercial task counts, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT's preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — a distinction conjoint cannot draw, and one that carries different managerial remedies.
+  Conjoint analysis measures what consumers prefer among alternatives they have been shown;  it encourages a full-information choice. Many consumer choices are made without full information: consumers inspect a subset of available alternatives and select among only those inspected. We introduce SIFT, a survey instrument that reproduces this two-stage architecture. The respondent faces a list-screen of alternatives, clicks through at will to inspect individual listings, and then chooses. Each respondent completes a sequence of such tasks where the position, list-screen content, and detail-page content are randomized by design. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters and search costs. We derive the likelihood, characterize what the designed variation contributes to identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT's preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — two outcomes conjoint cannot separate, and ones that call for opposite managerial responses.
 
 bibliography: references.bib
 citation: true
@@ -40,29 +40,29 @@ citation: true
 {{< include latex_commands.qmd >}}
 
 <!-- Sections -->
-{{< include sections/intro.qmd >}}
+{{< include sections/01_intro.qmd >}}
 
-{{< include sections/litreview.qmd >}}
+{{< include sections/02_litreview.qmd >}}
 
-{{< include sections/instrument.qmd >}}
+{{< include sections/03_instrument.qmd >}}
 
-{{< include sections/model.qmd >}}
+{{< include sections/04_model.qmd >}}
 
-{{< include sections/identification.qmd >}}
+{{< include sections/05_identification.qmd >}}
 
-{{< include sections/simstudy.qmd >}}
+{{< include sections/06_simstudy.qmd >}}
 
-{{< include sections/analysis.qmd >}}
+{{< include sections/07_analysis.qmd >}}
 
-{{< include sections/managerial.qmd >}}
+{{< include sections/08_managerial.qmd >}}
 
-{{< include sections/discussion.qmd >}}
+{{< include sections/09_discussion.qmd >}}
 
-{{< include sections/conclusion.qmd >}}
+{{< include sections/10_conclusion.qmd >}}
 
-{{< include sections/appendix.qmd >}}
+{{< include sections/91_appendix.qmd >}}
 
-{{< include sections/appendix-lit.qmd >}}
+{{< include sections/92_appendix-lit.qmd >}}
 
 ## References {.unnumbered}
 

@@ -1,0 +1,135 @@
+---
+title: "Two instruments, one population"
+subtitle: "Does conjoint mismeasure preference, or measure it well and fail downstream?"
+format: html
+bibliography: ../references.bib
+execute: {echo: false, warning: false}
+---
+
+```{r}
+#| include: false
+res <- function(n) {
+  p <- file.path("out", paste0(n, ".rds"))
+  if (!file.exists(p)) p <- file.path("comparisons", "out", paste0(n, ".rds"))
+  readRDS(p)
+}
+r <- res("instruments")
+```
+
+## The question
+
+It is easy to say that conjoint "ignores search" and leave the implication that
+its part-worths are therefore wrong. That claim needs testing, because there is a
+competing account under which conjoint is doing nothing wrong at all.
+
+A conjoint task shows every attribute of every alternative. The respondent sees
+the post-click attributes and weighs them. Search governs what a shopper *learns*,
+not what they *like*, so a full-information task may recover exactly the
+preferences that operate in the market. Under that account conjoint measures
+correctly and fails only when its estimates are carried into a world where
+consideration is incomplete.
+
+Two hypotheses, then:
+
+- **A — conjoint mismeasures preference.**
+- **B — conjoint measures preference well and fails downstream.**
+
+## Design
+
+One population with fixed preferences $(\boldsymbol\beta, \boldsymbol\kappa)$ and
+fixed search costs. Both instruments are fielded on it.
+
+| arm | task |
+|---|---|
+| SIFT | respondents search, inspect, and choose; fit the search model |
+| conjoint | the same attribute profiles, all shown at once, no search; fit a conditional logit |
+
+Then two separate questions. **Measurement:** does each instrument recover the
+preference ratios? **Prediction:** does each reproduce market behaviour, where
+behaviour is the search-then-choose process the population actually follows?
+
+Comparison is on ratios rather than levels, since logit and probit scales differ.
+Code: [`exp_instruments.R`](exp_instruments.R).
+
+## Result 1 — conjoint measures preference *better* than SIFT
+
+```{r}
+m <- r$meas
+knitr::kable(data.frame(
+  ratio = m$ratio, truth = sprintf("%.2f", m$truth),
+  SIFT = sprintf("%.3f", m$sift), conjoint = sprintf("%.3f", m$conjoint),
+  `SIFT error` = sprintf("%+.3f", m$sift_err),
+  `conjoint error` = sprintf("%+.3f", m$conjoint_err),
+  check.names = FALSE), align = "r")
+```
+
+Hypothesis A is rejected, and firmly. The conjoint survey recovers every ratio to
+within 0.03, including both post-click attributes. It is not attenuating anything.
+
+SIFT recovers the listing-page ratio equally well but errs by $+0.44$ and
+$-0.27$ on the two product-page ratios. The direction is unsurprising on
+reflection: a conjoint task reveals the post-click attributes of every
+alternative in every task, whereas SIFT reveals them only for alternatives the
+respondent chose to open — roughly one in six here. Conjoint simply has far more
+information about $\boldsymbol\kappa$ per task, and $\boldsymbol\kappa$ inherits
+the finite-sample bias documented in `R/DIAGNOSTICS.md`.
+
+**This is a cost of the instrument and should be reported as one.** SIFT is not a
+better instrument for measuring preferences. On this evidence it is a somewhat
+worse one.
+
+## Result 2 — conjoint cannot represent the question that matters
+
+```{r}
+p <- r$pred
+knitr::kable(data.frame(
+  `listing position` = p$position,
+  truth = sprintf("%.3f", p$truth),
+  SIFT = sprintf("%.3f", p$sift),
+  conjoint = sprintf("%.3f", p$conjoint),
+  check.names = FALSE), align = "r")
+```
+
+Purchase share falls steadily down the listing page, from 0.178 at the top to
+0.119 at the bottom — a ratio of **1.50**. SIFT reproduces this from its
+estimates, 0.185 to 0.114, a ratio of **1.61**.
+
+Conjoint predicts 0.155 at the top and 0.154 at the bottom. A ratio of
+**1.00**.
+
+This is not a bias that a larger sample would shrink. Conjoint has no position
+parameter, because a conjoint task has no position: every alternative is equally
+and costlessly visible. The model therefore *cannot* express the proposition that
+moving an alternative up the page changes anything, and it predicts — with
+complete internal consistency — that promoting a product from the bottom of the
+listing to the top would have no effect whatsoever on its share.
+
+## What this settles
+
+**Hypothesis B, not A.** The failure is structural rather than statistical, and
+it sits downstream of measurement.
+
+Share is the product of the probability an alternative is considered and the
+probability it is chosen once considered. Conjoint estimates the second term
+accurately — better than SIFT does — and sets the first to one. Every question
+about *what gets seen* therefore falls outside what the instrument can represent:
+placement, ranking, merchandising, listing-page design, and the distinction
+between an alternative that was rejected and one that was never opened.
+
+The honest summary of the comparison is that the two instruments are good at
+different things. Conjoint measures preference more precisely. SIFT measures
+preference less precisely and adds a consideration stage that conjoint cannot
+represent at any sample size. Which is preferable depends entirely on whether the
+question is about preference or about share.
+
+## Caveats
+
+- One dataset per arm. The search-cost block carries substantial finite-sample
+  bias, so the SIFT measurement errors here should not be read as a precise
+  quantification of the penalty; replication would sharpen it.
+- The conjoint respondent is modelled as fully compensatory, attending to every
+  attribute. Real respondents screen, and non-compensatory processing would
+  attenuate $\boldsymbol\kappa$ in the conjoint arm. This experiment therefore
+  gives conjoint its **best case**, which is the right way to test hypothesis A.
+- Both arms use the same attribute profiles and sample size, so the comparison
+  holds the design fixed and varies only the task.

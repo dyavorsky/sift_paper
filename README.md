@@ -42,7 +42,7 @@ review holds annotated bullets pending a citation-verification pass; the
 remaining sections are section and subsection headers with scoping notes in
 HTML comments.
 
-**All references in `references.bib` and `sections/litreview.qmd` are
+**All references in `references.bib` and `sections/02_litreview.qmd` are
 unverified** — reconstructed from memory, flagged [H]/[M]/[L] for confidence.
 Verify before circulating.
 

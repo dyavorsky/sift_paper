@@ -118,7 +118,7 @@ estimate of $\tilde\sigma$ is closer to the truth at $T=1$ in two of three
 sweeps.
 
 This is worth stating plainly because it sharpens the claim in
-[`sections/identification.qmd`](../sections/identification.qmd). The
+[`sections/05_identification.qmd`](../sections/05_identification.qmd). The
 **exogenous shifter** is what identifies the post-search spread; the **panel** is
 what identifies heterogeneity. These are separate arguments doing separate work,
 and the model fitted here is homogeneous, so the panel has nothing to contribute.

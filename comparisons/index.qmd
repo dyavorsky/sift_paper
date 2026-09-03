@@ -39,6 +39,7 @@ Shared setup lives in [`_common.R`](_common.R).
 | [Conjoint](compare-conjoint.qmd) | standard choice-based conjoint | what does an analyst get wrong when search is costly? | **done** |
 | [Position](compare-ursu-position.qmd) | @Ursu_2018 §4.3 | can we test where position acts instead of assuming it? | **done** |
 | [Simulators](compare-simulators.qmd) | @Ursu_Seiler_Honka_2024 Table 2 | does their simulator ranking hold on the SIFT design? | **done** |
+| [Instruments](compare-instruments.qmd) | conjoint as a *survey* | does conjoint mismeasure preference, or fail downstream? | **done** |
 | [MVSD](compare-yavorsky-mvsd.qmd) | @Yavorsky_2021 | what does normalizing the post-search spread to 1 cost? | **done** |
 | [Estimator](compare-chung-estimator.qmd) | @Chung_2025 | probability mapping vs the GHK hybrid | scoped |
 | [Panel](compare-morozov-panel.qmd) | @Morozov_2021 | does the recall rate separate tastes from search costs? | scoped |

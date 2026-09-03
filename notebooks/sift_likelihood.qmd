@@ -268,7 +268,7 @@ Full detail, including the crude-frequency arm, is in
 [the simulator comparison](../comparisons/compare-simulators.qmd).
 
 That matters for the 12-hour budget. It also reframes the choice recorded in
-[`sections/identification.qmd`](../sections/identification.qmd): the binding
+[`sections/05_identification.qmd`](../sections/05_identification.qmd): the binding
 constraint on SIFT is estimating **heterogeneity**, and the cheaper route there
 is hierarchical Bayes, which never integrates over the heterogeneity
 distribution at all.
@@ -280,4 +280,4 @@ distribution at all.
   already accommodates it through $\mathrm{Var}(\mathbf{L})$, but the DGP currently
   draws $\mathbf{L}$ independently.
 - A proper simulation study at commercial task counts, for
-  [`sections/simstudy.qmd`](../sections/simstudy.qmd).
+  [`sections/06_simstudy.qmd`](../sections/06_simstudy.qmd).

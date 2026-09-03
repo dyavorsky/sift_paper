@@ -16,6 +16,25 @@ res <- function(n) {
 }
 ```
 
+## What this study is, and is not
+
+This study fits a **full-information choice model to search-generated data** —
+which is what one does when modelling field clickstream, and what a conjoint
+share simulator implicitly assumes when it treats every alternative as
+considered.
+
+It is *not* a simulation of a conjoint survey. A conjoint survey constructs a
+full-information task, so the respondent genuinely does see and weigh the
+post-click attributes, and the part-worths it recovers need not be attenuated at
+all. The distinction matters enough that it has its own study:
+[two instruments, one population](compare-instruments.qmd) fields both
+instruments on the same simulated respondents and separates measurement from
+prediction.
+
+Read the result below as a statement about *carrying* full-information
+part-worths into a market where consumers search, not about what a conjoint
+questionnaire measures.
+
 ## The question
 
 SIFT nests conjoint. As the search cost goes to zero every alternative is

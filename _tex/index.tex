@@ -230,32 +230,31 @@ choice-based conjoint, structural estimation}},
 \subtitle{Measuring Preferences and Search Costs in a Single Survey
 Instrument}
 \author{Dan Yavorsky \and Eric T. Bradlow}
-\date{2026-08-27}
+\date{2026-09-03}
 \begin{document}
 \maketitle
 \begin{abstract}
 Conjoint analysis measures what consumers prefer among alternatives they
-have been shown. It is silent on what they would have looked at, what
-looking costs them, and what they never see at all. We introduce SIFT, a
-survey instrument in which the respondent faces a list-screen of
-alternatives, clicks through to inspect individual listings at will, and
-then chooses --- a task that reproduces the two-stage list-then-detail
-architecture of the environments in which many category purchases are
-actually made. Each respondent completes a sequence of such tasks, and
-position, list-screen content, and detail-page content are randomized by
-design in every one. We fit the resulting click-and-choose data with a
-sequential search model in the tradition of Weitzman (1979), recovering
-both preference parameters and search costs. We derive the likelihood,
-characterize what the designed variation buys for identification, and
-provide aggregate and hierarchical Bayesian estimation routines with
-replication code in R. A simulation study documents parameter recovery
-at commercial task counts, and an empirical application fielded in
-partnership with a consumer insights consultancy compares SIFT's
-preference estimates against conjoint part-worths from a split sample,
-tests whether estimated search costs are distinguishable from zero, and
-decomposes non-purchase into never-inspected and inspected-but-rejected
---- a distinction conjoint cannot draw, and one that carries different
-managerial remedies.
+have been shown; it encourages a full-information choice. Many consumer
+choices are made without full information: consumers inspect a subset of
+available alternatives and select among only those inspected. We
+introduce SIFT, a survey instrument that reproduces this two-stage
+architecture. The respondent faces a list-screen of alternatives, clicks
+through at will to inspect individual listings, and then chooses. Each
+respondent completes a sequence of such tasks where the position,
+list-screen content, and detail-page content are randomized by design.
+We fit the resulting click-and-choose data with a sequential search
+model in the tradition of Weitzman (1979), recovering both preference
+parameters and search costs. We derive the likelihood, characterize what
+the designed variation contributes to identification, and provide
+aggregate and hierarchical Bayesian estimation routines with replication
+code in R. A simulation study documents parameter recovery, and an
+empirical application fielded in partnership with a consumer insights
+consultancy compares SIFT's preference estimates against conjoint
+part-worths from a split sample, tests whether estimated search costs
+are distinguishable from zero, and decomposes non-purchase into
+never-inspected and inspected-but-rejected --- two outcomes conjoint
+cannot separate, and ones that call for opposite managerial responses.
 \end{abstract}
 
 
@@ -352,17 +351,26 @@ product and price on the other --- and a method that cannot separate
 them will send a manager to the wrong lever roughly whenever
 consideration rather than preference is binding.
 
-\textbf{It recovers preferences that conjoint systematically
-understates.} This is sharper than ``conjoint is silent about search.''
-In our simulations, conjoint recovers preferences for attributes visible
-\emph{before} a click accurately at any search cost, but attenuates
-preferences for attributes revealed \emph{after} a click in proportion
-to how little of the choice set gets inspected. At an inspection rate
-close to what Yavorsky et al. (2021) observes in the field, conjoint
-attenuates post-click part-worths by \textbf{64\%}
-(Section~\ref{sec-simstudy}). An analyst studying a category with real
-search frictions would conclude that experience attributes barely
-matter, when in fact respondents never saw them.
+\textbf{It represents consideration, which conjoint structurally
+cannot.} The claim here is narrower than it is sometimes made, and the
+narrower version is the defensible one. A conjoint task shows every
+attribute of every alternative, so it measures preference under full
+information, and in simulation it does so accurately --- recovering
+preference ratios to within 0.03, including for attributes that a
+shopper would only discover by inspection (Section~\ref{sec-simstudy}).
+Conjoint does not mismeasure preference.
+
+The difficulty is downstream. Share is the product of the probability
+that an alternative is considered and the probability that it is chosen
+once considered. Conjoint estimates the second term well and sets the
+first to one, so every question about \emph{what gets seen} falls
+outside what the instrument can express. In the same simulation,
+purchase share falls by half again from the top of the listing page to
+the bottom; conjoint predicts a ratio of exactly one, because a conjoint
+task has no position and the fitted model has no parameter that could
+carry one. This is not a bias that a larger sample would reduce. The
+model cannot state the proposition that promoting a product changes its
+share.
 
 \textbf{It answers placement and merchandising questions that conjoint
 cannot pose.} What happens to share if we move from position six to
@@ -450,11 +458,21 @@ improving quickly: Chung et al. (2024) report speedups of one to two
 orders of magnitude over the kernel-smoothed simulators that dominated
 the literature. But it is a real constraint on iteration today.
 
-\textbf{Precision on the search cost.} Preferences are recovered cleanly
-at commercial sample sizes. The \emph{level} of the search cost is
-harder, and carries a finite-sample bias that declines slowly in both
-sample size and simulation draws (Section~\ref{sec-simstudy}). This is a
-known property of simulated maximum likelihood estimation of search
+\textbf{Less precise preference estimates.} A conjoint task reveals
+every attribute of every alternative; a SIFT task reveals post-click
+attributes only for the alternatives a respondent chose to open, which
+at realistic inspection rates is a small minority. Conjoint therefore
+carries more information per task about preferences for attributes that
+require inspection, and in simulation it recovers them more accurately
+than SIFT does (Section~\ref{sec-simstudy}). SIFT buys a consideration
+stage at some cost in preference precision, and a study whose only
+object is preference measurement should use conjoint.
+
+\textbf{Precision on the search cost.} Preferences are recovered
+adequately at commercial sample sizes. The \emph{level} of the search
+cost is harder, and carries a finite-sample bias that declines slowly in
+both sample size and simulation draws (Section~\ref{sec-simstudy}). This
+is a known property of simulated maximum likelihood estimation of search
 models rather than a feature of our instrument --- Yavorsky et al.
 (2021) reports the same of his own simulations --- but it means that
 conclusions about search-cost \emph{magnitudes} demand larger samples

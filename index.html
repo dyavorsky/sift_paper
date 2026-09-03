@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.11.1">
+<meta name="generator" content="quarto-1.11.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dan Yavorsky">
 <meta name="author" content="Eric T. Bradlow">
-<meta name="dcterms.date" content="2026-08-27">
+<meta name="dcterms.date" content="2026-09-03">
 <meta name="keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
 
 <title>SIFT: Search Conjoint</title>
@@ -59,10 +59,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-d5b4e69c7e37b49c6591bcc5116dd748.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-3154a52da2b13509d7b4f2c9febd40cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-b89755862c00f08386c47aeabbd074f3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6637c74bae20b611a26c1e446f3bbec3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -95,15 +95,15 @@ window.Quarto = {
 </script>
 
 <meta name="citation_title" content="SIFT: Search Conjoint">
-<meta name="citation_abstract" content="Conjoint analysis measures what consumers prefer among alternatives they have been shown. It is silent on what they would have looked at, what looking costs them, and what they never see at all. We introduce SIFT, a survey instrument in which the respondent faces a list-screen of alternatives, clicks through to inspect individual listings at will, and then chooses — a task that reproduces the two-stage list-then-detail architecture of the environments in which many category purchases are actually made. Each respondent completes a sequence of such tasks, and position, list-screen content, and detail-page content are randomized by design in every one. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters and search costs. We derive the likelihood, characterize what the designed variation buys for identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery at commercial task counts, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT&amp;amp;#039;s preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — a distinction conjoint cannot draw, and one that carries different managerial remedies.
+<meta name="citation_abstract" content="Conjoint analysis measures what consumers prefer among alternatives they have been shown;  it encourages a full-information choice. Many consumer choices are made without full information: consumers inspect a subset of available alternatives and select among only those inspected. We introduce SIFT, a survey instrument that reproduces this two-stage architecture. The respondent faces a list-screen of alternatives, clicks through at will to inspect individual listings, and then chooses. Each respondent completes a sequence of such tasks where the position, list-screen content, and detail-page content are randomized by design. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters and search costs. We derive the likelihood, characterize what the designed variation contributes to identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT&amp;amp;#039;s preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — two outcomes conjoint cannot separate, and ones that call for opposite managerial responses.
 ">
 <meta name="citation_keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
 <meta name="citation_author" content="Dan Yavorsky">
 <meta name="citation_author" content="Eric T. Bradlow">
-<meta name="citation_publication_date" content="2026-08-27">
-<meta name="citation_cover_date" content="2026-08-27">
+<meta name="citation_publication_date" content="2026-09-03">
+<meta name="citation_cover_date" content="2026-09-03">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-08-27">
+<meta name="citation_online_date" content="2026-09-03">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=Optimal search for the best alternative;,citation_author=Martin L. Weitzman;,citation_publication_date=1979;,citation_cover_date=1979;,citation_year=1979;,citation_issue=3;,citation_doi=10.2307/1910412;,citation_volume=47;,citation_journal_title=Econometrica;">
 <meta name="citation_reference" content="citation_title=The economics of information;,citation_author=George J. Stigler;,citation_publication_date=1961;,citation_cover_date=1961;,citation_year=1961;,citation_issue=3;,citation_doi=10.1086/258464;,citation_volume=69;,citation_journal_title=Journal of Political Economy;">
@@ -156,7 +156,7 @@ window.Quarto = {
 <meta name="citation_reference" content="citation_title=A unified approach to conjoint analysis models;,citation_author=Pablo Marshall;,citation_author=Eric T Bradlow;,citation_publication_date=2002;,citation_cover_date=2002;,citation_year=2002;,citation_issue=459;,citation_doi=10.1198/016214502388618410;,citation_volume=97;,citation_journal_title=Journal of the American Statistical Association;">
 </head>
 
-<body class="quarto-light">
+<body class="quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
@@ -199,7 +199,7 @@ window.Quarto = {
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">August 27, 2026</p>
+              <p class="date">September 3, 2026</p>
             </div>
           </div>
           
@@ -213,7 +213,7 @@ window.Quarto = {
     <div>
       <div class="abstract">
         <div class="block-title">Abstract</div>
-        <p>Conjoint analysis measures what consumers prefer among alternatives they have been shown. It is silent on what they would have looked at, what looking costs them, and what they never see at all. We introduce SIFT, a survey instrument in which the respondent faces a list-screen of alternatives, clicks through to inspect individual listings at will, and then chooses — a task that reproduces the two-stage list-then-detail architecture of the environments in which many category purchases are actually made. Each respondent completes a sequence of such tasks, and position, list-screen content, and detail-page content are randomized by design in every one. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters and search costs. We derive the likelihood, characterize what the designed variation buys for identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery at commercial task counts, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT’s preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — a distinction conjoint cannot draw, and one that carries different managerial remedies.</p>
+        <p>Conjoint analysis measures what consumers prefer among alternatives they have been shown; it encourages a full-information choice. Many consumer choices are made without full information: consumers inspect a subset of available alternatives and select among only those inspected. We introduce SIFT, a survey instrument that reproduces this two-stage architecture. The respondent faces a list-screen of alternatives, clicks through at will to inspect individual listings, and then chooses. Each respondent completes a sequence of such tasks where the position, list-screen content, and detail-page content are randomized by design. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters and search costs. We derive the likelihood, characterize what the designed variation contributes to identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT’s preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — two outcomes conjoint cannot separate, and ones that call for opposite managerial responses.</p>
       </div>
     </div>
 
@@ -314,7 +314,7 @@ window.Quarto = {
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content" tabindex="-1">
 
 
 
@@ -358,7 +358,8 @@ window.Quarto = {
 <section id="what-sift-buys" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="what-sift-buys"><span class="header-section-number">1.3</span> What SIFT buys</h3>
 <p><strong>It separates non-purchase into two diagnoses that conjoint cannot tell apart.</strong> When a brand underperforms, conjoint can only report that it was not valued enough. SIFT distinguishes alternatives that were never opened from those that were opened and rejected. These have opposite remedies — distribution, placement, and media on one side; product and price on the other — and a method that cannot separate them will send a manager to the wrong lever roughly whenever consideration rather than preference is binding.</p>
-<p><strong>It recovers preferences that conjoint systematically understates.</strong> This is sharper than “conjoint is silent about search.” In our simulations, conjoint recovers preferences for attributes visible <em>before</em> a click accurately at any search cost, but attenuates preferences for attributes revealed <em>after</em> a click in proportion to how little of the choice set gets inspected. At an inspection rate close to what <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> observes in the field, conjoint attenuates post-click part-worths by <strong>64%</strong> (<a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a>). An analyst studying a category with real search frictions would conclude that experience attributes barely matter, when in fact respondents never saw them.</p>
+<p><strong>It represents consideration, which conjoint structurally cannot.</strong> The claim here is narrower than it is sometimes made, and the narrower version is the defensible one. A conjoint task shows every attribute of every alternative, so it measures preference under full information, and in simulation it does so accurately — recovering preference ratios to within 0.03, including for attributes that a shopper would only discover by inspection (<a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a>). Conjoint does not mismeasure preference.</p>
+<p>The difficulty is downstream. Share is the product of the probability that an alternative is considered and the probability that it is chosen once considered. Conjoint estimates the second term well and sets the first to one, so every question about <em>what gets seen</em> falls outside what the instrument can express. In the same simulation, purchase share falls by half again from the top of the listing page to the bottom; conjoint predicts a ratio of exactly one, because a conjoint task has no position and the fitted model has no parameter that could carry one. This is not a bias that a larger sample would reduce. The model cannot state the proposition that promoting a product changes its share.</p>
 <p><strong>It answers placement and merchandising questions that conjoint cannot pose.</strong> What happens to share if we move from position six to position two? What belongs on the listing tile versus the detail page? These are live questions for any marketplace, retail media network, app store, or streaming carousel, and they are questions about <em>what gets seen</em>, not about what is preferred once seen. Because SIFT randomizes position and page content by design, they are answered directly rather than assumed away.</p>
 <p><strong>It absorbs large attribute spaces.</strong> Conjoint degrades as attributes accumulate: respondent burden rises, number-of-levels effects intrude, and simplification heuristics contaminate the very tradeoffs the design was built to measure. SIFT distributes a large attribute space across two pages and lets respondents select what to examine. Non-attention stops being noise to be minimized and becomes data to be modelled.</p>
 <p><strong>It prices friction, and friction is a lever managers control.</strong> The search cost is estimated in utility units and convertible to money. Fewer clicks to a decision, better filters, better defaults, and better placement are all interventions on search cost, and SIFT is the only preference-measurement instrument that quantifies what they are worth. Conjoint offers nothing here, because in conjoint search is free.</p>
@@ -375,7 +376,8 @@ window.Quarto = {
 <p>The method carries costs as well, and we set them out alongside the advantages rather than confine them to a concluding caveat.</p>
 <p><strong>Complexity.</strong> SIFT is a new instrument fit with an unfamiliar model. Conjoint has four decades of accumulated norms — sample-size rules of thumb, design efficiency criteria, validated share simulators, benchmarks by category — and SIFT has none of that yet. It is roughly where conjoint was in the mid-2000s: the statistical machinery works, but the practitioner scaffolding that makes a method safe in ordinary hands has not been built. Anyone adopting SIFT now is adopting a method, not a product.</p>
 <p><strong>Estimation.</strong> Sequential search likelihoods are expensive. Where a hierarchical Bayes conjoint model fits in minutes, a comparably sized SIFT model takes hours: our implementation measures roughly eleven hours for a commercial-scale fit, and only when the sampler is parallelized across respondents — single-threaded it is eight times that. We regard this as an engineering problem rather than a fundamental one, and it is improving quickly: <span class="citation" data-cites="Chung_2025">Chung et al. (<a href="#ref-Chung_2025" role="doc-biblioref">2024</a>)</span> report speedups of one to two orders of magnitude over the kernel-smoothed simulators that dominated the literature. But it is a real constraint on iteration today.</p>
-<p><strong>Precision on the search cost.</strong> Preferences are recovered cleanly at commercial sample sizes. The <em>level</em> of the search cost is harder, and carries a finite-sample bias that declines slowly in both sample size and simulation draws (<a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a>). This is a known property of simulated maximum likelihood estimation of search models rather than a feature of our instrument — <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> reports the same of his own simulations — but it means that conclusions about search-cost <em>magnitudes</em> demand larger samples than conclusions about preferences, and we quantify how much larger.</p>
+<p><strong>Less precise preference estimates.</strong> A conjoint task reveals every attribute of every alternative; a SIFT task reveals post-click attributes only for the alternatives a respondent chose to open, which at realistic inspection rates is a small minority. Conjoint therefore carries more information per task about preferences for attributes that require inspection, and in simulation it recovers them more accurately than SIFT does (<a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a>). SIFT buys a consideration stage at some cost in preference precision, and a study whose only object is preference measurement should use conjoint.</p>
+<p><strong>Precision on the search cost.</strong> Preferences are recovered adequately at commercial sample sizes. The <em>level</em> of the search cost is harder, and carries a finite-sample bias that declines slowly in both sample size and simulation draws (<a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a>). This is a known property of simulated maximum likelihood estimation of search models rather than a feature of our instrument — <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> reports the same of his own simulations — but it means that conclusions about search-cost <em>magnitudes</em> demand larger samples than conclusions about preferences, and we quantify how much larger.</p>
 <p><strong>A behavioural assumption.</strong> The model assumes respondents search optimally in the sense of <span class="citation" data-cites="Weitzman_1979">Weitzman (<a href="#ref-Weitzman_1979" role="doc-biblioref">1979</a>)</span>. The experimental evidence on that assumption is mixed: laboratory subjects tend to search less than the optimum, exhibit order effects, and show sensitivity to sunk costs the theory says should be ignored. This is the most substantive scientific risk to the approach, and it applies with equal force to the structural search literature SIFT builds on. Our position is that the model should be judged as an approximation that recovers useful quantities, not as a claim about cognition, and that its predictions should be checked against holdout behaviour rather than assumed. <a href="#sec-discussion" class="quarto-xref">Section&nbsp;9</a> returns to this.</p>
 </section>
 <section id="roadmap" class="level3" data-number="1.6">
@@ -1175,36 +1177,35 @@ Table&nbsp;1: Notation crosswalk
 </div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{yavorsky2026,
   author = {Yavorsky, Dan and T. Bradlow, Eric},
   title = {SIFT: {Search} {Conjoint}},
-  date = {2026-08-27},
+  date = {2026-09-03},
   langid = {en},
   abstract = {Conjoint analysis measures what consumers prefer among
-    alternatives they have been shown. It is silent on what they would
-    have looked at, what looking costs them, and what they never see at
-    all. We introduce SIFT, a survey instrument in which the respondent
-    faces a list-screen of alternatives, clicks through to inspect
-    individual listings at will, and then chooses — a task that
-    reproduces the two-stage list-then-detail architecture of the
-    environments in which many category purchases are actually made.
-    Each respondent completes a sequence of such tasks, and position,
-    list-screen content, and detail-page content are randomized by
-    design in every one. We fit the resulting click-and-choose data with
-    a sequential search model in the tradition of Weitzman (1979),
-    recovering both preference parameters and search costs. We derive
-    the likelihood, characterize what the designed variation buys for
-    identification, and provide aggregate and hierarchical Bayesian
-    estimation routines with replication code in R. A simulation study
-    documents parameter recovery at commercial task counts, and an
-    empirical application fielded in partnership with a consumer
-    insights consultancy compares SIFT’s preference estimates against
-    conjoint part-worths from a split sample, tests whether estimated
-    search costs are distinguishable from zero, and decomposes
-    non-purchase into never-inspected and inspected-but-rejected — a
-    distinction conjoint cannot draw, and one that carries different
-    managerial remedies.}
+    alternatives they have been shown; it encourages a full-information
+    choice. Many consumer choices are made without full information:
+    consumers inspect a subset of available alternatives and select
+    among only those inspected. We introduce SIFT, a survey instrument
+    that reproduces this two-stage architecture. The respondent faces a
+    list-screen of alternatives, clicks through at will to inspect
+    individual listings, and then chooses. Each respondent completes a
+    sequence of such tasks where the position, list-screen content, and
+    detail-page content are randomized by design. We fit the resulting
+    click-and-choose data with a sequential search model in the
+    tradition of Weitzman (1979), recovering both preference parameters
+    and search costs. We derive the likelihood, characterize what the
+    designed variation contributes to identification, and provide
+    aggregate and hierarchical Bayesian estimation routines with
+    replication code in R. A simulation study documents parameter
+    recovery, and an empirical application fielded in partnership with a
+    consumer insights consultancy compares SIFT’s preference estimates
+    against conjoint part-worths from a split sample, tests whether
+    estimated search costs are distinguishable from zero, and decomposes
+    non-purchase into never-inspected and inspected-but-rejected — two
+    outcomes conjoint cannot separate, and ones that call for opposite
+    managerial responses.}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-yavorsky2026" class="csl-entry quarto-appendix-citeas" role="listitem">
 Yavorsky, Dan, and Eric T. Bradlow. 2026. <span>“SIFT: Search
-Conjoint.”</span> August 27.
+Conjoint.”</span> September 3.
 </div></div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">

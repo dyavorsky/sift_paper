@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
     <meta charset="utf-8">
-    <meta name="generator" content="quarto-1.11.1">
+    <meta name="generator" content="quarto-1.11.3">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -161,14 +161,14 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d5b4e69c7e37b49c6591bcc5116dd748.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-3154a52da2b13509d7b4f2c9febd40cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b89755862c00f08386c47aeabbd074f3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6637c74bae20b611a26c1e446f3bbec3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
       <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script> 
       </head>
 
-  <body class="quarto-notebook quarto-light">
+  <body class="quarto-notebook quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
     <div id="quarto-embed-header" class="headroom fixed-top bg-primary">
       
       <a onclick="window.quartoBackToArticle(); return false;" class="btn btn-primary quarto-back-link" href=""><i class="bi bi-caret-left"></i> Back to Article</a>
@@ -237,7 +237,7 @@
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
-<main class="content quarto-banner-title-block" id="quarto-document-content">      
+<main class="content quarto-banner-title-block" id="quarto-document-content" tabindex="-1">      
 
        <section id="what-this-notebook-is-for" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-notebook-is-for">What this notebook is for</h2>
@@ -480,14 +480,14 @@ z_{ijt} = \delta_{ijt} + \zeta_{ijt}\,\tilde\sigma,
 <p>GHK’s advantage is real but it is <em>not</em> the dramatic constant an earlier draft of this work claimed. Measured properly — 20 independent draw sets per cell, rather than the six that produced a headline of “399×” that did not survive re-measurement — the variance ratio against the kernel-smoothed simulator is <strong>100× at 150 tasks and 21× at 320 tasks</strong>. It moves around with the design, because the kernel-smoothed estimator’s spread is driven by a handful of awkward tasks rather than by an average.</p>
 <p>The number that actually matters is time to a given precision, since runtime is linear in draws. On that basis GHK is <strong>3–21× cheaper</strong> than kernel smoothing across the two designs measured, and crude frequency is not competitive at all — 175–260× more expensive, and badly biased besides, because zero cells have to be floored. Kernel smoothing also carries a visible upward bias in the negative log-likelihood (305 against GHK’s 295 at 150 tasks), exactly the asymptotic-only unbiasedness that <span class="citation" data-cites="Yavorsky_2021">@Yavorsky_2021</span> flags in his footnote 21.</p>
 <p>Full detail, including the crude-frequency arm, is in <a href="../comparisons/compare-simulators.qmd">the simulator comparison</a>.</p>
-<p>That matters for the 12-hour budget. It also reframes the choice recorded in <a href="../sections/identification.qmd"><code>sections/identification.qmd</code></a>: the binding constraint on SIFT is estimating <strong>heterogeneity</strong>, and the cheaper route there is hierarchical Bayes, which never integrates over the heterogeneity distribution at all.</p>
+<p>That matters for the 12-hour budget. It also reframes the choice recorded in <a href="../sections/05_identification.qmd"><code>sections/05_identification.qmd</code></a>: the binding constraint on SIFT is estimating <strong>heterogeneity</strong>, and the cheaper route there is hierarchical Bayes, which never integrates over the heterogeneity distribution at all.</p>
 </section>
 <section id="still-to-build" class="level2">
 <h2 class="anchored" data-anchor-id="still-to-build">Still to build</h2>
 <ul>
 <li>Random coefficients on <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\boldsymbol{\kappa}\)</span>, and the HB sampler.</li>
 <li>Correlated <span class="math inline">\(\mathbf{L}\)</span> across attributes; the variance-matched approximation already accommodates it through <span class="math inline">\(\mathrm{Var}(\mathbf{L})\)</span>, but the DGP currently draws <span class="math inline">\(\mathbf{L}\)</span> independently.</li>
-<li>A proper simulation study at commercial task counts, for <a href="../sections/simstudy.qmd"><code>sections/simstudy.qmd</code></a>.</li>
+<li>A proper simulation study at commercial task counts, for <a href="../sections/06_simstudy.qmd"><code>sections/06_simstudy.qmd</code></a>.</li>
 </ul>
 </section>
      </main>

@@ -98,3 +98,7 @@ R/out/parts/
 # rendered comparison notebooks (regenerate with sh comparisons/render_all.sh)
 comparisons/*.html
 comparisons/*_files/
+
+# standalone notebook renders (the manuscript build produces its own copies)
+notebooks/*.html
+notebooks/*_files/

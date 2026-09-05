@@ -26,3 +26,5 @@ manuscript:
   notebooks:
     - notebook: notebooks/sift_likelihood.qmd
       title: The SIFT Likelihood
+    - notebook: notebooks/estimating_search_models.qmd
+      title: "Tutorial: Estimating a Sequential Search Model"

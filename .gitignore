@@ -102,3 +102,6 @@ comparisons/*_files/
 # standalone notebook renders (the manuscript build produces its own copies)
 notebooks/*.html
 notebooks/*_files/
+
+# knitr cache from the cached tutorial chunks
+notebooks/*_cache/

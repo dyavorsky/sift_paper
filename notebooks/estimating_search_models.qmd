@@ -84,6 +84,26 @@ That is what collapses the dynamic program. Each box gets a single number,
 computed in isolation, once and for all.
 :::
 
+**What the result assumes.** Three conditions are doing the work, and only the
+third is ever seriously at risk.
+
+1. You know each $F_j$ before opening anything. You draw *from* the distribution;
+   you do not learn *about* it. (Relaxing this is the search-and-learning
+   literature, a different model.)
+2. One inspection reveals $u_j$ exactly and permanently, and you may return and
+   take any prize already seen — **full revelation and free recall**.
+3. $u_j$ is **independent across $j$**.
+
+Independence is what reduces the state to (best prize in hand, set still
+unopened). Under correlated prizes, opening box 1 tells you something about box
+2, so the realizations of everything opened enter your beliefs about everything
+unopened, $z_j$ stops being a fixed number computable in isolation, and
+Weitzman's rules are no longer optimal. Note this is a statement about the
+*searcher's* problem: §11.4 introduces heterogeneity, which induces correlation
+across alternatives from the *analyst's* point of view while leaving each
+consumer's own problem independent. The two are easy to conflate and are not the
+same thing.
+
 ### Working out $z$ for the normal case
 
 Let $u_j \sim N(\delta_j, \sigma^2)$. Substituting $t = (u-\delta_j)/\sigma$ and
@@ -139,7 +159,7 @@ $$
 $$
 
 with $\eta_{ij}\sim N(0,1)$ and $\varepsilon_{ij}\sim N(0,1)$, and a **constant,
-known-form search cost** $c$. We start with both variances fixed at one; §9.2
+known-form search cost** $c$. We start with both variances fixed at one; §11.2
 takes up estimating the second.
 
 ::: {.callout-warning}
@@ -162,7 +182,7 @@ $$
 
 Search order reveals the ordering of pre-search utilities. The *number* of
 searches is what speaks to $c$. Keep that distinction in mind — it is the whole
-of the identification argument in §8.
+of the identification argument in §10.
 
 ## 5. Ten consumers
 
@@ -330,6 +350,20 @@ is near 0; and in between it varies **smoothly** with the parameters. The scale
 $\lambda$ controls the trade-off: larger is a better approximation to the
 indicator but a less smooth objective.
 
+::: {.callout-tip}
+## Common random numbers
+
+Both likelihood functions call `set.seed(seed)` on entry, so **the same draws are
+reused at every parameter value**. This is not incidental. If fresh draws were
+taken at each evaluation, the objective would jitter by the simulation error from
+one call to the next, and the optimizer would be climbing a surface that moves
+under it — jagged again, for a different reason than the staircase. Holding the
+draws fixed makes the simulated objective a deterministic function of the
+parameters. It is standard practice in simulation estimation and it is worth
+naming, because forgetting it produces a failure that looks like a modelling
+problem and is not.
+:::
+
 ```{r}
 loglik_smooth <- function(par, dat, R = 500, lambda = 8, seed = 99) {
   set.seed(seed)
@@ -388,11 +422,61 @@ Every grid point gives a distinct value. There is now a gradient to follow.
 The smoothed estimator is **biased** for any finite $\lambda$: it is only
 asymptotically unbiased as $\lambda \to \infty$. But large $\lambda$ restores the
 staircase. You are choosing a point on a bias–smoothness trade-off, and
-$\lambda$ is a tuning constant you must justify. §9.5 describes estimators that
-avoid it.
+$\lambda$ is a tuning constant you must justify — see §9.1 for how much it can
+matter, and §11.5 for estimators that avoid it.
 :::
 
-## 9. Does it recover the truth?
+## 9. How much does $\lambda$ matter?
+
+Before trusting any estimate, find out what the tuning constant is doing. Fit the
+same 600-consumer dataset at a range of $\lambda$ and compare.
+
+```{r}
+#| eval: false
+for (lam in c(2, 4, 8, 16, 30)) {
+  f <- optim(c(0, 0, log(0.5)),
+             function(p) -loglik_smooth(p, big, R = 300, lambda = lam),
+             method = "BFGS", control = list(maxit = 200))
+  cat(sprintf("lambda %5.0f   beta1 %6.3f   beta2 %6.3f   cost %6.3f\n",
+              lam, f$par[1], f$par[2], exp(f$par[3])))
+}
+```
+
+This takes several minutes, so the results are tabulated rather than run inline.
+Truth is $\beta_1 = 1.0$, $\beta_2 = -0.5$, $c = 0.2$.
+
+| $\lambda$ | $\hat\beta_1$ | $\hat\beta_2$ | $\hat c$ |
+|---|---|---|---|
+| 2  | 1.024 | −0.508 | **0.448** |
+| 4  | 0.986 | −0.494 | 0.299 |
+| 8  | 0.989 | −0.495 | **0.220** |
+| 16 | 0.823 | −0.453 | 0.194 |
+| 30 | 0.744 | −0.401 | 0.203 |
+
+::: {.callout-important}
+## Read this table before believing any single fit
+
+The search cost moves by a factor of **2.3** across this range, from 0.448 to
+0.194. There is no value of $\lambda$ at which everything is simultaneously best,
+and the failure modes at the two ends are different.
+
+At **small $\lambda$** the kernel is a poor approximation to the indicator:
+conditions that are in fact violated still contribute, the likelihood is too
+generous, and $\hat c$ is badly overstated. At **large $\lambda$** the
+approximation is excellent but the staircase returns — the objective is nearly
+flat between jumps, the optimizer stalls, and $\hat\beta$ decays toward its
+starting value.
+
+The preference parameters are the more robust of the two, which is the same
+asymmetry §10 explains. But the search cost is only well estimated in a middle
+range, and nothing in the estimator tells you where that range is.
+
+**The practical rule: never report a search-cost estimate from a single
+$\lambda$.** Report the sensitivity, or use an estimator that has no tuning
+constant (§11.5).
+:::
+
+## 9.1 Does it recover the truth?
 
 Ten consumers is too few to estimate three parameters. Six hundred is enough to
 see recovery.
@@ -417,6 +501,22 @@ data.frame(parameter = c("beta1", "beta2", "search cost"),
 Both preference parameters and the search cost are recovered. Note that we
 estimated $\log c$ rather than $c$, so that the optimizer cannot propose a
 negative cost.
+
+::: {.callout-warning}
+## What kind of estimator this is
+
+This is **simulated maximum likelihood**, and its asymptotics are not those of
+MLE. The simulator is unbiased for each *probability*, but the likelihood uses
+the *log* of that probability, and by Jensen's inequality $\mathbb{E}[\log \hat p]
+< \log p$. The bias is of order $1/R$ and — this is the part that catches people
+— **it does not vanish as $N \to \infty$ at fixed $R$**. Consistency requires
+$R \to \infty$ along with $N$, at a rate fast enough that $\sqrt{N}/R \to 0$.
+
+Two practical consequences. Adding consumers does not rescue an estimate computed
+with too few draws. And the smoothing bias of the previous section is a *second*,
+separate bias that does not vanish as $R$ grows either — only as $\lambda$ grows,
+which trades against smoothness. A simulated search-model estimate carries both.
+:::
 
 ## 10. What identifies what
 
@@ -446,6 +546,14 @@ This asymmetry has consequences you will meet immediately in practice:
 
 Each of these is one step from what you have already written.
 
+One natural-seeming extension is deliberately absent. **Correlated match values**
+— letting $\varepsilon_{ij}$ covary across $j$ — is not an extension of this
+framework but a departure from it. It violates assumption 3 of §2, so
+reservation values are no longer computable in isolation and Weitzman's rules are
+no longer optimal. You cannot add a covariance to `sim()` and re-estimate; you
+would have to solve the dynamic program the reservation value was introduced to
+avoid.
+
 ### 11.1 Search costs that depend on covariates
 
 Replace the constant with $c_{ij} = \exp(\mathbf{w}_{ij}'\boldsymbol\gamma)$.
@@ -459,9 +567,21 @@ by $\delta$. Now alternatives with different costs have different $\zeta$, and
 inspected early because it is cheap to inspect rather than because it is
 attractive.
 
-That is a loss of a clean identification argument, and simultaneously the source
-of the best identification argument available: if $\mathbf{w}$ contains something
-randomized, it moves search order without moving preference.
+That is a loss of a clean identification argument, but order is not the only
+margin. Consider two alternatives with the same reservation value: A is
+attractive but expensive to inspect, B is mediocre but cheap. They are opened
+first equally often, because order responds only to $z$. Once A is opened,
+though, its cost is sunk while its high realized utility is not — so A stops
+search more often than B does. **Stopping rates after inspection separate
+$\delta$ from $c$ where order alone cannot** [@Ursu_Seiler_Honka_2024].
+
+So no exclusion restriction is needed *in principle*, which is why $\mathbf{w}$
+and $\mathbf{x}$ may overlap and why you can ask whether a characteristic shifts
+utility, search cost, or both. But that argument leans entirely on the assumed
+shock distributions. This is the same in-principle-versus-credible distinction as
+§11.2, and it has the same resolution: if $\mathbf{w}$ contains something
+randomized, it moves search order without moving preference, and you no longer
+have to lean on functional form.
 
 ### 11.2 Estimating the match-value standard deviation
 
@@ -473,10 +593,20 @@ cost and the match-value spread enter through the *same channel*, and they push
 in opposite directions: a large $\sigma$ makes searching attractive, a large $c$
 makes it unattractive. Both change $K$.
 
-They are separately identified by functional form, since $\sigma$ appears on both
-sides of the $g$ equation — but functional form alone is weak. In practice, the
-two are nearly collinear: @Yavorsky_2021 report a correlation of $0.95$ between
-$\log\sigma$ and the search-cost intercept even with 6,511 consumers.
+They are separately identified, but by a thinner argument than it first appears.
+Note that $\zeta$ solves $g(\zeta) = c/\sigma$ and so depends on the **ratio**
+alone: how *much* people search speaks only to $c/\sigma$. What breaks the tie is
+that $\sigma$ appears twice more, and not only in that ratio. It multiplies
+$\zeta$ in $z = \delta + \zeta\sigma$, and it scales $\varepsilon$ inside $u$.
+Because we normalized $\sigma_\eta = 1$, search *order* responds to
+$\boldsymbol\beta$ while the purchase among inspected alternatives responds to
+$\boldsymbol\beta/\sigma_\varepsilon$ — and the relative sensitivity of those two
+margins is what pins $\sigma_\varepsilon$ down.
+
+That is real identification, but it runs entirely through assumed distributions
+and a normalization, so it is weak. In practice the two are nearly collinear:
+@Yavorsky_2021 report a correlation of $0.95$ between $\log\sigma$ and the
+search-cost intercept even with 6,511 consumers.
 
 What breaks the tie is an *exogenous, alternative-specific* search-cost shifter.
 With one in hand, $\boldsymbol\gamma$ is identified from how search responds to
@@ -492,14 +622,30 @@ with $\sigma = 3$, and watch the search-cost estimate absorb the misspecificatio
 We assumed the first search always happens. Real data include consumers who
 inspect nothing.
 
-Add an alternative $j=0$ with utility known from the outset and no search
-required. The continuation rule at $k=1$ then acquires content — the best
-reservation value must beat the outside option — and $K=0$ becomes an observed
-outcome rather than something you must condition away.
+Add an alternative $j=0$ whose utility $u_0$ is known from the outset and needs
+no search. Then $u_0$ joins the running maximum **everywhere it appears** in §6,
+not only at the first step:
+
+- continuation becomes $\max\left(u_0,\ \max_{h<k} u_{s_h}\right) < z_{s_k}$
+- stopping becomes $\max\left(u_0,\ \max_{h \le K} u_{s_h}\right) \ge \max_{l \in \bar S} z_l$
+- choice now ranges over $S \cup \{0\}$, so $y = 0$ — searched, bought nothing —
+  is an outcome the likelihood must be able to produce
+
+Because alternatives are opened in decreasing $z$, the running maximum is
+non-decreasing, so the *binding* new restriction is $u_0 < z_{s_K}$ at the last
+search; the condition at $k=1$ is implied by it. And $K=0$ is simply continuation
+failing at the first step: $u_0 \ge \max_j z_j$.
+
+Getting this wrong is easy and silent. Patch only the $k=1$ guard, leave the
+stopping and choice lines of `loglik_cfs` and `loglik_smooth` untouched, and the
+estimator still runs and still converges — on the wrong model.
 
 This matters more than it looks. Conditioning on having searched selects the
-sample on an outcome the model is trying to explain, and papers that do it must
-assume the first search is free to avoid the resulting bias.
+sample on an outcome the model is trying to explain. Papers that do it handle the
+problem in one of two ways: assume the first search is free, which makes
+searching at least once a probability-one event [@Honka_2014], or write a partial
+likelihood conditional on having searched while keeping every search costly.
+Observing the non-searchers, as we do here, removes the need for either.
 
 ### 11.4 Heterogeneity
 
@@ -540,6 +686,30 @@ Three alternatives, roughly in order of how much machinery they require:
 
 @Ursu_Seiler_Honka_2024 compare these systematically and is the right next thing
 to read.
+
+### 11.6 The effective-value representation
+
+One result you will meet immediately in the literature and which we have not
+used. @Armstrong_2017 and @Choi_2018 show that the *purchase* probability of the
+sequential search model is exactly that of a static discrete choice over the
+**effective value**
+
+$$
+w_{ij} = \min\left(u_{ij},\ z_{ij}\right).
+$$
+
+In our notation $z = \delta + \zeta$ and $u = \delta + \varepsilon$ share
+$\delta$, so $w_{ij} = \delta_{ij} + \min(\varepsilon_{ij}, \zeta)$ — a choice
+model whose error is a truncated post-search shock. This is the standard route to
+market shares, welfare, and elasticities, because it turns a search model into
+something with the algebra of a choice model.
+
+Two cautions. It requires that every search be costly and that an outside option
+always be available, neither of which holds for the estimator you just wrote — so
+§11.3 comes first. And it collapses the *purchase* probability only, not the
+joint probability of an ordered search sequence, which is what our likelihood in
+§6 actually targets. It is a tool for what you do with estimates, not a
+replacement for how you obtain them.
 
 ## 12. Exercises
 

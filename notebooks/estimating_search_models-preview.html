@@ -410,7 +410,8 @@
   <li><a href="#the-likelihood" id="toc-the-likelihood" class="nav-link" data-scroll-target="#the-likelihood">6. The likelihood</a></li>
   <li><a href="#first-attempt-the-crude-frequency-simulator" id="toc-first-attempt-the-crude-frequency-simulator" class="nav-link" data-scroll-target="#first-attempt-the-crude-frequency-simulator">7. First attempt: the crude frequency simulator</a></li>
   <li><a href="#the-fix-smooth-the-indicator" id="toc-the-fix-smooth-the-indicator" class="nav-link" data-scroll-target="#the-fix-smooth-the-indicator">8. The fix: smooth the indicator</a></li>
-  <li><a href="#does-it-recover-the-truth" id="toc-does-it-recover-the-truth" class="nav-link" data-scroll-target="#does-it-recover-the-truth">9. Does it recover the truth?</a></li>
+  <li><a href="#how-much-does-lambda-matter" id="toc-how-much-does-lambda-matter" class="nav-link" data-scroll-target="#how-much-does-lambda-matter">9. How much does <span class="math inline">\(\lambda\)</span> matter?</a></li>
+  <li><a href="#does-it-recover-the-truth" id="toc-does-it-recover-the-truth" class="nav-link" data-scroll-target="#does-it-recover-the-truth">9.1 Does it recover the truth?</a></li>
   <li><a href="#what-identifies-what" id="toc-what-identifies-what" class="nav-link" data-scroll-target="#what-identifies-what">10. What identifies what</a></li>
   <li><a href="#extensions" id="toc-extensions" class="nav-link" data-scroll-target="#extensions">11. Extensions</a>
   <ul class="collapse">
@@ -419,6 +420,7 @@
   <li><a href="#an-outside-option-and-zero-searches" id="toc-an-outside-option-and-zero-searches" class="nav-link" data-scroll-target="#an-outside-option-and-zero-searches">11.3 An outside option, and zero searches</a></li>
   <li><a href="#heterogeneity" id="toc-heterogeneity" class="nav-link" data-scroll-target="#heterogeneity">11.4 Heterogeneity</a></li>
   <li><a href="#better-simulators" id="toc-better-simulators" class="nav-link" data-scroll-target="#better-simulators">11.5 Better simulators</a></li>
+  <li><a href="#the-effective-value-representation" id="toc-the-effective-value-representation" class="nav-link" data-scroll-target="#the-effective-value-representation">11.6 The effective-value representation</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">12. Exercises</a></li>
   </ul>
@@ -477,6 +479,13 @@
 <p>That is what collapses the dynamic program. Each box gets a single number, computed in isolation, once and for all.</p>
 </div>
 </div>
+<p><strong>What the result assumes.</strong> Three conditions are doing the work, and only the third is ever seriously at risk.</p>
+<ol type="1">
+<li>You know each <span class="math inline">\(F_j\)</span> before opening anything. You draw <em>from</em> the distribution; you do not learn <em>about</em> it. (Relaxing this is the search-and-learning literature, a different model.)</li>
+<li>One inspection reveals <span class="math inline">\(u_j\)</span> exactly and permanently, and you may return and take any prize already seen — <strong>full revelation and free recall</strong>.</li>
+<li><span class="math inline">\(u_j\)</span> is <strong>independent across <span class="math inline">\(j\)</span></strong>.</li>
+</ol>
+<p>Independence is what reduces the state to (best prize in hand, set still unopened). Under correlated prizes, opening box 1 tells you something about box 2, so the realizations of everything opened enter your beliefs about everything unopened, <span class="math inline">\(z_j\)</span> stops being a fixed number computable in isolation, and Weitzman’s rules are no longer optimal. Note this is a statement about the <em>searcher’s</em> problem: §11.4 introduces heterogeneity, which induces correlation across alternatives from the <em>analyst’s</em> point of view while leaving each consumer’s own problem independent. The two are easy to conflate and are not the same thing.</p>
 </section>
 <section id="working-out-z-for-the-normal-case" class="level3">
 <h3 class="anchored" data-anchor-id="working-out-z-for-the-normal-case">Working out <span class="math inline">\(z\)</span> for the normal case</h3>
@@ -533,7 +542,7 @@ z_j = \delta_j + \zeta_j\,\sigma, \qquad \text{where } g(\zeta_j) = c_j/\sigma .
 \qquad
 \underbrace{u_{ij} = \delta_{ij} + \varepsilon_{ij}}_{\text{learned by searching}}
 \]</span></p>
-<p>with <span class="math inline">\(\eta_{ij}\sim N(0,1)\)</span> and <span class="math inline">\(\varepsilon_{ij}\sim N(0,1)\)</span>, and a <strong>constant, known-form search cost</strong> <span class="math inline">\(c\)</span>. We start with both variances fixed at one; §9.2 takes up estimating the second.</p>
+<p>with <span class="math inline">\(\eta_{ij}\sim N(0,1)\)</span> and <span class="math inline">\(\varepsilon_{ij}\sim N(0,1)\)</span>, and a <strong>constant, known-form search cost</strong> <span class="math inline">\(c\)</span>. We start with both variances fixed at one; §11.2 takes up estimating the second.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -551,7 +560,7 @@ z_j = \delta_j + \zeta_j\,\sigma, \qquad \text{where } g(\zeta_j) = c_j/\sigma .
 <p><span class="math display">\[
 \textbf{ordering by } z \;=\; \textbf{ordering by } \delta .
 \]</span></p>
-<p>Search order reveals the ordering of pre-search utilities. The <em>number</em> of searches is what speaks to <span class="math inline">\(c\)</span>. Keep that distinction in mind — it is the whole of the identification argument in §8.</p>
+<p>Search order reveals the ordering of pre-search utilities. The <em>number</em> of searches is what speaks to <span class="math inline">\(c\)</span>. Keep that distinction in mind — it is the whole of the identification argument in §10.</p>
 </section>
 <section id="ten-consumers" class="level2">
 <h2 class="anchored" data-anchor-id="ten-consumers">5. Ten consumers</h2>
@@ -798,6 +807,19 @@ z_j = \delta_j + \zeta_j\,\sigma, \qquad \text{where } g(\zeta_j) = c_j/\sigma .
 \tilde{\mathbb{1}} \;=\; \Big(1 + \textstyle\sum_m e^{-\lambda \nu_m}\Big)^{-1}.
 \]</span></p>
 <p>When every margin is comfortably positive this is near 1; when any is negative it is near 0; and in between it varies <strong>smoothly</strong> with the parameters. The scale <span class="math inline">\(\lambda\)</span> controls the trade-off: larger is a better approximation to the indicator but a less smooth objective.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Common random numbers
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Both likelihood functions call <code>set.seed(seed)</code> on entry, so <strong>the same draws are reused at every parameter value</strong>. This is not incidental. If fresh draws were taken at each evaluation, the objective would jitter by the simulation error from one call to the next, and the optimizer would be climbing a surface that moves under it — jagged again, for a different reason than the staircase. Holding the draws fixed makes the simulated objective a deterministic function of the parameters. It is standard practice in simulation estimation and it is worth naming, because forgetting it produces a failure that looks like a modelling problem and is not.</p>
+</div>
+</div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [8]:</pre></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>loglik_smooth <span class="ot">&lt;-</span> <span class="cf">function</span>(par, dat, <span class="at">R =</span> <span class="dv">500</span>, <span class="at">lambda =</span> <span class="dv">8</span>, <span class="at">seed =</span> <span class="dv">99</span>) {</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(seed)</span>
@@ -865,30 +887,102 @@ z_j = \delta_j + \zeta_j\,\sigma, \qquad \text{where } g(\zeta_j) = c_j/\sigma .
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The smoothed estimator is <strong>biased</strong> for any finite <span class="math inline">\(\lambda\)</span>: it is only asymptotically unbiased as <span class="math inline">\(\lambda \to \infty\)</span>. But large <span class="math inline">\(\lambda\)</span> restores the staircase. You are choosing a point on a bias–smoothness trade-off, and <span class="math inline">\(\lambda\)</span> is a tuning constant you must justify. §9.5 describes estimators that avoid it.</p>
+<p>The smoothed estimator is <strong>biased</strong> for any finite <span class="math inline">\(\lambda\)</span>: it is only asymptotically unbiased as <span class="math inline">\(\lambda \to \infty\)</span>. But large <span class="math inline">\(\lambda\)</span> restores the staircase. You are choosing a point on a bias–smoothness trade-off, and <span class="math inline">\(\lambda\)</span> is a tuning constant you must justify — see §9.1 for how much it can matter, and §11.5 for estimators that avoid it.</p>
+</div>
+</div>
+</section>
+<section id="how-much-does-lambda-matter" class="level2">
+<h2 class="anchored" data-anchor-id="how-much-does-lambda-matter">9. How much does <span class="math inline">\(\lambda\)</span> matter?</h2>
+<p>Before trusting any estimate, find out what the tuning constant is doing. Fit the same 600-consumer dataset at a range of <span class="math inline">\(\lambda\)</span> and compare.</p>
+<div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (lam <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">30</span>)) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fu">log</span>(<span class="fl">0.5</span>)),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>             <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">loglik_smooth</span>(p, big, <span class="at">R =</span> <span class="dv">300</span>, <span class="at">lambda =</span> lam),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> <span class="dv">200</span>))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"lambda %5.0f   beta1 %6.3f   beta2 %6.3f   cost %6.3f</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>              lam, f<span class="sc">$</span>par[<span class="dv">1</span>], f<span class="sc">$</span>par[<span class="dv">2</span>], <span class="fu">exp</span>(f<span class="sc">$</span>par[<span class="dv">3</span>])))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<p>This takes several minutes, so the results are tabulated rather than run inline. Truth is <span class="math inline">\(\beta_1 = 1.0\)</span>, <span class="math inline">\(\beta_2 = -0.5\)</span>, <span class="math inline">\(c = 0.2\)</span>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\lambda\)</span></th>
+<th><span class="math inline">\(\hat\beta_1\)</span></th>
+<th><span class="math inline">\(\hat\beta_2\)</span></th>
+<th><span class="math inline">\(\hat c\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2</td>
+<td>1.024</td>
+<td>−0.508</td>
+<td><strong>0.448</strong></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>0.986</td>
+<td>−0.494</td>
+<td>0.299</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.989</td>
+<td>−0.495</td>
+<td><strong>0.220</strong></td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>0.823</td>
+<td>−0.453</td>
+<td>0.194</td>
+</tr>
+<tr class="odd">
+<td>30</td>
+<td>0.744</td>
+<td>−0.401</td>
+<td>0.203</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Read this table before believing any single fit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The search cost moves by a factor of <strong>2.3</strong> across this range, from 0.448 to 0.194. There is no value of <span class="math inline">\(\lambda\)</span> at which everything is simultaneously best, and the failure modes at the two ends are different.</p>
+<p>At <strong>small <span class="math inline">\(\lambda\)</span></strong> the kernel is a poor approximation to the indicator: conditions that are in fact violated still contribute, the likelihood is too generous, and <span class="math inline">\(\hat c\)</span> is badly overstated. At <strong>large <span class="math inline">\(\lambda\)</span></strong> the approximation is excellent but the staircase returns — the objective is nearly flat between jumps, the optimizer stalls, and <span class="math inline">\(\hat\beta\)</span> decays toward its starting value.</p>
+<p>The preference parameters are the more robust of the two, which is the same asymmetry §10 explains. But the search cost is only well estimated in a middle range, and nothing in the estimator tells you where that range is.</p>
+<p><strong>The practical rule: never report a search-cost estimate from a single <span class="math inline">\(\lambda\)</span>.</strong> Report the sensitivity, or use an estimator that has no tuning constant (§11.5).</p>
 </div>
 </div>
 </section>
 <section id="does-it-recover-the-truth" class="level2">
-<h2 class="anchored" data-anchor-id="does-it-recover-the-truth">9. Does it recover the truth?</h2>
+<h2 class="anchored" data-anchor-id="does-it-recover-the-truth">9.1 Does it recover the truth?</h2>
 <p>Ten consumers is too few to estimate three parameters. Six hundred is enough to see recovery.</p>
-<div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>big <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="at">N =</span> <span class="dv">600</span>, <span class="at">J =</span> <span class="dv">3</span>, <span class="at">beta =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">0.5</span>), <span class="at">cost =</span> <span class="fl">0.2</span>, <span class="at">seed =</span> <span class="dv">21</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(<span class="fu">sapply</span>(big<span class="sc">$</span>S, length)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>big <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="at">N =</span> <span class="dv">600</span>, <span class="at">J =</span> <span class="dv">3</span>, <span class="at">beta =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">0.5</span>), <span class="at">cost =</span> <span class="fl">0.2</span>, <span class="at">seed =</span> <span class="dv">21</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(<span class="fu">sapply</span>(big<span class="sc">$</span>S, length)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
          1          2          3 
 0.68666667 0.26166667 0.05166667 </code></pre>
 </div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fu">log</span>(<span class="fl">0.5</span>)),</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>             <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">loglik_smooth</span>(p, big, <span class="at">R =</span> <span class="dv">300</span>, <span class="at">lambda =</span> <span class="dv">8</span>),</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> <span class="dv">200</span>))</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">parameter =</span> <span class="fu">c</span>(<span class="st">"beta1"</span>, <span class="st">"beta2"</span>, <span class="st">"search cost"</span>),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">truth     =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.2</span>),</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">estimate  =</span> <span class="fu">c</span>(fit<span class="sc">$</span>par[<span class="dv">1</span>], fit<span class="sc">$</span>par[<span class="dv">2</span>], <span class="fu">exp</span>(fit<span class="sc">$</span>par[<span class="dv">3</span>])))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fu">log</span>(<span class="fl">0.5</span>)),</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>             <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">loglik_smooth</span>(p, big, <span class="at">R =</span> <span class="dv">300</span>, <span class="at">lambda =</span> <span class="dv">8</span>),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> <span class="dv">200</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">parameter =</span> <span class="fu">c</span>(<span class="st">"beta1"</span>, <span class="st">"beta2"</span>, <span class="st">"search cost"</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">truth     =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.2</span>),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">estimate  =</span> <span class="fu">c</span>(fit<span class="sc">$</span>par[<span class="dv">1</span>], fit<span class="sc">$</span>par[<span class="dv">2</span>], <span class="fu">exp</span>(fit<span class="sc">$</span>par[<span class="dv">3</span>])))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    parameter truth   estimate
 1       beta1   1.0  0.9885493
@@ -897,6 +991,21 @@ z_j = \delta_j + \zeta_j\,\sigma, \qquad \text{where } g(\zeta_j) = c_j/\sigma .
 </div>
 </div></div>
 <p>Both preference parameters and the search cost are recovered. Note that we estimated <span class="math inline">\(\log c\)</span> rather than <span class="math inline">\(c\)</span>, so that the optimizer cannot propose a negative cost.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>What kind of estimator this is
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is <strong>simulated maximum likelihood</strong>, and its asymptotics are not those of MLE. The simulator is unbiased for each <em>probability</em>, but the likelihood uses the <em>log</em> of that probability, and by Jensen’s inequality <span class="math inline">\(\mathbb{E}[\log \hat p]
+&lt; \log p\)</span>. The bias is of order <span class="math inline">\(1/R\)</span> and — this is the part that catches people — <strong>it does not vanish as <span class="math inline">\(N \to \infty\)</span> at fixed <span class="math inline">\(R\)</span></strong>. Consistency requires <span class="math inline">\(R \to \infty\)</span> along with <span class="math inline">\(N\)</span>, at a rate fast enough that <span class="math inline">\(\sqrt{N}/R \to 0\)</span>.</p>
+<p>Two practical consequences. Adding consumers does not rescue an estimate computed with too few draws. And the smoothing bias of the previous section is a <em>second</em>, separate bias that does not vanish as <span class="math inline">\(R\)</span> grows either — only as <span class="math inline">\(\lambda\)</span> grows, which trades against smoothness. A simulated search-model estimate carries both.</p>
+</div>
+</div>
 </section>
 <section id="what-identifies-what" class="level2">
 <h2 class="anchored" data-anchor-id="what-identifies-what">10. What identifies what</h2>
@@ -913,25 +1022,35 @@ z_j = \delta_j + \zeta_j\,\sigma, \qquad \text{where } g(\zeta_j) = c_j/\sigma .
 <section id="extensions" class="level2">
 <h2 class="anchored" data-anchor-id="extensions">11. Extensions</h2>
 <p>Each of these is one step from what you have already written.</p>
+<p>One natural-seeming extension is deliberately absent. <strong>Correlated match values</strong> — letting <span class="math inline">\(\varepsilon_{ij}\)</span> covary across <span class="math inline">\(j\)</span> — is not an extension of this framework but a departure from it. It violates assumption 3 of §2, so reservation values are no longer computable in isolation and Weitzman’s rules are no longer optimal. You cannot add a covariance to <code>sim()</code> and re-estimate; you would have to solve the dynamic program the reservation value was introduced to avoid.</p>
 <section id="search-costs-that-depend-on-covariates" class="level3">
 <h3 class="anchored" data-anchor-id="search-costs-that-depend-on-covariates">11.1 Search costs that depend on covariates</h3>
 <p>Replace the constant with <span class="math inline">\(c_{ij} = \exp(\mathbf{w}_{ij}'\boldsymbol\gamma)\)</span>. Positivity comes free from the exponential. In the code, <code>zeta</code> stops being a scalar and becomes a vector — call <code>g_inv</code> per alternative.</p>
 <p>The consequence is more interesting than the code change. With a constant cost, <span class="math inline">\(\zeta\)</span> was common across alternatives, so search order was determined entirely by <span class="math inline">\(\delta\)</span>. Now alternatives with different costs have different <span class="math inline">\(\zeta\)</span>, and <strong>search order is no longer the same as preference order</strong>. An alternative may be inspected early because it is cheap to inspect rather than because it is attractive.</p>
-<p>That is a loss of a clean identification argument, and simultaneously the source of the best identification argument available: if <span class="math inline">\(\mathbf{w}\)</span> contains something randomized, it moves search order without moving preference.</p>
+<p>That is a loss of a clean identification argument, but order is not the only margin. Consider two alternatives with the same reservation value: A is attractive but expensive to inspect, B is mediocre but cheap. They are opened first equally often, because order responds only to <span class="math inline">\(z\)</span>. Once A is opened, though, its cost is sunk while its high realized utility is not — so A stops search more often than B does. <strong>Stopping rates after inspection separate <span class="math inline">\(\delta\)</span> from <span class="math inline">\(c\)</span> where order alone cannot</strong> <span class="citation" data-cites="Ursu_Seiler_Honka_2024">(<a href="#ref-Ursu_Seiler_Honka_2024" role="doc-biblioref">Ursu et al. 2024</a>)</span>.</p>
+<p>So no exclusion restriction is needed <em>in principle</em>, which is why <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> may overlap and why you can ask whether a characteristic shifts utility, search cost, or both. But that argument leans entirely on the assumed shock distributions. This is the same in-principle-versus-credible distinction as §11.2, and it has the same resolution: if <span class="math inline">\(\mathbf{w}\)</span> contains something randomized, it moves search order without moving preference, and you no longer have to lean on functional form.</p>
 </section>
 <section id="estimating-the-match-value-standard-deviation" class="level3">
 <h3 class="anchored" data-anchor-id="estimating-the-match-value-standard-deviation">11.2 Estimating the match-value standard deviation</h3>
 <p>We fixed <span class="math inline">\(\sigma_\varepsilon = 1\)</span>. Almost all of the literature does the same. Why?</p>
 <p>Look again at <span class="math inline">\(g(\zeta) = c/\sigma\)</span> and <span class="math inline">\(z = \delta + \zeta\sigma\)</span>. The search cost and the match-value spread enter through the <em>same channel</em>, and they push in opposite directions: a large <span class="math inline">\(\sigma\)</span> makes searching attractive, a large <span class="math inline">\(c\)</span> makes it unattractive. Both change <span class="math inline">\(K\)</span>.</p>
-<p>They are separately identified by functional form, since <span class="math inline">\(\sigma\)</span> appears on both sides of the <span class="math inline">\(g\)</span> equation — but functional form alone is weak. In practice, the two are nearly collinear: <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> report a correlation of <span class="math inline">\(0.95\)</span> between <span class="math inline">\(\log\sigma\)</span> and the search-cost intercept even with 6,511 consumers.</p>
+<p>They are separately identified, but by a thinner argument than it first appears. Note that <span class="math inline">\(\zeta\)</span> solves <span class="math inline">\(g(\zeta) = c/\sigma\)</span> and so depends on the <strong>ratio</strong> alone: how <em>much</em> people search speaks only to <span class="math inline">\(c/\sigma\)</span>. What breaks the tie is that <span class="math inline">\(\sigma\)</span> appears twice more, and not only in that ratio. It multiplies <span class="math inline">\(\zeta\)</span> in <span class="math inline">\(z = \delta + \zeta\sigma\)</span>, and it scales <span class="math inline">\(\varepsilon\)</span> inside <span class="math inline">\(u\)</span>. Because we normalized <span class="math inline">\(\sigma_\eta = 1\)</span>, search <em>order</em> responds to <span class="math inline">\(\boldsymbol\beta\)</span> while the purchase among inspected alternatives responds to <span class="math inline">\(\boldsymbol\beta/\sigma_\varepsilon\)</span> — and the relative sensitivity of those two margins is what pins <span class="math inline">\(\sigma_\varepsilon\)</span> down.</p>
+<p>That is real identification, but it runs entirely through assumed distributions and a normalization, so it is weak. In practice the two are nearly collinear: <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> report a correlation of <span class="math inline">\(0.95\)</span> between <span class="math inline">\(\log\sigma\)</span> and the search-cost intercept even with 6,511 consumers.</p>
 <p>What breaks the tie is an <em>exogenous, alternative-specific</em> search-cost shifter. With one in hand, <span class="math inline">\(\boldsymbol\gamma\)</span> is identified from how search responds to <span class="math inline">\(\mathbf{w}\)</span>, and <span class="math inline">\(\sigma\)</span> is then identified separately from the level of search. <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> estimate <span class="math inline">\(\sigma = 8.16\)</span> where the literature had been imposing 1, with large consequences for what search costs are worth in money.</p>
 <p>The exercise to run: fix <span class="math inline">\(\sigma\)</span> at 1 in your estimation while simulating data with <span class="math inline">\(\sigma = 3\)</span>, and watch the search-cost estimate absorb the misspecification.</p>
 </section>
 <section id="an-outside-option-and-zero-searches" class="level3">
 <h3 class="anchored" data-anchor-id="an-outside-option-and-zero-searches">11.3 An outside option, and zero searches</h3>
 <p>We assumed the first search always happens. Real data include consumers who inspect nothing.</p>
-<p>Add an alternative <span class="math inline">\(j=0\)</span> with utility known from the outset and no search required. The continuation rule at <span class="math inline">\(k=1\)</span> then acquires content — the best reservation value must beat the outside option — and <span class="math inline">\(K=0\)</span> becomes an observed outcome rather than something you must condition away.</p>
-<p>This matters more than it looks. Conditioning on having searched selects the sample on an outcome the model is trying to explain, and papers that do it must assume the first search is free to avoid the resulting bias.</p>
+<p>Add an alternative <span class="math inline">\(j=0\)</span> whose utility <span class="math inline">\(u_0\)</span> is known from the outset and needs no search. Then <span class="math inline">\(u_0\)</span> joins the running maximum <strong>everywhere it appears</strong> in §6, not only at the first step:</p>
+<ul>
+<li>continuation becomes <span class="math inline">\(\max\left(u_0,\ \max_{h&lt;k} u_{s_h}\right) &lt; z_{s_k}\)</span></li>
+<li>stopping becomes <span class="math inline">\(\max\left(u_0,\ \max_{h \le K} u_{s_h}\right) \ge \max_{l \in \bar S} z_l\)</span></li>
+<li>choice now ranges over <span class="math inline">\(S \cup \{0\}\)</span>, so <span class="math inline">\(y = 0\)</span> — searched, bought nothing — is an outcome the likelihood must be able to produce</li>
+</ul>
+<p>Because alternatives are opened in decreasing <span class="math inline">\(z\)</span>, the running maximum is non-decreasing, so the <em>binding</em> new restriction is <span class="math inline">\(u_0 &lt; z_{s_K}\)</span> at the last search; the condition at <span class="math inline">\(k=1\)</span> is implied by it. And <span class="math inline">\(K=0\)</span> is simply continuation failing at the first step: <span class="math inline">\(u_0 \ge \max_j z_j\)</span>.</p>
+<p>Getting this wrong is easy and silent. Patch only the <span class="math inline">\(k=1\)</span> guard, leave the stopping and choice lines of <code>loglik_cfs</code> and <code>loglik_smooth</code> untouched, and the estimator still runs and still converges — on the wrong model.</p>
+<p>This matters more than it looks. Conditioning on having searched selects the sample on an outcome the model is trying to explain. Papers that do it handle the problem in one of two ways: assume the first search is free, which makes searching at least once a probability-one event <span class="citation" data-cites="Honka_2014">(<a href="#ref-Honka_2014" role="doc-biblioref">Honka 2014</a>)</span>, or write a partial likelihood conditional on having searched while keeping every search costly. Observing the non-searchers, as we do here, removes the need for either.</p>
 </section>
 <section id="heterogeneity" class="level3">
 <h3 class="anchored" data-anchor-id="heterogeneity">11.4 Heterogeneity</h3>
@@ -950,6 +1069,15 @@ z_j = \delta_j + \zeta_j\,\sigma, \qquad \text{where } g(\zeta_j) = c_j/\sigma .
 </ul>
 <p><span class="citation" data-cites="Ursu_Seiler_Honka_2024">Ursu et al. (<a href="#ref-Ursu_Seiler_Honka_2024" role="doc-biblioref">2024</a>)</span> compare these systematically and is the right next thing to read.</p>
 </section>
+<section id="the-effective-value-representation" class="level3">
+<h3 class="anchored" data-anchor-id="the-effective-value-representation">11.6 The effective-value representation</h3>
+<p>One result you will meet immediately in the literature and which we have not used. <span class="citation" data-cites="Armstrong_2017">Armstrong (<a href="#ref-Armstrong_2017" role="doc-biblioref">2017</a>)</span> and <span class="citation" data-cites="Choi_2018">Choi et al. (<a href="#ref-Choi_2018" role="doc-biblioref">2018</a>)</span> show that the <em>purchase</em> probability of the sequential search model is exactly that of a static discrete choice over the <strong>effective value</strong></p>
+<p><span class="math display">\[
+w_{ij} = \min\left(u_{ij},\ z_{ij}\right).
+\]</span></p>
+<p>In our notation <span class="math inline">\(z = \delta + \zeta\)</span> and <span class="math inline">\(u = \delta + \varepsilon\)</span> share <span class="math inline">\(\delta\)</span>, so <span class="math inline">\(w_{ij} = \delta_{ij} + \min(\varepsilon_{ij}, \zeta)\)</span> — a choice model whose error is a truncated post-search shock. This is the standard route to market shares, welfare, and elasticities, because it turns a search model into something with the algebra of a choice model.</p>
+<p>Two cautions. It requires that every search be costly and that an outside option always be available, neither of which holds for the estimator you just wrote — so §11.3 comes first. And it collapses the <em>purchase</em> probability only, not the joint probability of an ordered search sequence, which is what our likelihood in §6 actually targets. It is a tool for what you do with estimates, not a replacement for how you obtain them.</p>
+</section>
 </section>
 <section id="exercises" class="level2">
 <h2 class="anchored" data-anchor-id="exercises">12. Exercises</h2>
@@ -964,8 +1092,17 @@ z_j = \delta_j + \zeta_j\,\sigma, \qquad \text{where } g(\zeta_j) = c_j/\sigma .
 <div id="ref-Ackerberg_2009" class="csl-entry" role="listitem">
 Ackerberg, Daniel A. 2009. <span>“A New Use of Importance Sampling to Reduce Computational Burden in Simulation Estimation.”</span> <em>Quantitative Marketing and Economics</em> 7 (4): 343–76. <a href="https://doi.org/10.1007/s11129-009-9074-z">https://doi.org/10.1007/s11129-009-9074-z</a>.
 </div>
+<div id="ref-Armstrong_2017" class="csl-entry" role="listitem">
+Armstrong, Mark. 2017. <span>“Ordered Consumer Search.”</span> <em>Journal of the European Economic Association</em> 15 (5): 989–1024. <a href="https://doi.org/10.1093/jeea/jvx017">https://doi.org/10.1093/jeea/jvx017</a>.
+</div>
+<div id="ref-Choi_2018" class="csl-entry" role="listitem">
+Choi, Michael, Anovia Yifan Dai, and Kyungmin Kim. 2018. <span>“Consumer Search and Price Competition.”</span> <em>Econometrica</em> 86 (4): 1257–81. <a href="https://doi.org/10.3982/ecta14837">https://doi.org/10.3982/ecta14837</a>.
+</div>
 <div id="ref-Chung_2025" class="csl-entry" role="listitem">
 Chung, Jae Hyen, Pradeep Chintagunta, and Sanjog Misra. 2024. <span>“Simulated Maximum Likelihood Estimation of the Sequential Search Model.”</span> <em>Quantitative Marketing and Economics</em> 23 (1): 105–64. <a href="https://doi.org/10.1007/s11129-024-09281-4">https://doi.org/10.1007/s11129-024-09281-4</a>.
+</div>
+<div id="ref-Honka_2014" class="csl-entry" role="listitem">
+Honka, Elisabeth. 2014. <span>“Quantifying Search and Switching Costs in the <span>US</span> Auto Insurance Industry.”</span> <em>The RAND Journal of Economics</em> 45 (4): 847–84. <a href="https://doi.org/10.1111/1756-2171.12073">https://doi.org/10.1111/1756-2171.12073</a>.
 </div>
 <div id="ref-Morozov_2021" class="csl-entry" role="listitem">
 Morozov, Ilya, Stephan Seiler, Xiaojing Dong, and Liwen Hou. 2021. <span>“Estimation of Preference Heterogeneity in Markets with Costly Search.”</span> <em>Marketing Science</em> 40 (5): 871–99. <a href="https://doi.org/10.1287/mksc.2021.1287">https://doi.org/10.1287/mksc.2021.1287</a>.

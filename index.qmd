@@ -10,8 +10,6 @@ affiliations:
     name: GBK Collective
   - id: ucsd
     name: Rady School of Management, University of California San Diego
-  - id: wharton
-    name: The Wharton School, University of Pennsylvania
 
 author:
   - name: Dan Yavorsky
@@ -21,11 +19,6 @@ author:
     affiliations:
       - ref: gbk
       - ref: ucsd
-  - name: Eric T. Bradlow
-    corresponding: false
-    email: ebradlow@wharton.upenn.edu
-    affiliations:
-      - ref: wharton
 
 keywords: consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation
 

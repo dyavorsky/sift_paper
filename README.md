@@ -2,7 +2,7 @@
 
 ## Measuring Preferences and Search Costs in a Single Survey Instrument
 
-Dan Yavorsky (GBK Collective; Rady School of Management, UC San Diego) and Eric T. Bradlow (The Wharton School).
+Dan Yavorsky (GBK Collective; Rady School of Management, UC San Diego).
 
 A survey instrument in which the respondent faces a list-screen of alternatives,
 clicks through to inspect individual listings, and then chooses. The resulting

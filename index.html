@@ -2,13 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.11.3">
+<meta name="generator" content="quarto-1.12.0">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dan Yavorsky">
-<meta name="author" content="Eric T. Bradlow">
-<meta name="dcterms.date" content="2026-09-06">
+<meta name="dcterms.date" content="2026-11-04">
 <meta name="keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
 
 <title>SIFT: Search Conjoint</title>
@@ -55,18 +54,19 @@ div.csl-indent {
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-3154a52da2b13509d7b4f2c9febd40cf.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a1037d2a1b57a8656048b8b11b787e65.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-3154a52da2b13509d7b4f2c9febd40cf.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f0688f390a76b21125ecd060a3d0a4db.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-ea86cb3e3c485c66326a784895574736.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f0688f390a76b21125ecd060a3d0a4db.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6637c74bae20b611a26c1e446f3bbec3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-d208b09cdb495724f7dedb2cf10a734c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-6637c74bae20b611a26c1e446f3bbec3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-27e7aecbfd76940d03b8e4778a6b0ae4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-c009ea57aa94ad75f56dfc6421d8089a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-27e7aecbfd76940d03b8e4778a6b0ae4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -99,65 +99,59 @@ window.Quarto = {
 </script>
 
 <meta name="citation_title" content="SIFT: Search Conjoint">
-<meta name="citation_abstract" content="Conjoint analysis measures what consumers prefer among alternatives they have been shown;  it encourages a full-information choice. Many consumer choices are made without full information: consumers inspect a subset of available alternatives and select among only those inspected. We introduce SIFT, a survey instrument that reproduces this two-stage architecture. The respondent faces a list-screen of alternatives, clicks through at will to inspect individual listings, and then chooses. Each respondent completes a sequence of such tasks where the position, list-screen content, and detail-page content are randomized by design. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters and search costs. We derive the likelihood, characterize what the designed variation contributes to identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT&amp;amp;#039;s preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — two outcomes conjoint cannot separate, and ones that call for opposite managerial responses.
+<meta name="citation_abstract" content="Conjoint analysis measures what consumers prefer among alternatives they have been shown;  it encourages a full-information choice. Many consumer choices are made without full information: consumers inspect a subset of available alternatives and select among only those inspected. We introduce SIFT, a survey instrument that reproduces this two-stage architecture. The respondent faces a list-screen of alternatives, clicks through at will to inspect individual listings, and then chooses. Each respondent completes a sequence of such tasks where the position, list-screen content, and detail-page content are randomized by design. We fit the resulting click-and-choose data with a sequential search model in the tradition of Weitzman (1979), recovering both preference parameters and search costs. We derive the likelihood, characterize what the designed variation contributes to identification, and provide aggregate and hierarchical Bayesian estimation routines with replication code in R. A simulation study documents parameter recovery, and an empirical application fielded in partnership with a consumer insights consultancy compares SIFT's preference estimates against conjoint part-worths from a split sample, tests whether estimated search costs are distinguishable from zero, and decomposes non-purchase into never-inspected and inspected-but-rejected — two outcomes conjoint cannot separate, and ones that call for opposite managerial responses.
 ">
 <meta name="citation_keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
 <meta name="citation_author" content="Dan Yavorsky">
-<meta name="citation_author" content="Eric T. Bradlow">
-<meta name="citation_publication_date" content="2026-09-06">
-<meta name="citation_cover_date" content="2026-09-06">
+<meta name="citation_publication_date" content="2026-11-04">
+<meta name="citation_cover_date" content="2026-11-04">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-09-06">
+<meta name="citation_online_date" content="2026-11-04">
 <meta name="citation_language" content="en">
-<meta name="citation_reference" content="citation_title=Optimal search for the best alternative;,citation_author=Martin L. Weitzman;,citation_publication_date=1979;,citation_cover_date=1979;,citation_year=1979;,citation_issue=3;,citation_doi=10.2307/1910412;,citation_volume=47;,citation_journal_title=Econometrica;">
-<meta name="citation_reference" content="citation_title=The economics of information;,citation_author=George J. Stigler;,citation_publication_date=1961;,citation_cover_date=1961;,citation_year=1961;,citation_issue=3;,citation_doi=10.1086/258464;,citation_volume=69;,citation_journal_title=Journal of Political Economy;">
-<meta name="citation_reference" content="citation_title=Economics of information and job search;,citation_author=J. J. McCall;,citation_publication_date=1970;,citation_cover_date=1970;,citation_year=1970;,citation_issue=1;,citation_doi=10.2307/1879403;,citation_volume=84;,citation_journal_title=The Quarterly Journal of Economics;">
-<meta name="citation_reference" content="citation_title=Using price distributions to estimate search costs;,citation_author=Han Hong;,citation_author=Matthew Shum;,citation_publication_date=2006;,citation_cover_date=2006;,citation_year=2006;,citation_issue=2;,citation_doi=10.1111/j.1756-2171.2006.tb00015.x;,citation_volume=37;,citation_journal_title=The RAND Journal of Economics;">
-<meta name="citation_reference" content="citation_title=Product differentiation, search costs, and competition in the mutual fund industry: A case study of s&amp;amp;amp;amp;p 500 index funds;,citation_author=A. Hortacsu;,citation_author=C. Syverson;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_issue=2;,citation_doi=10.1162/0033553041382184;,citation_volume=119;,citation_journal_title=The Quarterly Journal of Economics;">
-<meta name="citation_reference" content="citation_title=Online demand under limited consumer search;,citation_author=Jun B. Kim;,citation_author=Paulo Albuquerque;,citation_author=Bart J. Bronnenberg;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;,citation_issue=6;,citation_doi=10.1287/mksc.1100.0574;,citation_volume=29;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Testing models of consumer search using data on web browsing and purchasing behavior;,citation_author=Babur De los Santos;,citation_author=Ali Hortaçsu;,citation_author=Matthijs R Wildenbeest;,citation_publication_date=2012;,citation_cover_date=2012;,citation_year=2012;,citation_issue=6;,citation_doi=10.1257/aer.102.6.2955;,citation_volume=102;,citation_journal_title=American Economic Review;">
-<meta name="citation_reference" content="citation_title=Search for differentiated products: Identification and estimation;,citation_author=Sergei Koulayev;,citation_publication_date=2014;,citation_cover_date=2014;,citation_year=2014;,citation_issue=3;,citation_doi=10.1111/1756-2171.12062;,citation_volume=45;,citation_journal_title=The RAND Journal of Economics;">
-<meta name="citation_reference" content="citation_title=Quantifying search and switching costs in the US auto insurance industry;,citation_author=Elisabeth Honka;,citation_publication_date=2014;,citation_cover_date=2014;,citation_year=2014;,citation_issue=4;,citation_doi=10.1111/1756-2171.12073;,citation_volume=45;,citation_journal_title=The RAND Journal of Economics;">
-<meta name="citation_reference" content="citation_title=Simultaneous or sequential? Search strategies in the u.s. Auto insurance industry;,citation_author=Elisabeth Honka;,citation_author=Pradeep Chintagunta;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_issue=1;,citation_doi=10.1287/mksc.2016.0995;,citation_volume=36;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Sequential search with refinement: Model and application with click-stream data;,citation_author=Yuxin Chen;,citation_author=Song Yao;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_issue=12;,citation_doi=10.1287/mnsc.2016.2557;,citation_volume=63;,citation_journal_title=Management Science;">
-<meta name="citation_reference" content="citation_title=The power of rankings: Quantifying the effect of rankings on online consumer search and purchase decisions;,citation_author=Raluca M. Ursu;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_issue=4;,citation_doi=10.1287/mksc.2017.1072;,citation_volume=37;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Search duration;,citation_author=Raluca M. Ursu;,citation_author=Qingliang Wang;,citation_author=Pradeep K. Chintagunta;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_issue=5;,citation_doi=10.1287/mksc.2020.1225;,citation_volume=39;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Consumer search in the U.S. Auto industry: The role of dealership visits;,citation_author=Dan Yavorsky;,citation_author=Elisabeth Honka;,citation_author=Keith Chen;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_issue=1;,citation_doi=10.1007/s11129-020-09229-4;,citation_volume=19;,citation_journal_title=Quantitative Marketing and Economics;">
-<meta name="citation_reference" content="citation_title=Zooming in on choice: How do consumers search for cameras online?;,citation_author=Bart J. Bronnenberg;,citation_author=Jun B. Kim;,citation_author=Carl F. Mela;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_issue=5;,citation_doi=10.1287/mksc.2016.0977;,citation_volume=35;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=The sequential search model: A framework for empirical research;,citation_author=Raluca Ursu;,citation_author=Stephan Seiler;,citation_author=Elisabeth Honka;,citation_publication_date=2024;,citation_cover_date=2024;,citation_year=2024;,citation_issue=1;,citation_doi=10.1007/s11129-024-09291-2;,citation_volume=23;,citation_journal_title=Quantitative Marketing and Economics;">
-<meta name="citation_reference" content="citation_title=Estimation of preference heterogeneity in markets with costly search;,citation_author=Ilya Morozov;,citation_author=Stephan Seiler;,citation_author=Xiaojing Dong;,citation_author=Liwen Hou;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_issue=5;,citation_doi=10.1287/mksc.2021.1287;,citation_volume=40;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=The probit choice model under sequential search with an application to online retailing;,citation_author=Jun B. Kim;,citation_author=Paulo Albuquerque;,citation_author=Bart J. Bronnenberg;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_issue=11;,citation_doi=10.1287/mnsc.2016.2545;,citation_volume=63;,citation_journal_title=Management Science;">
-<meta name="citation_reference" content="citation_title=Ordered consumer search;,citation_author=Mark Armstrong;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_issue=5;,citation_doi=10.1093/jeea/jvx017;,citation_volume=15;,citation_journal_title=Journal of the European Economic Association;">
-<meta name="citation_reference" content="citation_title=Consumer search and price competition;,citation_author=Michael Choi;,citation_author=Anovia Yifan Dai;,citation_author=Kyungmin Kim;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_issue=4;,citation_doi=10.3982/ecta14837;,citation_volume=86;,citation_journal_title=Econometrica;">
-<meta name="citation_reference" content="citation_title=Simulated maximum likelihood estimation of the sequential search model;,citation_author=Jae Hyen Chung;,citation_author=Pradeep Chintagunta;,citation_author=Sanjog Misra;,citation_publication_date=2024;,citation_cover_date=2024;,citation_year=2024;,citation_issue=1;,citation_doi=10.1007/s11129-024-09281-4;,citation_volume=23;,citation_journal_title=Quantitative Marketing and Economics;">
-<meta name="citation_reference" content="citation_title=Consumer search and purchase: An empirical investigation of retargeting based on consumer online behaviors;,citation_author=Zhenling Jiang;,citation_author=Tat Chan;,citation_author=Hai Che;,citation_author=Youwei Wang;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_issue=2;,citation_doi=10.1287/mksc.2020.1255;,citation_volume=40;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Search gaps and consumer fatigue;,citation_author=Raluca M. Ursu;,citation_author=Qianyun Zhang;,citation_author=Elisabeth Honka;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_issue=1;,citation_doi=10.1287/mksc.2022.1359;,citation_volume=42;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Measuring benefits from new products in markets with information frictions;,citation_author=Ilya Morozov;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_issue=11;,citation_doi=10.1287/mnsc.2023.4729;,citation_volume=69;,citation_journal_title=Management Science;">
-<meta name="citation_reference" content="citation_title=A new use of importance sampling to reduce computational burden in simulation estimation;,citation_author=Daniel A. Ackerberg;,citation_publication_date=2009;,citation_cover_date=2009;,citation_year=2009;,citation_issue=4;,citation_doi=10.1007/s11129-009-9074-z;,citation_volume=7;,citation_journal_title=Quantitative Marketing and Economics;">
-<meta name="citation_reference" content="citation_title=Dynamic effects of price promotions: Field evidence, consumer search, and supply-side implications;,citation_author=Andrés Elberg;,citation_author=Pedro M. Gardete;,citation_author=Rosario Macera;,citation_author=Carlos Noton;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_issue=1;,citation_doi=10.1007/s11129-018-9205-5;,citation_volume=17;,citation_journal_title=Quantitative Marketing and Economics;">
-<meta name="citation_reference" content="citation_title=Optimal search and discovery;,citation_author=Rafael P. Greminger;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_issue=5;,citation_doi=10.1287/mnsc.2021.4085;,citation_volume=68;,citation_journal_title=Management Science;">
-<meta name="citation_reference" content="citation_title=Economic search: An experimental study;,citation_author=ANDREW SCHOTTER;,citation_author=YALE M. BRAUNSTEIN;,citation_publication_date=1981;,citation_cover_date=1981;,citation_year=1981;,citation_issue=1;,citation_doi=10.1111/j.1465-7295.1981.tb00600.x;,citation_volume=19;,citation_journal_title=Economic Inquiry;">
-<meta name="citation_reference" content="citation_title=Still searching;,citation_author=John D. Hey;,citation_publication_date=1987;,citation_cover_date=1987;,citation_year=1987;,citation_issue=1;,citation_doi=10.1016/0167-2681(87)90026-6;,citation_volume=8;,citation_journal_title=Journal of Economic Behavior &amp;amp;amp;amp; Organization;">
-<meta name="citation_reference" content="citation_title=Laboratory experiments with a finite-horizon job-search model;,citation_author=JamesC. Cox;,citation_author=RonaldL. Oaxaca;,citation_publication_date=1989;,citation_cover_date=1989;,citation_year=1989;,citation_issue=3;,citation_doi=10.1007/bf00209391;,citation_volume=2;,citation_journal_title=Journal of Risk and Uncertainty;">
-<meta name="citation_reference" content="citation_title=Strategies of search;,citation_author=Joep Sonnemans;,citation_publication_date=1998;,citation_cover_date=1998;,citation_year=1998;,citation_issue=3;,citation_doi=10.1016/s0167-2681(98)00051-1;,citation_volume=35;,citation_journal_title=Journal of Economic Behavior &amp;amp;amp;amp; Organization;">
-<meta name="citation_reference" content="citation_title=Real-time search in the laboratory and the market;,citation_author=Meta Brown;,citation_author=Christopher J Flinn;,citation_author=Andrew Schotter;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_issue=2;,citation_doi=10.1257/aer.101.2.948;,citation_volume=101;,citation_journal_title=American Economic Review;">
-<meta name="citation_reference" content="citation_title=Adaptive strategy selection in decision making;,citation_author=John W. Payne;,citation_author=James R. Bettman;,citation_author=Eric J. Johnson;,citation_publication_date=1988;,citation_cover_date=1988;,citation_year=1988;,citation_issue=3;,citation_doi=10.1037/0278-7393.14.3.534;,citation_volume=14;,citation_journal_title=Journal of Experimental Psychology: Learning, Memory, and Cognition;">
-<meta name="citation_reference" content="citation_title=The adaptive decision maker;,citation_author=John W. Payne;,citation_author=James R. Bettman;,citation_author=Eric J. Johnson;,citation_publication_date=1993;,citation_cover_date=1993;,citation_year=1993;,citation_doi=10.1017/cbo9781139173933;">
-<meta name="citation_reference" content="citation_title=Costly information acquisition: Experimental analysis of a boundedly rational model;,citation_author=Xavier Gabaix;,citation_author=David Laibson;,citation_author=Guillermo Moloche;,citation_author=Stephen Weinberg;,citation_publication_date=2006;,citation_cover_date=2006;,citation_year=2006;,citation_issue=4;,citation_doi=10.1257/aer.96.4.1043;,citation_volume=96;,citation_journal_title=American Economic Review;">
-<meta name="citation_reference" content="citation_title=Search and satisficing;,citation_author=Andrew Caplin;,citation_author=Mark Dean;,citation_author=Daniel Martin;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_issue=7;,citation_doi=10.1257/aer.101.7.2899;,citation_volume=101;,citation_journal_title=American Economic Review;">
-<meta name="citation_reference" content="citation_title=Search dynamics in consumer choice under time pressure: An eye-tracking study;,citation_author=Elena Reutskaja;,citation_author=Rosemarie Nagel;,citation_author=Colin F Camerer;,citation_author=Antonio Rangel;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_issue=2;,citation_doi=10.1257/aer.101.2.900;,citation_volume=101;,citation_journal_title=American Economic Review;">
-<meta name="citation_reference" content="citation_title=A bounded rationality model of information search and choice in preference measurement;,citation_author=Liu (Cathy) Yang;,citation_author=Olivier Toubia;,citation_author=Martijn G. De Jong;,citation_publication_date=2015;,citation_cover_date=2015;,citation_year=2015;,citation_issue=2;,citation_doi=10.1509/jmr.13.0288;,citation_volume=52;,citation_journal_title=Journal of Marketing Research;">
-<meta name="citation_reference" content="citation_title=Attention, information processing, and choice in incentive-aligned choice experiments;,citation_author=Liu (Cathy) Yang;,citation_author=Olivier Toubia;,citation_author=Martijn G. Jong;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_doi=10.1509/jmr.15.0474;,citation_journal_title=Journal of Marketing Research;">
-<meta name="citation_reference" content="citation_title=Eye tracking reveals processes that enable conjoint choices to become increasingly efficient with practice;,citation_author=Martin Meißner;,citation_author=Andres Musalem;,citation_author=Joel Huber;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_issue=1;,citation_doi=10.1509/jmr.13.0467;,citation_volume=53;,citation_journal_title=Journal of Marketing Research;">
-<meta name="citation_reference" content="citation_title=A choice model with conjunctive, disjunctive, and compensatory screening rules;,citation_author=Timothy J. Gilbride;,citation_author=Greg M. Allenby;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_issue=3;,citation_doi=10.1287/mksc.1030.0032;,citation_volume=23;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Disjunctions of conjunctions, cognitive simplicity, and consideration sets;,citation_author=John R. Hauser;,citation_author=Olivier Toubia;,citation_author=Theodoros Evgeniou;,citation_author=Rene Befurt;,citation_author=Daria Dzyabura;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;,citation_issue=3;,citation_doi=10.1509/jmkr.47.3.485;,citation_volume=47;,citation_journal_title=Journal of Marketing Research;">
-<meta name="citation_reference" content="citation_title=Greedoid-based noncompensatory inference;,citation_author=Michael Yee;,citation_author=Ely Dahan;,citation_author=John R. Hauser;,citation_author=James Orlin;,citation_publication_date=2007;,citation_cover_date=2007;,citation_year=2007;,citation_issue=4;,citation_doi=10.1287/mksc.1060.0213;,citation_volume=26;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Active machine learning for consideration heuristics;,citation_author=Daria Dzyabura;,citation_author=John R. Hauser;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_issue=5;,citation_doi=10.1287/mksc.1110.0660;,citation_volume=30;,citation_journal_title=Marketing Science;">
-<meta name="citation_reference" content="citation_title=Consideration-set heuristics;,citation_author=John R. Hauser;,citation_publication_date=2014;,citation_cover_date=2014;,citation_year=2014;,citation_issue=8;,citation_doi=10.1016/j.jbusres.2014.02.015;,citation_volume=67;,citation_journal_title=Journal of Business Research;">
-<meta name="citation_reference" content="citation_title=Economic foundations of conjoint analysis;,citation_author=Greg M. Allenby;,citation_author=Nino Hardt;,citation_author=Peter E. Rossi;,citation_publication_date=2019;,citation_cover_date=2019;,citation_year=2019;,citation_doi=10.1016/bs.hem.2019.04.002;,citation_inbook_title=Handbook of the economics of marketing;">
-<meta name="citation_reference" content="citation_title=Incentive-aligned conjoint analysis;,citation_author=Min Ding;,citation_author=Rajdeep Grewal;,citation_author=John Liechty;,citation_publication_date=2005;,citation_cover_date=2005;,citation_year=2005;,citation_issue=1;,citation_doi=10.1509/jmkr.42.1.67.56890;,citation_volume=42;,citation_journal_title=Journal of Marketing Research;">
-<meta name="citation_reference" content="citation_title=An incentive-aligned mechanism for conjoint analysis;,citation_author=Min Ding;,citation_publication_date=2007;,citation_cover_date=2007;,citation_year=2007;,citation_issue=2;,citation_doi=10.1509/jmkr.44.2.214;,citation_volume=44;,citation_journal_title=Journal of Marketing Research;">
-<meta name="citation_reference" content="citation_title=A unified approach to conjoint analysis models;,citation_author=Pablo Marshall;,citation_author=Eric T Bradlow;,citation_publication_date=2002;,citation_cover_date=2002;,citation_year=2002;,citation_issue=459;,citation_doi=10.1198/016214502388618410;,citation_volume=97;,citation_journal_title=Journal of the American Statistical Association;">
+<meta name="citation_reference" content="citation_title=Optimal search for the best alternative; citation_author=Martin L. Weitzman; citation_publication_date=1979; citation_cover_date=1979; citation_year=1979; citation_issue=3; citation_doi=10.2307/1910412; citation_volume=47; citation_firstpage=641; citation_lastpage=654; citation_journal_title=Econometrica;">
+<meta name="citation_reference" content="citation_title=The economics of information; citation_author=George J. Stigler; citation_publication_date=1961; citation_cover_date=1961; citation_year=1961; citation_issue=3; citation_doi=10.1086/258464; citation_volume=69; citation_firstpage=213; citation_lastpage=225; citation_journal_title=Journal of Political Economy;">
+<meta name="citation_reference" content="citation_title=Economics of information and job search; citation_author=J. J. McCall; citation_publication_date=1970; citation_cover_date=1970; citation_year=1970; citation_issue=1; citation_doi=10.2307/1879403; citation_volume=84; citation_firstpage=113; citation_journal_title=The Quarterly Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Using price distributions to estimate search costs; citation_author=Han Hong; citation_author=Matthew Shum; citation_publication_date=2006; citation_cover_date=2006; citation_year=2006; citation_issue=2; citation_doi=10.1111/j.1756-2171.2006.tb00015.x; citation_volume=37; citation_firstpage=257; citation_lastpage=275; citation_journal_title=The RAND Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Product differentiation, search costs, and competition in the mutual fund industry: A case study of s&amp;amp;p 500 index funds; citation_author=A. Hortacsu; citation_author=C. Syverson; citation_publication_date=2004; citation_cover_date=2004; citation_year=2004; citation_issue=2; citation_doi=10.1162/0033553041382184; citation_volume=119; citation_firstpage=403; citation_lastpage=456; citation_journal_title=The Quarterly Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Online demand under limited consumer search; citation_author=Jun B. Kim; citation_author=Paulo Albuquerque; citation_author=Bart J. Bronnenberg; citation_publication_date=2010; citation_cover_date=2010; citation_year=2010; citation_issue=6; citation_doi=10.1287/mksc.1100.0574; citation_volume=29; citation_firstpage=1001; citation_lastpage=1023; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Testing models of consumer search using data on web browsing and purchasing behavior; citation_author=Babur De los Santos; citation_author=Ali Hortaçsu; citation_author=Matthijs R Wildenbeest; citation_publication_date=2012; citation_cover_date=2012; citation_year=2012; citation_issue=6; citation_doi=10.1257/aer.102.6.2955; citation_volume=102; citation_firstpage=2955; citation_lastpage=2980; citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=Search for differentiated products: Identification and estimation; citation_author=Sergei Koulayev; citation_publication_date=2014; citation_cover_date=2014; citation_year=2014; citation_issue=3; citation_doi=10.1111/1756-2171.12062; citation_volume=45; citation_firstpage=553; citation_lastpage=575; citation_journal_title=The RAND Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Quantifying search and switching costs in the US auto insurance industry; citation_author=Elisabeth Honka; citation_publication_date=2014; citation_cover_date=2014; citation_year=2014; citation_issue=4; citation_doi=10.1111/1756-2171.12073; citation_volume=45; citation_firstpage=847; citation_lastpage=884; citation_journal_title=The RAND Journal of Economics;">
+<meta name="citation_reference" content="citation_title=Simultaneous or sequential? Search strategies in the u.s. Auto insurance industry; citation_author=Elisabeth Honka; citation_author=Pradeep Chintagunta; citation_publication_date=2017; citation_cover_date=2017; citation_year=2017; citation_issue=1; citation_doi=10.1287/mksc.2016.0995; citation_volume=36; citation_firstpage=21; citation_lastpage=42; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Sequential search with refinement: Model and application with click-stream data; citation_author=Yuxin Chen; citation_author=Song Yao; citation_publication_date=2017; citation_cover_date=2017; citation_year=2017; citation_issue=12; citation_doi=10.1287/mnsc.2016.2557; citation_volume=63; citation_firstpage=4345; citation_lastpage=4365; citation_journal_title=Management Science;">
+<meta name="citation_reference" content="citation_title=The power of rankings: Quantifying the effect of rankings on online consumer search and purchase decisions; citation_author=Raluca M. Ursu; citation_publication_date=2018; citation_cover_date=2018; citation_year=2018; citation_issue=4; citation_doi=10.1287/mksc.2017.1072; citation_volume=37; citation_firstpage=530; citation_lastpage=552; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Search duration; citation_author=Raluca M. Ursu; citation_author=Qingliang Wang; citation_author=Pradeep K. Chintagunta; citation_publication_date=2020; citation_cover_date=2020; citation_year=2020; citation_issue=5; citation_doi=10.1287/mksc.2020.1225; citation_volume=39; citation_firstpage=849; citation_lastpage=871; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Consumer search in the U.S. Auto industry: The role of dealership visits; citation_author=Dan Yavorsky; citation_author=Elisabeth Honka; citation_author=Keith Chen; citation_publication_date=2021; citation_cover_date=2021; citation_year=2021; citation_issue=1; citation_doi=10.1007/s11129-020-09229-4; citation_volume=19; citation_firstpage=1; citation_lastpage=52; citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Zooming in on choice: How do consumers search for cameras online?; citation_author=Bart J. Bronnenberg; citation_author=Jun B. Kim; citation_author=Carl F. Mela; citation_publication_date=2016; citation_cover_date=2016; citation_year=2016; citation_issue=5; citation_doi=10.1287/mksc.2016.0977; citation_volume=35; citation_firstpage=693; citation_lastpage=712; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=The sequential search model: A framework for empirical research; citation_author=Raluca Ursu; citation_author=Stephan Seiler; citation_author=Elisabeth Honka; citation_publication_date=2024; citation_cover_date=2024; citation_year=2024; citation_issue=1; citation_doi=10.1007/s11129-024-09291-2; citation_volume=23; citation_firstpage=165; citation_lastpage=213; citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Estimation of preference heterogeneity in markets with costly search; citation_author=Ilya Morozov; citation_author=Stephan Seiler; citation_author=Xiaojing Dong; citation_author=Liwen Hou; citation_publication_date=2021; citation_cover_date=2021; citation_year=2021; citation_issue=5; citation_doi=10.1287/mksc.2021.1287; citation_volume=40; citation_firstpage=871; citation_lastpage=899; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Simulated maximum likelihood estimation of the sequential search model; citation_author=Jae Hyen Chung; citation_author=Pradeep Chintagunta; citation_author=Sanjog Misra; citation_publication_date=2024; citation_cover_date=2024; citation_year=2024; citation_issue=1; citation_doi=10.1007/s11129-024-09281-4; citation_volume=23; citation_firstpage=105; citation_lastpage=164; citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Search gaps and consumer fatigue; citation_author=Raluca M. Ursu; citation_author=Qianyun Zhang; citation_author=Elisabeth Honka; citation_publication_date=2023; citation_cover_date=2023; citation_year=2023; citation_issue=1; citation_doi=10.1287/mksc.2022.1359; citation_volume=42; citation_firstpage=110; citation_lastpage=136; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Measuring benefits from new products in markets with information frictions; citation_author=Ilya Morozov; citation_publication_date=2023; citation_cover_date=2023; citation_year=2023; citation_issue=11; citation_doi=10.1287/mnsc.2023.4729; citation_volume=69; citation_firstpage=6988; citation_lastpage=7008; citation_journal_title=Management Science;">
+<meta name="citation_reference" content="citation_title=A new use of importance sampling to reduce computational burden in simulation estimation; citation_author=Daniel A. Ackerberg; citation_publication_date=2009; citation_cover_date=2009; citation_year=2009; citation_issue=4; citation_doi=10.1007/s11129-009-9074-z; citation_volume=7; citation_firstpage=343; citation_lastpage=376; citation_journal_title=Quantitative Marketing and Economics;">
+<meta name="citation_reference" content="citation_title=Optimal search and discovery; citation_author=Rafael P. Greminger; citation_publication_date=2022; citation_cover_date=2022; citation_year=2022; citation_issue=5; citation_doi=10.1287/mnsc.2021.4085; citation_volume=68; citation_firstpage=3904; citation_lastpage=3924; citation_journal_title=Management Science;">
+<meta name="citation_reference" content="citation_title=Economic search: An experimental study; citation_author=ANDREW SCHOTTER; citation_author=YALE M. BRAUNSTEIN; citation_publication_date=1981; citation_cover_date=1981; citation_year=1981; citation_issue=1; citation_doi=10.1111/j.1465-7295.1981.tb00600.x; citation_volume=19; citation_firstpage=1; citation_lastpage=25; citation_journal_title=Economic Inquiry;">
+<meta name="citation_reference" content="citation_title=Still searching; citation_author=John D. Hey; citation_publication_date=1987; citation_cover_date=1987; citation_year=1987; citation_issue=1; citation_doi=10.1016/0167-2681(87)90026-6; citation_volume=8; citation_firstpage=137; citation_lastpage=144; citation_journal_title=Journal of Economic Behavior &amp;amp; Organization;">
+<meta name="citation_reference" content="citation_title=Laboratory experiments with a finite-horizon job-search model; citation_author=JamesC. Cox; citation_author=RonaldL. Oaxaca; citation_publication_date=1989; citation_cover_date=1989; citation_year=1989; citation_issue=3; citation_doi=10.1007/bf00209391; citation_volume=2; citation_journal_title=Journal of Risk and Uncertainty;">
+<meta name="citation_reference" content="citation_title=Strategies of search; citation_author=Joep Sonnemans; citation_publication_date=1998; citation_cover_date=1998; citation_year=1998; citation_issue=3; citation_doi=10.1016/s0167-2681(98)00051-1; citation_volume=35; citation_firstpage=309; citation_lastpage=332; citation_journal_title=Journal of Economic Behavior &amp;amp; Organization;">
+<meta name="citation_reference" content="citation_title=Real-time search in the laboratory and the market; citation_author=Meta Brown; citation_author=Christopher J Flinn; citation_author=Andrew Schotter; citation_publication_date=2011; citation_cover_date=2011; citation_year=2011; citation_issue=2; citation_doi=10.1257/aer.101.2.948; citation_volume=101; citation_firstpage=948; citation_lastpage=974; citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=Adaptive strategy selection in decision making; citation_author=John W. Payne; citation_author=James R. Bettman; citation_author=Eric J. Johnson; citation_publication_date=1988; citation_cover_date=1988; citation_year=1988; citation_issue=3; citation_doi=10.1037/0278-7393.14.3.534; citation_volume=14; citation_firstpage=534; citation_lastpage=552; citation_journal_title=Journal of Experimental Psychology: Learning, Memory, and Cognition;">
+<meta name="citation_reference" content="citation_title=The adaptive decision maker; citation_author=John W. Payne; citation_author=James R. Bettman; citation_author=Eric J. Johnson; citation_publication_date=1993; citation_cover_date=1993; citation_year=1993; citation_doi=10.1017/cbo9781139173933;">
+<meta name="citation_reference" content="citation_title=Costly information acquisition: Experimental analysis of a boundedly rational model; citation_author=Xavier Gabaix; citation_author=David Laibson; citation_author=Guillermo Moloche; citation_author=Stephen Weinberg; citation_publication_date=2006; citation_cover_date=2006; citation_year=2006; citation_issue=4; citation_doi=10.1257/aer.96.4.1043; citation_volume=96; citation_firstpage=1043; citation_lastpage=1068; citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=Search and satisficing; citation_author=Andrew Caplin; citation_author=Mark Dean; citation_author=Daniel Martin; citation_publication_date=2011; citation_cover_date=2011; citation_year=2011; citation_issue=7; citation_doi=10.1257/aer.101.7.2899; citation_volume=101; citation_firstpage=2899; citation_lastpage=2922; citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=Search dynamics in consumer choice under time pressure: An eye-tracking study; citation_author=Elena Reutskaja; citation_author=Rosemarie Nagel; citation_author=Colin F Camerer; citation_author=Antonio Rangel; citation_publication_date=2011; citation_cover_date=2011; citation_year=2011; citation_issue=2; citation_doi=10.1257/aer.101.2.900; citation_volume=101; citation_firstpage=900; citation_lastpage=926; citation_journal_title=American Economic Review;">
+<meta name="citation_reference" content="citation_title=A bounded rationality model of information search and choice in preference measurement; citation_author=Liu (Cathy) Yang; citation_author=Olivier Toubia; citation_author=Martijn G. De Jong; citation_publication_date=2015; citation_cover_date=2015; citation_year=2015; citation_issue=2; citation_doi=10.1509/jmr.13.0288; citation_volume=52; citation_firstpage=166; citation_lastpage=183; citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=Attention, information processing, and choice in incentive-aligned choice experiments; citation_author=Liu (Cathy) Yang; citation_author=Olivier Toubia; citation_author=Martijn G. Jong; citation_publication_date=2018; citation_cover_date=2018; citation_year=2018; citation_doi=10.1509/jmr.15.0474; citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=Eye tracking reveals processes that enable conjoint choices to become increasingly efficient with practice; citation_author=Martin Meißner; citation_author=Andres Musalem; citation_author=Joel Huber; citation_publication_date=2016; citation_cover_date=2016; citation_year=2016; citation_issue=1; citation_doi=10.1509/jmr.13.0467; citation_volume=53; citation_firstpage=1; citation_lastpage=17; citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=A choice model with conjunctive, disjunctive, and compensatory screening rules; citation_author=Timothy J. Gilbride; citation_author=Greg M. Allenby; citation_publication_date=2004; citation_cover_date=2004; citation_year=2004; citation_issue=3; citation_doi=10.1287/mksc.1030.0032; citation_volume=23; citation_firstpage=391; citation_lastpage=406; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Disjunctions of conjunctions, cognitive simplicity, and consideration sets; citation_author=John R. Hauser; citation_author=Olivier Toubia; citation_author=Theodoros Evgeniou; citation_author=Rene Befurt; citation_author=Daria Dzyabura; citation_publication_date=2010; citation_cover_date=2010; citation_year=2010; citation_issue=3; citation_doi=10.1509/jmkr.47.3.485; citation_volume=47; citation_firstpage=485; citation_lastpage=496; citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=Greedoid-based noncompensatory inference; citation_author=Michael Yee; citation_author=Ely Dahan; citation_author=John R. Hauser; citation_author=James Orlin; citation_publication_date=2007; citation_cover_date=2007; citation_year=2007; citation_issue=4; citation_doi=10.1287/mksc.1060.0213; citation_volume=26; citation_firstpage=532; citation_lastpage=549; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Active machine learning for consideration heuristics; citation_author=Daria Dzyabura; citation_author=John R. Hauser; citation_publication_date=2011; citation_cover_date=2011; citation_year=2011; citation_issue=5; citation_doi=10.1287/mksc.1110.0660; citation_volume=30; citation_firstpage=801; citation_lastpage=819; citation_journal_title=Marketing Science;">
+<meta name="citation_reference" content="citation_title=Consideration-set heuristics; citation_author=John R. Hauser; citation_publication_date=2014; citation_cover_date=2014; citation_year=2014; citation_issue=8; citation_doi=10.1016/j.jbusres.2014.02.015; citation_volume=67; citation_firstpage=1688; citation_lastpage=1699; citation_journal_title=Journal of Business Research;">
+<meta name="citation_reference" content="citation_title=Economic foundations of conjoint analysis; citation_author=Greg M. Allenby; citation_author=Nino Hardt; citation_author=Peter E. Rossi; citation_publication_date=2019; citation_cover_date=2019; citation_year=2019; citation_doi=10.1016/bs.hem.2019.04.002; citation_firstpage=151; citation_lastpage=192; citation_inbook_title=Handbook of the economics of marketing;">
+<meta name="citation_reference" content="citation_title=Incentive-aligned conjoint analysis; citation_author=Min Ding; citation_author=Rajdeep Grewal; citation_author=John Liechty; citation_publication_date=2005; citation_cover_date=2005; citation_year=2005; citation_issue=1; citation_doi=10.1509/jmkr.42.1.67.56890; citation_volume=42; citation_firstpage=67; citation_lastpage=82; citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=An incentive-aligned mechanism for conjoint analysis; citation_author=Min Ding; citation_publication_date=2007; citation_cover_date=2007; citation_year=2007; citation_issue=2; citation_doi=10.1509/jmkr.44.2.214; citation_volume=44; citation_firstpage=214; citation_lastpage=223; citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=A unified approach to conjoint analysis models; citation_author=Pablo Marshall; citation_author=Eric T Bradlow; citation_publication_date=2002; citation_cover_date=2002; citation_year=2002; citation_issue=459; citation_doi=10.1198/016214502388618410; citation_volume=97; citation_firstpage=674; citation_lastpage=682; citation_journal_title=Journal of the American Statistical Association;">
 </head>
 
 <body class="quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
@@ -213,13 +207,19 @@ window.Quarto = {
       manageTransitions('#quarto-margin-sidebar .nav-link', true);
       // Switch the toggles
       setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
       if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
         manageTransitions("body", false);
-        window.scrollTo(0, 1);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
         setTimeout(() => {
-          window.scrollTo(0, 0);
+          window.scrollTo(0, scrollY);
           manageTransitions("body", true);
         }, 40);
       }
@@ -313,6 +313,7 @@ window.Quarto = {
       // Read the current dark / light value
       let toAlternate = !hasAlternateSentinel();
       toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
@@ -336,7 +337,7 @@ window.Quarto = {
     <div class="quarto-title-meta-container">
       <div class="quarto-title-meta-column-start">
             <div class="quarto-title-meta-author">
-          <div class="quarto-title-meta-heading">Authors</div>
+          <div class="quarto-title-meta-heading">Author</div>
           <div class="quarto-title-meta-heading">Affiliations</div>
           
                 <div class="quarto-title-meta-contents">
@@ -350,14 +351,6 @@ window.Quarto = {
                         Rady School of Management, University of California San Diego
                       </p>
                   </div>
-                      <div class="quarto-title-meta-contents">
-            <p class="author">Eric T. Bradlow <a href="mailto:ebradlow@wharton.upenn.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
-          </div>
-                <div class="quarto-title-meta-contents">
-                    <p class="affiliation">
-                        The Wharton School, University of Pennsylvania
-                      </p>
-                  </div>
                     </div>
         
         <div class="quarto-title-meta">
@@ -366,7 +359,7 @@ window.Quarto = {
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">September 6, 2026</p>
+              <p class="date">November 4, 2026</p>
             </div>
           </div>
           
@@ -395,7 +388,7 @@ window.Quarto = {
     </div>  </div>
 </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active">
+  <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -1340,10 +1333,10 @@ Table&nbsp;1: Notation crosswalk
 <h4 data-number="11.3.9" class="anchored" data-anchor-id="sec-applit-positioning"><span class="header-section-number">11.3.9</span> Positioning</h4>
 </section>
 </section>
-</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{yavorsky2026,
-  author = {Yavorsky, Dan and T. Bradlow, Eric},
+</div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{yavorsky2026,
+  author = {Yavorsky, Dan},
   title = {SIFT: {Search} {Conjoint}},
-  date = {2026-09-06},
+  date = {2026-11-04},
   langid = {en},
   abstract = {Conjoint analysis measures what consumers prefer among
     alternatives they have been shown; it encourages a full-information
@@ -1369,9 +1362,8 @@ Table&nbsp;1: Notation crosswalk
     outcomes conjoint cannot separate, and ones that call for opposite
     managerial responses.}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-yavorsky2026" class="csl-entry quarto-appendix-citeas" role="listitem">
-Yavorsky, Dan, and Eric T. Bradlow. 2026. <span>“SIFT: Search
-Conjoint.”</span> September 6.
+</code></pre><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-yavorsky2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Yavorsky, Dan. 2026. <span>“SIFT: Search Conjoint.”</span> November 4.
 </div></div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1500,7 +1492,8 @@ Conjoint.”</span> September 6.
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1509,8 +1502,69 @@ Conjoint.”</span> September 6.
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1524,6 +1578,7 @@ Conjoint.”</span> September 6.
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1686,44 +1741,54 @@ Conjoint.”</span> September 6.
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1821,6 +1886,9 @@ Conjoint.”</span> September 6.
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 

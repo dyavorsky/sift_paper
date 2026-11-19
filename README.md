@@ -2,7 +2,7 @@
 
 ## Measuring Preferences and Search Costs in a Single Survey Instrument
 
-Dan Yavorsky (San Diego State University).
+Dan Yavorsky (San Diego State University) and Tinghan Zhang (Tilburg University).
 
 A survey instrument in which the respondent faces a list-screen of alternatives,
 clicks through to inspect individual listings, and then chooses. The resulting

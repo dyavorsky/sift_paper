@@ -8,6 +8,9 @@ number-sections: true
 affiliations:
   - id: sdsu
     name: San Diego State University
+  - id: tilburg
+    name: Tilburg University
+    department: Department of Econometrics and Operations Research
 
 author:
   - name: Dan Yavorsky
@@ -16,6 +19,12 @@ author:
     email: dyavorsky@gmail.com
     affiliations:
       - ref: sdsu
+  - name: Tinghan Zhang
+    orcid: 0000-0003-1125-8528
+    corresponding: false
+    email: t.zhang_2@tilburguniversity.edu
+    affiliations:
+      - ref: tilburg
 
 keywords: consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation
 

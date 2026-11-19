@@ -6,10 +6,8 @@ date: last-modified
 number-sections: true
 
 affiliations:
-  - id: gbk
-    name: GBK Collective
-  - id: ucsd
-    name: Rady School of Management, University of California San Diego
+  - id: sdsu
+    name: San Diego State University
 
 author:
   - name: Dan Yavorsky
@@ -17,8 +15,7 @@ author:
     corresponding: true
     email: dyavorsky@gmail.com
     affiliations:
-      - ref: gbk
-      - ref: ucsd
+      - ref: sdsu
 
 keywords: consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation
 

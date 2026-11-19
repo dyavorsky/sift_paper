@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
     <meta charset="utf-8">
-    <meta name="generator" content="quarto-1.12.0">
+    <meta name="generator" content="quarto-1.12.3">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -61,7 +61,27 @@
       @media screen {
       pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
       }
-    </style>
+      @media print {
+        html {
+          color-scheme: light only;
+        }
+        html, body, pre, code {
+          background-color: transparent;
+        }
+        body, a, a:visited, blockquote {
+          color: black;
+        }
+        pre, code {
+          padding: 0;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }    </style>
 
     <style>
       body.hypothesis-enabled #quarto-embed-header {
@@ -77,12 +97,15 @@
         border-bottom: solid 1px;
       }
 
+      /* The title sits on the theme's primary background, so it inherits the
+         header's contrasting text color instead of the theme heading color */
       #quarto-embed-header h6 {
         font-size: 1.1em;
         padding-top: 0.6em;
         margin-left: 1em;
         margin-right: 1em;
         font-weight: 400;
+        color: inherit;
       }
 
       #quarto-embed-header a.quarto-back-link,
@@ -169,14 +192,14 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-f0688f390a76b21125ecd060a3d0a4db.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-ea86cb3e3c485c66326a784895574736.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-f0688f390a76b21125ecd060a3d0a4db.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c65da67e2ccd7271deb104e05bb4b4d6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-7749293871c339a7c6910f03739b02b3.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c65da67e2ccd7271deb104e05bb4b4d6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-27e7aecbfd76940d03b8e4778a6b0ae4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-c009ea57aa94ad75f56dfc6421d8089a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-27e7aecbfd76940d03b8e4778a6b0ae4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-808fa2b54be4417f9355fb1d1925d19c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-e5a66914afd9cc7eeaa2b2ba4ccee20c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-808fa2b54be4417f9355fb1d1925d19c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
       <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script> 
       </head>
 
@@ -351,7 +374,7 @@
       toggleColorMode(false);
     }
   </script>
-    <nav id="quarto-embed-header" class="headroom fixed-top bg-primary" aria-labelledby="quarto-embed-title">
+    <nav id="quarto-embed-header" class="headroom fixed-top text-bg-primary" aria-labelledby="quarto-embed-title">
 
       <a href="../index.html" onclick="window.quartoBackToArticle(); return false;" class="btn btn-primary quarto-back-link"><i class="bi bi-caret-left"></i> Back to Article</a>
       <h6 id="quarto-embed-title"><i class="bi bi-journal-code"></i> The SIFT Likelihood</h6>
@@ -441,16 +464,12 @@
 </details>
 </div></div>
 <p>Respondent <span class="math inline">\(i\)</span> faces task <span class="math inline">\(t\)</span> with <span class="math inline">\(J\)</span> alternatives on a landing page, plus a no-purchase outside option. Writing <span class="math inline">\(\mathcal{S}\)</span> for the ordered set of clicks:</p>
-<p><span class="math display">\[
-\delta_{ijt} = \mathbf{X}_{ijt}'\boldsymbol{\beta} + \eta_{ijt}, \qquad
+<p><span class="math display">\[\delta_{ijt} = \mathbf{X}_{ijt}'\boldsymbol{\beta} + \eta_{ijt}, \qquad
 u_{ijt} = \delta_{ijt} + \varepsilon_{ijt}, \qquad
-u_{i0t} = a_0 .
-\]</span></p>
+u_{i0t} = a_0 .\]</span></p>
 <p><span class="math inline">\(\delta\)</span> is what the respondent knows from the landing page. <span class="math inline">\(\varepsilon\)</span> is what a click reveals. The search cost depends on randomized position, <span class="math inline">\(c_{ijt} = \exp\{\gamma_0 + \gamma_p\,\mathrm{pos}_{ijt}\}\)</span>, and the reservation value follows <span class="citation" data-cites="Weitzman_1979">@Weitzman_1979</span> via <span class="citation" data-cites="Kim_2010">@Kim_2010</span>:</p>
-<p><span class="math display">\[
-z_{ijt} = \delta_{ijt} + \zeta_{ijt}\,\tilde\sigma,
-\qquad g(\zeta) \equiv \phi(\zeta) - \zeta\,[1-\Phi(\zeta)] = c_{ijt}/\tilde\sigma .
-\]</span></p>
+<p><span class="math display">\[z_{ijt} = \delta_{ijt} + \zeta_{ijt}\,\tilde\sigma,
+\qquad g(\zeta) \equiv \phi(\zeta) - \zeta\,[1-\Phi(\zeta)] = c_{ijt}/\tilde\sigma .\]</span></p>
 <section id="where-sift-departs-from-the-field-settings" class="level3">
 <h3 class="anchored" data-anchor-id="where-sift-departs-from-the-field-settings">Where SIFT departs from the field settings</h3>
 <p>Four things differ from the environments <span class="citation" data-cites="Yavorsky_2021">@Yavorsky_2021</span> and <span class="citation" data-cites="Ursu_2018">@Ursu_2018</span> study.</p>
@@ -478,10 +497,8 @@ z_{ijt} = \delta_{ijt} + \zeta_{ijt}\,\tilde\sigma,
 <section id="a-kernel-smoothed-logit-acceptreject" class="level3">
 <h3 class="anchored" data-anchor-id="a-kernel-smoothed-logit-acceptreject">(A) Kernel-smoothed logit accept–reject</h3>
 <p>This is the <span class="citation" data-cites="Yavorsky_2021">@Yavorsky_2021</span> Appendix C simulator: form the violation margins <span class="math inline">\(\nu\)</span> for each Weitzman condition and smooth the indicator with a logit kernel,</p>
-<p><span class="math display">\[
-\tilde L^q = \Big(1 + \textstyle\sum_j e^{-\lambda_1\nu_{1j}}
-+ \sum_j e^{-\lambda_2\nu_{2j}} + e^{-\lambda_3\nu_3} + e^{-\lambda_4\nu_4}\Big)^{-1}.
-\]</span></p>
+<p><span class="math display">\[\tilde L^q = \Big(1 + \textstyle\sum_j e^{-\lambda_1\nu_{1j}}
++ \sum_j e^{-\lambda_2\nu_{2j}} + e^{-\lambda_3\nu_3} + e^{-\lambda_4\nu_4}\Big)^{-1}.\]</span></p>
 <p>It is general and easy to extend. Its weakness is well known and stated plainly in <span class="citation" data-cites="Yavorsky_2021">@Yavorsky_2021</span> (their footnote 21): the estimator is only <em>asymptotically</em> unbiased, the bias falls as the scale factors <span class="math inline">\(\lambda\)</span> grow, and large <span class="math inline">\(\lambda\)</span> destroys the smoothness the optimiser needs.</p>
 </section>
 <section id="b-ghk-on-the-eta-block-analytic-on-the-varepsilon-block" class="level3">
@@ -795,6 +812,28 @@ z_{ijt} = \delta_{ijt} + \zeta_{ijt}\,\tilde\sigma,
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp('/' + window.location.host + '/');
+      const newWindowLabel = "(opens in a new tab)";
+      const newWindowNoteId = "quarto-ext-newwindow-label";
+      // Links reference one hidden label through aria-describedby, so the
+      // announcement never changes their accessible name.
+      var describeNewWindow = (link) => {
+        if (!window.document.getElementById(newWindowNoteId)) {
+          var newWindowNote = window.document.createElement("span");
+          newWindowNote.id = newWindowNoteId;
+          newWindowNote.hidden = true;
+          newWindowNote.textContent = newWindowLabel;
+          window.document.body.appendChild(newWindowNote);
+        }
+        var describedBy = (link.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+        if (!describedBy.includes(newWindowNoteId)) {
+          describedBy.push(newWindowNoteId);
+          link.setAttribute("aria-describedby", describedBy.join(" "));
+        }
+      }
+      var opensNewContext = (link) => {
+        var target = (link.getAttribute("target") || "").toLowerCase();
+        return target !== "" && !["_self", "_parent", "_top"].includes(target);
+      }
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -811,6 +850,9 @@ z_{ijt} = \delta_{ijt} + \zeta_{ijt}\,\tilde\sigma,
           }
           if (!link.classList.contains('no-external-icon')) {
           }
+        }
+        if (opensNewContext(link)) {
+          describeNewWindow(link);
         }
       }
       };

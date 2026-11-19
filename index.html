@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.12.0">
+<meta name="generator" content="quarto-1.12.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dan Yavorsky">
-<meta name="dcterms.date" content="2026-11-04">
+<meta name="dcterms.date" content="2026-11-19">
 <meta name="keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
 
 <title>SIFT: Search Conjoint</title>
@@ -48,6 +48,26 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
+}@media print {
+  html {
+    color-scheme: light only;
+  }
+  html, body, pre, code {
+    background-color: transparent;
+  }
+  body, a, a:visited, blockquote {
+    color: black;
+  }
+  pre, code {
+    padding: 0;
+  }
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2, h3, h4 {
+    page-break-after: avoid;
+  }
 }</style>
 
 
@@ -59,14 +79,14 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-f0688f390a76b21125ecd060a3d0a4db.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-ea86cb3e3c485c66326a784895574736.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-f0688f390a76b21125ecd060a3d0a4db.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c65da67e2ccd7271deb104e05bb4b4d6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-7749293871c339a7c6910f03739b02b3.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c65da67e2ccd7271deb104e05bb4b4d6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-27e7aecbfd76940d03b8e4778a6b0ae4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-c009ea57aa94ad75f56dfc6421d8089a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-27e7aecbfd76940d03b8e4778a6b0ae4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-808fa2b54be4417f9355fb1d1925d19c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-e5a66914afd9cc7eeaa2b2ba4ccee20c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-808fa2b54be4417f9355fb1d1925d19c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -103,10 +123,10 @@ window.Quarto = {
 ">
 <meta name="citation_keywords" content="consumer search, sequential search, search costs, conjoint analysis, preference measurement, consideration sets, choice-based conjoint, structural estimation">
 <meta name="citation_author" content="Dan Yavorsky">
-<meta name="citation_publication_date" content="2026-11-04">
-<meta name="citation_cover_date" content="2026-11-04">
+<meta name="citation_publication_date" content="2026-11-19">
+<meta name="citation_cover_date" content="2026-11-19">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-11-04">
+<meta name="citation_online_date" content="2026-11-19">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=Optimal search for the best alternative; citation_author=Martin L. Weitzman; citation_publication_date=1979; citation_cover_date=1979; citation_year=1979; citation_issue=3; citation_doi=10.2307/1910412; citation_volume=47; citation_firstpage=641; citation_lastpage=654; citation_journal_title=Econometrica;">
 <meta name="citation_reference" content="citation_title=The economics of information; citation_author=George J. Stigler; citation_publication_date=1961; citation_cover_date=1961; citation_year=1961; citation_issue=3; citation_doi=10.1086/258464; citation_volume=69; citation_firstpage=213; citation_lastpage=225; citation_journal_title=Journal of Political Economy;">
@@ -141,7 +161,7 @@ window.Quarto = {
 <meta name="citation_reference" content="citation_title=Search and satisficing; citation_author=Andrew Caplin; citation_author=Mark Dean; citation_author=Daniel Martin; citation_publication_date=2011; citation_cover_date=2011; citation_year=2011; citation_issue=7; citation_doi=10.1257/aer.101.7.2899; citation_volume=101; citation_firstpage=2899; citation_lastpage=2922; citation_journal_title=American Economic Review;">
 <meta name="citation_reference" content="citation_title=Search dynamics in consumer choice under time pressure: An eye-tracking study; citation_author=Elena Reutskaja; citation_author=Rosemarie Nagel; citation_author=Colin F Camerer; citation_author=Antonio Rangel; citation_publication_date=2011; citation_cover_date=2011; citation_year=2011; citation_issue=2; citation_doi=10.1257/aer.101.2.900; citation_volume=101; citation_firstpage=900; citation_lastpage=926; citation_journal_title=American Economic Review;">
 <meta name="citation_reference" content="citation_title=A bounded rationality model of information search and choice in preference measurement; citation_author=Liu (Cathy) Yang; citation_author=Olivier Toubia; citation_author=Martijn G. De Jong; citation_publication_date=2015; citation_cover_date=2015; citation_year=2015; citation_issue=2; citation_doi=10.1509/jmr.13.0288; citation_volume=52; citation_firstpage=166; citation_lastpage=183; citation_journal_title=Journal of Marketing Research;">
-<meta name="citation_reference" content="citation_title=Attention, information processing, and choice in incentive-aligned choice experiments; citation_author=Liu (Cathy) Yang; citation_author=Olivier Toubia; citation_author=Martijn G. Jong; citation_publication_date=2018; citation_cover_date=2018; citation_year=2018; citation_doi=10.1509/jmr.15.0474; citation_journal_title=Journal of Marketing Research;">
+<meta name="citation_reference" content="citation_title=Attention, information processing, and choice in incentive-aligned choice experiments; citation_author=Liu (Cathy) Yang; citation_author=Olivier Toubia; citation_author=Martijn G. de Jong; citation_publication_date=2018; citation_cover_date=2018; citation_year=2018; citation_doi=10.1509/jmr.15.0474; citation_journal_title=Journal of Marketing Research;">
 <meta name="citation_reference" content="citation_title=Eye tracking reveals processes that enable conjoint choices to become increasingly efficient with practice; citation_author=Martin Meißner; citation_author=Andres Musalem; citation_author=Joel Huber; citation_publication_date=2016; citation_cover_date=2016; citation_year=2016; citation_issue=1; citation_doi=10.1509/jmr.13.0467; citation_volume=53; citation_firstpage=1; citation_lastpage=17; citation_journal_title=Journal of Marketing Research;">
 <meta name="citation_reference" content="citation_title=A choice model with conjunctive, disjunctive, and compensatory screening rules; citation_author=Timothy J. Gilbride; citation_author=Greg M. Allenby; citation_publication_date=2004; citation_cover_date=2004; citation_year=2004; citation_issue=3; citation_doi=10.1287/mksc.1030.0032; citation_volume=23; citation_firstpage=391; citation_lastpage=406; citation_journal_title=Marketing Science;">
 <meta name="citation_reference" content="citation_title=Disjunctions of conjunctions, cognitive simplicity, and consideration sets; citation_author=John R. Hauser; citation_author=Olivier Toubia; citation_author=Theodoros Evgeniou; citation_author=Rene Befurt; citation_author=Daria Dzyabura; citation_publication_date=2010; citation_cover_date=2010; citation_year=2010; citation_issue=3; citation_doi=10.1509/jmkr.47.3.485; citation_volume=47; citation_firstpage=485; citation_lastpage=496; citation_journal_title=Journal of Marketing Research;">
@@ -338,17 +358,14 @@ window.Quarto = {
       <div class="quarto-title-meta-column-start">
             <div class="quarto-title-meta-author">
           <div class="quarto-title-meta-heading">Author</div>
-          <div class="quarto-title-meta-heading">Affiliations</div>
+          <div class="quarto-title-meta-heading">Affiliation</div>
           
                 <div class="quarto-title-meta-contents">
             <p class="author">Dan Yavorsky <a href="mailto:dyavorsky@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0003-4095-6405" class="quarto-title-author-orcid" aria-label="ORCID profile for Dan Yavorsky"> <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
           </div>
                 <div class="quarto-title-meta-contents">
                     <p class="affiliation">
-                        GBK Collective
-                      </p>
-                    <p class="affiliation">
-                        Rady School of Management, University of California San Diego
+                        San Diego State University
                       </p>
                   </div>
                     </div>
@@ -359,7 +376,7 @@ window.Quarto = {
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">November 4, 2026</p>
+              <p class="date">November 19, 2026</p>
             </div>
           </div>
           
@@ -481,8 +498,7 @@ window.Quarto = {
 
 
 <!-- Latex -->
-<p><span class="math display">\[
-  \newcommand{\iid}{\stackrel{iid}{\sim}}
+<p><span class="math display">\[\newcommand{\iid}{\stackrel{iid}{\sim}}
   \newcommand{\bfbeta}{\boldsymbol{\beta}}
   \newcommand{\bfgamma}{\boldsymbol{\gamma}}
   \newcommand{\bfkappa}{\boldsymbol{\kappa}}
@@ -496,8 +512,7 @@ window.Quarto = {
   \newcommand{\Sset}{\mathcal{S}}
   \newcommand{\Sbar}{\bar{\mathcal{S}}}
   \newcommand{\resv}{z}
-  \newcommand{\cost}{c}
-\]</span></p>
+  \newcommand{\cost}{c}\]</span></p>
 <!-- Sections -->
 <section id="sec-intro" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="sec-intro"><span class="header-section-number">1</span> Introduction</h2>
@@ -541,7 +556,7 @@ window.Quarto = {
 </section>
 <section id="roadmap" class="level3" data-number="1.6">
 <h3 data-number="1.6" class="anchored" data-anchor-id="roadmap"><span class="header-section-number">1.6</span> Roadmap</h3>
-<p><a href="#sec-lit" class="quarto-xref">Section&nbsp;2</a> positions SIFT against the search, conjoint, and consideration-set literatures. 2 describes the instrument. <a href="#sec-model" class="quarto-xref">Section&nbsp;4</a> develops the model, and <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a> treats identification and estimation. <a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a> reports a simulation study establishing what the design recovers and at what sample sizes. <a href="#sec-analysis" class="quarto-xref">Section&nbsp;7</a> presents an empirical application, <a href="#sec-managerial" class="quarto-xref">Section&nbsp;8</a> draws out what the estimates support that conjoint cannot, and <a href="#sec-discussion" class="quarto-xref">Section&nbsp;9</a> takes up limitations.</p>
+<p><a href="#sec-lit" class="quarto-xref">Section&nbsp;2</a> positions SIFT against the search, conjoint, and consideration-set literatures. <a href="#sec-instrument" class="quarto-xref">Section&nbsp;3</a> describes the instrument. <a href="#sec-model" class="quarto-xref">Section&nbsp;4</a> develops the model, and <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a> treats identification and estimation. <a href="#sec-simstudy" class="quarto-xref">Section&nbsp;6</a> reports a simulation study establishing what the design recovers and at what sample sizes. <a href="#sec-analysis" class="quarto-xref">Section&nbsp;7</a> presents an empirical application, <a href="#sec-managerial" class="quarto-xref">Section&nbsp;8</a> draws out what the estimates support that conjoint cannot, and <a href="#sec-discussion" class="quarto-xref">Section&nbsp;9</a> takes up limitations.</p>
 </section>
 </section>
 <section id="sec-lit" class="level2" data-number="2">
@@ -615,23 +630,17 @@ window.Quarto = {
 <p>We follow the notation of 1 wherever the two are compatible, so that readers arriving from the sequential-search literature can map our objects onto theirs without translation. Two departures are forced on us by the instrument, and one by the object being searched over; we flag all three below. <a href="#sec-appendix-notation" class="quarto-xref">Section&nbsp;11.1</a> gives a crosswalk to 1 and <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> for readers coming from either.</p>
 <p><strong>Indices.</strong> Respondent <span class="math inline">\(i = 1,\dots,N\)</span> completes tasks <span class="math inline">\(t = 1,\dots,T\)</span>. Task <span class="math inline">\(t\)</span> presents respondent <span class="math inline">\(i\)</span> with a listing page holding the alternatives <span class="math inline">\(\Jset_{it} = \{1,\dots,J_{it}\}\)</span>, together with the no-purchase option <span class="math inline">\(j=0\)</span>, which is always available and never requires a click. The index <span class="math inline">\(j\)</span> names an <em>alternative</em>, not its rank and not its screen position: because position is randomized (<a href="#sec-instrument-randomization" class="quarto-xref">Section&nbsp;3.2</a>), the paper must hold three things apart at once — an alternative’s identity <span class="math inline">\(j\)</span>, the position it occupied on the listing page in task <span class="math inline">\(t\)</span>, and its rank in the respondent’s reservation-value ordering. Search order is carried by a separate index <span class="math inline">\(h\)</span>, where <span class="math inline">\(h=1\)</span> denotes the first product page the respondent opened.</p>
 <p><strong>Utility.</strong> Respondent <span class="math inline">\(i\)</span>’s utility from alternative <span class="math inline">\(j\)</span> in task <span class="math inline">\(t\)</span> is</p>
-<p><span id="eq-utility"><span class="math display">\[
-u_{itj} \;=\; \underbrace{\bfX_{itj}'\bfbeta_i + \mu_{itj}}_{\displaystyle \delta_{itj}\ \text{(known before clicking)}} \;+\; \underbrace{\bfL_{itj}'\bfkappa_i + \varepsilon_{itj}}_{\displaystyle \text{(revealed by clicking)}} ,
-\tag{1}\]</span></span></p>
+<p><span id="eq-utility"><span class="math display">\[u_{itj} \;=\; \underbrace{\bfX_{itj}'\bfbeta_i + \mu_{itj}}_{\displaystyle \delta_{itj}\ \text{(known before clicking)}} \;+\; \underbrace{\bfL_{itj}'\bfkappa_i + \varepsilon_{itj}}_{\displaystyle \text{(revealed by clicking)}} , \tag{1}\]</span></span></p>
 <p>where <span class="math inline">\(\bfX_{itj}\)</span> collects the attributes displayed on the listing page, <span class="math inline">\(\bfL_{itj}\)</span> the attributes displayed only on the product page, <span class="math inline">\(\mu_{itj}\)</span> is a pre-search taste shock observed by the respondent but not by us, and <span class="math inline">\(\varepsilon_{itj}\)</span> is a post-search taste shock. Write <span class="math inline">\(\xi_{itj} = \bfX_{itj}'\bfbeta_i\)</span> for the observed part of pre-search utility and <span class="math inline">\(\delta_{itj} = \xi_{itj} + \mu_{itj}\)</span> for pre-search utility. Both shocks are mean-zero normal, <span class="math inline">\(\mu_{itj} \iid N(0,\sigma_\mu^2)\)</span> and <span class="math inline">\(\varepsilon_{itj} \iid N(0,\sigma_\varepsilon^2)\)</span>, with <span class="math inline">\(\sigma_\mu = 1\)</span> imposed as the scale normalization. The no-purchase option has <span class="math inline">\(u_{it0} = \bfX_{it0}'\bfbeta_i + \mu_{it0}\)</span> with no post-search component: nothing about it is learned by clicking, so its utility is resolved from the outset.</p>
 <p>The term <span class="math inline">\(\bfL_{itj}'\bfkappa_i\)</span> is the departure that matters most. In the match-value formulations that dominate empirical work, everything learned through search is a scalar shock <span class="math inline">\(\varepsilon_{itj}\)</span> unobserved by the researcher both before and after search. Here the product page reveals <em>attributes we designed</em>, so part of what search delivers is observed, priced by <span class="math inline">\(\bfkappa_i\)</span>, and — critically — drawn from a distribution the analyst chose rather than assumed. 1 give exactly this general form in their §2.4 and note it is uncommon in practice; SIFT is a case where it is unavoidable, since recovering <span class="math inline">\(\bfkappa_i\)</span> for product-page attributes is half of what the instrument is for. The reservation-value discussion below takes up what this costs computationally.</p>
 <p><strong>Search costs.</strong> Opening alternative <span class="math inline">\(j\)</span>’s product page costs</p>
-<p><span id="eq-cost"><span class="math display">\[
-\cost_{itj} \;=\; \exp\!\left(\bfZ_{itj}'\bfgamma_i\right),
-\tag{2}\]</span></span></p>
+<p><span id="eq-cost"><span class="math display">\[\cost_{itj} \;=\; \exp\!\left(\bfZ_{itj}'\bfgamma_i\right), \tag{2}\]</span></span></p>
 <p>exponentiated to enforce positivity, as is standard. <span class="math inline">\(\bfZ_{itj}\)</span> holds a respondent-level intercept and the randomized listing-page position, and may hold listing-page attributes that plausibly shift salience. Overlap between <span class="math inline">\(\bfX\)</span> and <span class="math inline">\(\bfZ\)</span> is permitted; <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a> takes up what separates the two.</p>
 <p><strong>Where the randomness lives.</strong> Reservation values must carry a stochastic component, or search order would be a deterministic function of observables and no observed order could be rationalized <span class="citation" data-cites="Ursu_Seiler_Honka_2024">(<a href="#ref-Ursu_Seiler_Honka_2024" role="doc-biblioref">Ursu et al. 2024</a>)</span>. Two specifications supply one. The first, used above and by most of the literature, puts a pre-search taste shock <span class="math inline">\(\mu_{itj}\)</span> in utility. The second, due to <span class="citation" data-cites="Chung_2025">Chung et al. (<a href="#ref-Chung_2025" role="doc-biblioref">2024</a>)</span>, drops <span class="math inline">\(\mu_{itj}\)</span> and instead treats the search cost itself as random at the respondent-alternative level, with <span class="math inline">\(\cost_{itj}\)</span> drawn from a distribution whose location carries the position effect. The two are observationally similar but econometrically quite different: under the first, the scale of reservation utilities and the scale of realized utilities are jointly determined by <span class="math inline">\(\sigma_\mu\)</span> and <span class="math inline">\(\sigma_\varepsilon\)</span>, and estimating both requires an auxiliary step; under the second, search-cost dispersion fixes the scale of reservation values while <span class="math inline">\(\sigma_\varepsilon\)</span> alone fixes the scale of realized utilities, and everything is estimable in one pass.</p>
 <p>1 §4.4.1 object to the second on interpretive grounds, asking why the cost of clicking a product detail page would vary at the consumer-product level. The objection has least force here, because we randomize the thing that makes it vary: the same alternative sits at a different position for different respondents and in different tasks, so respondent-alternative variation in click cost is designed in rather than assumed. <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a> takes up which specification to estimate; <span class="citation" data-cites="Chung_2025">Chung et al. (<a href="#ref-Chung_2025" role="doc-biblioref">2024</a>)</span> show that relative preference parameters survive getting this choice wrong, though search-cost <em>levels</em> do not.</p>
 <p><strong>Search and choice.</strong> Let <span class="math inline">\(\Sset_{it} \subseteq \Jset_{it}\)</span> denote the set of alternatives whose product pages respondent <span class="math inline">\(i\)</span> opened in task <span class="math inline">\(t\)</span>, <span class="math inline">\(\Sbar_{it}\)</span> its complement, <span class="math inline">\(H_{it} = |\Sset_{it}|\)</span> the number of clicks, and <span class="math inline">\(y_{it} \in \Sset_{it} \cup \{0\}\)</span> the alternative purchased, with <span class="math inline">\(y_{it}=0\)</span> recording exit without purchase. Recall is free, so <span class="math inline">\(y_{it}\)</span> may be any member of <span class="math inline">\(\Sset_{it}\)</span>, and selection requires prior inspection, so it may not be drawn from <span class="math inline">\(\Sbar_{it}\)</span>.</p>
 <p><strong>Reservation values.</strong> The reservation value <span class="math inline">\(\resv_{itj}\)</span> equates the marginal cost of opening a product page to the marginal expected benefit,</p>
-<p><span id="eq-reservation"><span class="math display">\[
-\int_{\resv_{itj}}^{\infty} \left(u - \resv_{itj}\right) dF_{itj}(u) \;=\; \cost_{itj},
-\tag{3}\]</span></span></p>
+<p><span id="eq-reservation"><span class="math display">\[\int_{\resv_{itj}}^{\infty} \left(u - \resv_{itj}\right) dF_{itj}(u) \;=\; \cost_{itj}, \tag{3}\]</span></span></p>
 <p>where <span class="math inline">\(F_{itj}\)</span> is the respondent’s belief about <span class="math inline">\(u_{itj}\)</span> prior to clicking. Additive separability gives <span class="math inline">\(\resv_{itj} = \delta_{itj} + g(\cost_{itj})\)</span>, with <span class="math inline">\(g\)</span> decreasing in search cost and depending on the belief distribution only through the post-search component.</p>
 <p>Here <a href="#eq-utility" class="quarto-xref">Equation&nbsp;1</a> exacts a price, though a smaller one than it first appears. When the post-search component is a single normal shock, <span class="math inline">\(g\)</span> has the familiar closed form <span class="math inline">\(g(\cost) = m(\cost/\sigma_\varepsilon)\,\sigma_\varepsilon\)</span> with <span class="math inline">\(m\)</span> solving <span class="math inline">\(\cost/\sigma_\varepsilon = \phi(m) + m[\Phi(m)-1]\)</span> <span class="citation" data-cites="Kim_2010">(<a href="#ref-Kim_2010" role="doc-biblioref">Kim et al. 2010</a>)</span>, and this is what every existing implementation computes. With designed product-page attributes the pre-click belief about <span class="math inline">\(\bfL_{itj}'\bfkappa_i + \varepsilon_{itj}\)</span> is instead a <em>mixture</em> of normals — one component per attribute-level combination the design can produce, with weights fixed by the design — and <span class="math inline">\(g\)</span> has no scalar closed form.</p>
 <p>Two properties of a designed instrument keep this cheap. First, the mixture is <em>common across alternatives</em>: a balanced design draws <span class="math inline">\(\bfL_{itj}\)</span> from the same distribution at every position, so the respondent’s pre-click belief is identical for every alternative she has not yet opened, and the mixture enters the model only through <span class="math inline">\(g\)</span> rather than alternative by alternative. The same balance delivers the independence across <span class="math inline">\(j\)</span> that Weitzman’s rules require. Second, the left side of <a href="#eq-reservation" class="quarto-xref">Equation&nbsp;3</a> is then a probability-weighted sum of normal partial expectations, strictly decreasing in <span class="math inline">\(\resv_{itj}\)</span>, so one root-find recovers <span class="math inline">\(g\)</span> for each distinct search cost — and because position is categorical, the number of distinct search costs per respondent is the number of positions, not the number of alternative-task pairs. The scalar-normal case is the one-component special case, and nothing in Weitzman’s rules requires normality, so the decision rules of <a href="#sec-model-policy" class="quarto-xref">Section&nbsp;4.2</a> carry over unchanged.</p>
@@ -643,29 +652,19 @@ u_{itj} \;=\; \underbrace{\bfX_{itj}'\bfbeta_i + \mu_{itj}}_{\displaystyle \delt
 <p><span class="citation" data-cites="Weitzman_1979">Weitzman (<a href="#ref-Weitzman_1979" role="doc-biblioref">1979</a>)</span> solves the problem posed by <a href="#eq-utility" class="quarto-xref">Equation&nbsp;1</a> and <a href="#eq-cost" class="quarto-xref">Equation&nbsp;2</a>. What makes it tractable is that <span class="math inline">\(\resv_{itj}\)</span> depends only on alternative <span class="math inline">\(j\)</span>’s own parameters: it is computed once, before any searching, and never revised in light of what other alternatives turn out to be worth. Optimal behaviour is then characterized by four conditions, which we state in the notation of <a href="#sec-model-setup" class="quarto-xref">Section&nbsp;4.1</a> with the task subscript carried throughout.</p>
 <p>Write <span class="math inline">\(h = 1,\dots,H_{it}\)</span> for the order in which product pages were opened, so that <span class="math inline">\(h=1\)</span> denotes the first page opened, and recall that the no-purchase option <span class="math inline">\(j=0\)</span> is available from the outset and never requires a click.</p>
 <p><strong>Selection.</strong> Product pages are opened in decreasing order of reservation value, so that every alternative inspected has a reservation value at least as high as every alternative left unopened,</p>
-<p><span id="eq-selection"><span class="math display">\[
-\resv_{ith} \;\ge\; \max_{l \in \Sbar_{it}} \resv_{itl}
-\qquad \text{for } h = 1,\dots,H_{it}.
-\tag{4}\]</span></span></p>
+<p><span id="eq-selection"><span class="math display">\[\resv_{ith} \;\ge\; \max_{l \in \Sbar_{it}} \resv_{itl}
+\qquad \text{for } h = 1,\dots,H_{it}. \tag{4}\]</span></span></p>
 <p><strong>Continuation.</strong> The respondent opens the <span class="math inline">\(h\)</span>-th page only if its reservation value exceeds the best utility realized so far, the no-purchase option included,</p>
-<p><span id="eq-continuation"><span class="math display">\[
-\resv_{ith} \;&gt;\; \max\left\{u_{it0},\; \max_{k&lt;h} u_{itk}\right\}
-\qquad \text{for } h = 1,\dots,H_{it}.
-\tag{5}\]</span></span></p>
+<p><span id="eq-continuation"><span class="math display">\[\resv_{ith} \;&gt;\; \max\left\{u_{it0},\; \max_{k&lt;h} u_{itk}\right\}
+\qquad \text{for } h = 1,\dots,H_{it}. \tag{5}\]</span></span></p>
 <p><strong>Stopping.</strong> Search ends when the best realized utility exceeds every remaining reservation value,</p>
-<p><span id="eq-stopping"><span class="math display">\[
-\max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\} \;\ge\; \max_{l \in \Sbar_{it}} \resv_{itl}.
-\tag{6}\]</span></span></p>
+<p><span id="eq-stopping"><span class="math display">\[\max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\} \;\ge\; \max_{l \in \Sbar_{it}} \resv_{itl}. \tag{6}\]</span></span></p>
 <p><strong>Choice.</strong> The respondent buys the best alternative among those inspected, with the no-purchase option always in contention,</p>
-<p><span id="eq-choice"><span class="math display">\[
-u_{it y_{it}} \;\ge\; \max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\}.
-\tag{7}\]</span></span></p>
+<p><span id="eq-choice"><span class="math display">\[u_{it y_{it}} \;\ge\; \max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\}. \tag{7}\]</span></span></p>
 <p>Two features of this system are specific to SIFT and worth drawing out.</p>
 <p><strong>The first click is costly.</strong> Much empirical work conditions on consumers who searched at least once, which forces the assumption that the first search is free — otherwise the sample is selected on an outcome the model is trying to explain. Because a SIFT respondent may leave a task without opening anything, and we record that, <span class="math inline">\(H_{it} = 0\)</span> is an observed outcome rather than a truncation. <a href="#eq-continuation" class="quarto-xref">Equation&nbsp;5</a> at <span class="math inline">\(h=1\)</span> then carries real content: it says the best reservation value on the listing page beat the no-purchase option. This is not a technicality. It means the effective-value and welfare expressions of 1 §3 remain available without the free-first-search patch, and it is one of the places where designing the instrument buys something a field study cannot easily obtain.</p>
 <p><strong>Continuation collapses to a single binding constraint.</strong> <a href="#eq-continuation" class="quarto-xref">Equation&nbsp;5</a> appears to impose <span class="math inline">\(H_{it}\)</span> separate restrictions, but reservation values decrease along the search order by <a href="#eq-selection" class="quarto-xref">Equation&nbsp;4</a>, so the tightest is the last. Continuation is therefore equivalent to</p>
-<p><span class="math display">\[
-\max\left\{u_{it0},\; u_{it1},\; \dots,\; u_{it,H_{it}-1}\right\} \;&lt;\; \resv_{it H_{it}},
-\]</span></p>
+<p><span class="math display">\[\max\left\{u_{it0},\; u_{it1},\; \dots,\; u_{it,H_{it}-1}\right\} \;&lt;\; \resv_{it H_{it}},\]</span></p>
 <p>a single inequality involving the reservation value at the final click only. This is not merely tidy — it is what keeps the likelihood in <a href="#sec-model-likelihood" class="quarto-xref">Section&nbsp;4.3</a> tractable, and overlooking it is an easy and silent implementation error.</p>
 </section>
 <section id="sec-model-likelihood" class="level3" data-number="4.3">
@@ -673,17 +672,13 @@ u_{it y_{it}} \;\ge\; \max\left\{u_{it0},\; \max_{h \le H_{it}} u_{ith}\right\}.
 <p>The four conditions are inequalities in the unobserved shocks <span class="math inline">\(\mu_{itj}\)</span> and <span class="math inline">\(\varepsilon_{itj}\)</span>, so the probability of an observed task outcome is the measure of the region in which all of them hold. Following 1 we write each condition as a difference required to be non-negative and index them <span class="math inline">\(\nu_1,\dots,\nu_4\)</span> in the order selection, continuation, stopping, choice.</p>
 <p>This labelling is not uniform in the literature: <span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span> adopts the opposite convention, with <span class="math inline">\(\nu_1\)</span> denoting continuation and <span class="math inline">\(\nu_2\)</span> selection. The crosswalk in <a href="#sec-appendix-notation" class="quarto-xref">Section&nbsp;11.1</a> records both, and comparisons of smoothing parameters or fit diagnostics across the two literatures should be made with the convention in mind.</p>
 <p>The task-level probability is</p>
-<p><span id="eq-task-likelihood"><span class="math display">\[
-\Pr\left(\Sset_{it}, y_{it} \mid \bftheta_i\right)
+<p><span id="eq-task-likelihood"><span class="math display">\[\Pr\left(\Sset_{it}, y_{it} \mid \bftheta_i\right)
 = \int \mathbb{1}\left\{\nu_1 \ge 0,\ \nu_2 &gt; 0,\ \nu_3 \ge 0,\ \nu_4 \ge 0\right\}
-  \, dF(\boldsymbol\mu_{it}, \boldsymbol\varepsilon_{it}),
-\tag{8}\]</span></span></p>
+  \, dF(\boldsymbol\mu_{it}, \boldsymbol\varepsilon_{it}), \tag{8}\]</span></span></p>
 <p>which has no closed form. <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a> takes up how it is computed. Here we record only the structural fact that determines what is computationally possible.</p>
 <p>Conditional on the observed purchase <span class="math inline">\(y_{it}\)</span>, all four conditions are a <em>conjunction</em> of linear inequalities. <a href="#eq-stopping" class="quarto-xref">Equation&nbsp;6</a> as written is a statement about a maximum and so in general a union of events, which is not an orthant and not directly amenable to the standard simulators. But <a href="#eq-choice" class="quarto-xref">Equation&nbsp;7</a> names which alternative attains that maximum, and once it is named, stopping becomes <span class="math inline">\(u_{it y_{it}} \ge \resv_{itl}\)</span> for each <span class="math inline">\(l \in \Sbar_{it}\)</span> separately. Conditioning on the choice converts the one genuinely awkward condition into an orthant, which is what makes a GHK-type simulator available at all.</p>
 <p><strong>The panel multiplies.</strong> Respondent <span class="math inline">\(i\)</span>’s contribution is</p>
-<p><span id="eq-resp-likelihood"><span class="math display">\[
-\mathcal{L}_i(\bftheta_i) \;=\; \prod_{t=1}^{T} \Pr\left(\Sset_{it}, y_{it} \mid \bftheta_i\right),
-\tag{9}\]</span></span></p>
+<p><span id="eq-resp-likelihood"><span class="math display">\[\mathcal{L}_i(\bftheta_i) \;=\; \prod_{t=1}^{T} \Pr\left(\Sset_{it}, y_{it} \mid \bftheta_i\right), \tag{9}\]</span></span></p>
 <p>and the sample likelihood integrates <span class="math inline">\(\mathcal{L}_i\)</span> over the heterogeneity distribution governed by <span class="math inline">\(\bfOmega\)</span>. Independence across tasks is an assumption rather than a consequence, and it does real work: it is what turns <span class="math inline">\(T\)</span> tasks into <span class="math inline">\(T\)</span> times the information rather than one long correlated spell.</p>
 <p>The design earns that assumption instead of asserting it. Because attribute profiles are drawn fresh in every task rather than being a fixed set of named alternatives recurring throughout (<a href="#sec-instrument-randomization" class="quarto-xref">Section&nbsp;3.2</a>), a profile in task <span class="math inline">\(t+1\)</span> genuinely is a new object, with no match value carried forward from task <span class="math inline">\(t\)</span> to be rationalized as learning. The contrast is instructive: <span class="citation" data-cites="Morozov_2021">Morozov et al. (<a href="#ref-Morozov_2021" role="doc-biblioref">2021</a>)</span> estimate an MA(1) carryover of roughly <span class="math inline">\(0.3\)</span> across sessions separated by weeks, and SIFT tasks are separated by minutes, so a design with recurring alternatives would face a substantially larger carryover and would have to model it. What remains is respondent-level learning and fatigue <em>across</em> tasks, which we test for directly rather than assume away.</p>
 </section>
@@ -1012,7 +1007,7 @@ Honka, Elisabeth, and Pradeep Chintagunta. 2017. <span>“Simultaneous or Sequen
 Hortacsu, A., and C. Syverson. 2004. <span>“Product Differentiation, Search Costs, and Competition in the Mutual Fund Industry: A Case Study of s&amp;amp;p 500 Index Funds.”</span> <em>The Quarterly Journal of Economics</em> 119 (2): 403–56. <a href="https://doi.org/10.1162/0033553041382184">https://doi.org/10.1162/0033553041382184</a>.
 </div>
 <div id="ref-Kim_2010" class="csl-entry" role="listitem">
-Kim, Jun B., Paulo Albuquerque, and Bart J. Bronnenberg. 2010. <span>“Online Demand Under Limited Consumer Search.”</span> <em>Marketing Science</em> 29 (6): 1001–23. <a href="https://doi.org/10.1287/mksc.1100.0574">https://doi.org/10.1287/mksc.1100.0574</a>.
+Kim, Jun B., Paulo Albuquerque, and Bart J. Bronnenberg. 2010. <span>“Online Demand under Limited Consumer Search.”</span> <em>Marketing Science</em> 29 (6): 1001–23. <a href="https://doi.org/10.1287/mksc.1100.0574">https://doi.org/10.1287/mksc.1100.0574</a>.
 </div>
 <div id="ref-Koulayev_2014" class="csl-entry" role="listitem">
 Koulayev, Sergei. 2014. <span>“Search for Differentiated Products: Identification and Estimation.”</span> <em>The RAND Journal of Economics</em> 45 (3): 553–75. <a href="https://doi.org/10.1111/1756-2171.12062">https://doi.org/10.1111/1756-2171.12062</a>.
@@ -1039,7 +1034,7 @@ Payne, John W., James R. Bettman, and Eric J. Johnson. 1988. <span>“Adaptive S
 Payne, John W., James R. Bettman, and Eric J. Johnson. 1993. <em>The Adaptive Decision Maker</em>. Cambridge University Press. <a href="https://doi.org/10.1017/cbo9781139173933">https://doi.org/10.1017/cbo9781139173933</a>.
 </div>
 <div id="ref-Reutskaja_2011" class="csl-entry" role="listitem">
-Reutskaja, Elena, Rosemarie Nagel, Colin F Camerer, and Antonio Rangel. 2011. <span>“Search Dynamics in Consumer Choice Under Time Pressure: An Eye-Tracking Study.”</span> <em>American Economic Review</em> 101 (2): 900–926. <a href="https://doi.org/10.1257/aer.101.2.900">https://doi.org/10.1257/aer.101.2.900</a>.
+Reutskaja, Elena, Rosemarie Nagel, Colin F Camerer, and Antonio Rangel. 2011. <span>“Search Dynamics in Consumer Choice under Time Pressure: An Eye-Tracking Study.”</span> <em>American Economic Review</em> 101 (2): 900–926. <a href="https://doi.org/10.1257/aer.101.2.900">https://doi.org/10.1257/aer.101.2.900</a>.
 </div>
 <div id="ref-Schotter_Braunstein_1981" class="csl-entry" role="listitem">
 SCHOTTER, ANDREW, and YALE M. BRAUNSTEIN. 1981. <span>“Economic Search: An Experimental Study.”</span> <em>Economic Inquiry</em> 19 (1): 1–25. <a href="https://doi.org/10.1111/j.1465-7295.1981.tb00600.x">https://doi.org/10.1111/j.1465-7295.1981.tb00600.x</a>.
@@ -1264,9 +1259,7 @@ Table&nbsp;1: Notation crosswalk
 <li><strong><span class="citation" data-cites="Ursu_2020">Ursu et al. (<a href="#ref-Ursu_2020" role="doc-biblioref">2020</a>)</span>, <em>Marketing Science</em>. [M]</strong> Search duration and time spent, rather than search incidence alone.</li>
 <li><strong><span class="citation" data-cites="Yavorsky_2021">Yavorsky et al. (<a href="#ref-Yavorsky_2021" role="doc-biblioref">2021</a>)</span>, <em>Quantitative Marketing and Economics</em>. [H]</strong> Dealership visits in the U.S. auto market; identification of search costs from observed search sets. (Author’s own; the estimation code is an implementation asset, see <a href="#sec-estimation" class="quarto-xref">Section&nbsp;5</a>.)</li>
 <li><strong><span class="citation" data-cites="Bronnenberg_2016">Bronnenberg et al. (<a href="#ref-Bronnenberg_2016" role="doc-biblioref">2016</a>)</span>, “Zooming In on Choice,” <em>Journal of Marketing Research</em>. [M]</strong> Descriptive clickstream evidence on how consumers actually move through product pages. Face-validity evidence for the interface design in
-<ol start="2" class="example" type="1">
-<li></li>
-</ol></li>
+<a href="#sec-instrument" class="quarto-xref">Section&nbsp;3</a>.</li>
 <li><strong>1, <em>Quantitative Marketing and Economics</em>. [M] — novelty gate</strong> Framework and consolidation review of the sequential search model. Best single entry point to the current state of model specification, identification, and estimation practice; read first to establish what is already settled.</li>
 <li><strong><span class="citation" data-cites="Greminger_2022">Greminger (<a href="#ref-Greminger_2022" role="doc-biblioref">2022</a>)</span>, <em>Management Science</em>. [M]</strong> Search with discovery of alternatives — the consumer does not know the full choice set at the outset. Relevant to how much of the list-screen the instrument reveals up front.</li>
 </ul>
@@ -1336,7 +1329,7 @@ Table&nbsp;1: Notation crosswalk
 </div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{yavorsky2026,
   author = {Yavorsky, Dan},
   title = {SIFT: {Search} {Conjoint}},
-  date = {2026-11-04},
+  date = {2026-11-19},
   langid = {en},
   abstract = {Conjoint analysis measures what consumers prefer among
     alternatives they have been shown; it encourages a full-information
@@ -1363,7 +1356,7 @@ Table&nbsp;1: Notation crosswalk
     managerial responses.}
 }
 </code></pre><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-yavorsky2026" class="csl-entry quarto-appendix-citeas" role="listitem">
-Yavorsky, Dan. 2026. <span>“SIFT: Search Conjoint.”</span> November 4.
+Yavorsky, Dan. 2026. <span>“SIFT: Search Conjoint.”</span> November 19.
 </div></div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1488,6 +1481,28 @@ Yavorsky, Dan. 2026. <span>“SIFT: Search Conjoint.”</span> November 4.
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp('/' + window.location.host + '/');
+      const newWindowLabel = "(opens in a new tab)";
+      const newWindowNoteId = "quarto-ext-newwindow-label";
+      // Links reference one hidden label through aria-describedby, so the
+      // announcement never changes their accessible name.
+      var describeNewWindow = (link) => {
+        if (!window.document.getElementById(newWindowNoteId)) {
+          var newWindowNote = window.document.createElement("span");
+          newWindowNote.id = newWindowNoteId;
+          newWindowNote.hidden = true;
+          newWindowNote.textContent = newWindowLabel;
+          window.document.body.appendChild(newWindowNote);
+        }
+        var describedBy = (link.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+        if (!describedBy.includes(newWindowNoteId)) {
+          describedBy.push(newWindowNoteId);
+          link.setAttribute("aria-describedby", describedBy.join(" "));
+        }
+      }
+      var opensNewContext = (link) => {
+        var target = (link.getAttribute("target") || "").toLowerCase();
+        return target !== "" && !["_self", "_parent", "_top"].includes(target);
+      }
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1504,6 +1519,9 @@ Yavorsky, Dan. 2026. <span>“SIFT: Search Conjoint.”</span> November 4.
           }
           if (!link.classList.contains('no-external-icon')) {
           }
+        }
+        if (opensNewContext(link)) {
+          describeNewWindow(link);
         }
       }
       };

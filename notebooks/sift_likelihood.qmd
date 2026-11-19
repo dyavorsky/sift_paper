@@ -1,7 +1,9 @@
 ---
 title: "The SIFT Likelihood"
 subtitle: "Construction, and why conditioning on the observed choice makes GHK available"
-author: "Dan Yavorsky"
+author:
+  - name: Dan Yavorsky
+  - name: Tinghan Zhang
 format:
   html:
     toc: true
